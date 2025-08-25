@@ -17,11 +17,10 @@ public class SpaceMappingService {
 
     @Transactional(readOnly = true) //읽기 전용
     public Optional<SpaceMapping> getByDisplaySiteKey(String displaySiteKey) {
-        String key = displaySiteKey;
-        if (key.isEmpty()) {
+        if (displaySiteKey == null || displaySiteKey.trim().isEmpty()) {
             throw new IllegalArgumentException("Displaysitekey 없음");
         }
-        return spaceMappingRepository.findByDisplaySiteKey(key);
+        return spaceMappingRepository.findByDisplaySiteKey(displaySiteKey.trim());
     }
 
     //UPSERT
@@ -39,7 +38,8 @@ public class SpaceMappingService {
             throw new IllegalArgumentException("spacecode 없음");
         }
 
-        Optional<SpaceMapping> opt = spaceMappingRepository.findByDisplaySiteKey(key);
+        Optional<SpaceMapping> opt = spaceMappingRepository
+                .findByDisplaySiteKey(key);
         SpaceMapping entity;
         // 업데이트 부분
         if (opt.isPresent()) {

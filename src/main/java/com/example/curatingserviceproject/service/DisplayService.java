@@ -1,11 +1,12 @@
 package com.example.curatingserviceproject.service;
 
+import com.example.curatingserviceproject.dto.DisplayCardDTO;
+import com.example.curatingserviceproject.entity.SpaceMapping;
 import com.example.curatingserviceproject.repository.DisplayRepository;
 import com.example.curatingserviceproject.entity.Display;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.json.XML;
 import java.io.BufferedReader;
@@ -14,6 +15,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -21,6 +23,7 @@ import java.util.stream.Collectors;
 public class DisplayService {
 
     private final DisplayRepository displayRepository;
+    private final SpaceMappingService spaceMappingService;
 
     public List<Display> fetchANDSAVEDisplay() {
         try {
@@ -71,6 +74,8 @@ public class DisplayService {
                 JSONObject item = arr.getJSONObject(i);
 
                 String agency = item.optString("CNTC_INSTT_NM", "");
+                String displaySiteKey = item.optString("TITLE", "");
+
                 if (!"국립현대미술관".equals(agency)) {
                     continue;
                 }
@@ -87,10 +92,17 @@ public class DisplayService {
                 display.setCHARGE(item.optString("CHARGE", ""));
                 display.setPERIOD(item.optString("PERIOD", ""));
                 display.setEVENT_PERIOD(item.optString("EVENT_PERIOD", ""));
-                display.setCNTC_INSTT_NM(item.optString("CNTC_INSTT_NM", ""));
+                display.setCNTC_INSTT_NM(agency);
+
+                Optional<SpaceMapping> opt = spaceMappingService.getByDisplaySiteKey(displaySiteKey);
+                if (opt.isPresent()) {
+                    SpaceMapping mapping = opt.get();
+                    display.setSpaceCode(mapping.getSpaceCode());
+                }
 
                 displays.add(display);
             }
+
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,5 +113,28 @@ public class DisplayService {
     public List<Display> getAllDisplays() {
         return displayRepository.findAll();
     }
-}
 
+    //DisplayCard DTO
+    public List<DisplayCardDTO> getDisplayCards() {
+        List<Display> displays = displayRepository.findAll();
+        List<DisplayCardDTO> result = new ArrayList<>();
+
+        for (Display display : displays) {
+            String spaceCode = display.getSpaceCode();
+            String congestionNm = display.getCongestionNm();
+
+            int score = 100; //임시 점수
+
+            DisplayCardDTO dto = new DisplayCardDTO(
+                    display.getTITLE(),
+                    display.getCNTC_INSTT_NM(),
+                    spaceCode,
+                    congestionNm,
+                    score
+            );
+
+            result.add(dto);
+        }
+        return result;
+    }
+}

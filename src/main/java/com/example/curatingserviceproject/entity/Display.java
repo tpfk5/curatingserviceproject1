@@ -51,5 +51,11 @@ public class Display {
     @Column(name = "event_period")
     private String EVENT_PERIOD; //시간
 
+    @Column(name = "space_code")
+    private String SpaceCode;
+
+    @Column(name = "congestion_nm")
+    private String congestionNm;
+
 
 }
