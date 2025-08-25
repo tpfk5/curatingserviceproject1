@@ -25,7 +25,7 @@ public class CongestionService {
         try {
             String apiUrl = "https://apis.data.go.kr/1371033/mmcadensity/congestion?" +
                     "serviceKey=TdJVbdw05eWxZJO%2Ff0ZX1IZOv2j1u%2BJ3JHze%2Bmp3mtBTg82ota042ELqefPV0oydKkLsP0ufsyFEqI7cqlXd%2Fw%3D%3D" +
-                    "&spaceCode=" + spaceCode; // 전시실 코드 -> controller 테스트 중
+                    "&spaceCode=" + spaceCode; // 전시실 코드 -> Congestioncontroller 테스트 중
 
             URL url = new URL(apiUrl);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -62,8 +62,10 @@ public class CongestionService {
                 congestion = existingCongestion.get();
                 congestion.setCongestionNm(data.optString("congestionNm", ""));
                 congestion.setCollectedAt(now);
+
                 log.info("새 혼잡도 데이터 생성: {}", spaceNm);
-            } else {
+            }
+            else {
                 // 없다면? -> 최신 데이터 생성하기
                 congestion = Congestion.builder()
                         .agncNm(data.optString("agncNm", ""))
@@ -71,6 +73,7 @@ public class CongestionService {
                         .congestionNm(data.optString("congestionNm", ""))
                         .collectedAt(now)
                         .build();
+
                 log.info("새 혼잡도 데이터 생성: {}", spaceNm);
             }
 

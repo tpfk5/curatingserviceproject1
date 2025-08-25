@@ -15,40 +15,40 @@ public class Display {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "TITLE")
+    @Column(name = "title")
     private String TITLE; //제목
 
-    @Column(name = "COLLECTED_DATE")
+    @Column(name = "collected_date")
     private String COLLECTED_DATE; //수집일
 
 //    @Column(name = "DESCRIPTION")
 //    private String DESCRIPTION; //소개
 
-    @Column(name = "VIEW_COUNT")
+    @Column(name = "view_count")
     private Integer VIEW_COUNT; //조회수
 
-    @Column(name = "CNTC_INSTT_NM")
+    @Column(name = "cntc_instt_nm")
     private String CNTC_INSTT_NM; //연계기간명
 
-    @Column(name = "EVENT_SITE")
+    @Column(name = "event_site")
     private String EVENT_SITE; //장소
 
-    @Column(name = "GENRE")
+    @Column(name = "genre")
     private String GENRE; //장르
 
-    @Column(name = "DURATION")
-    private String DURATION; //관람시간
+//    @Column(name = "DURATION")
+//    private String DURATION; //관람시간
 
-    @Column(name = "AUTHOR")
+    @Column(name = "author")
     private String AUTHOR; //작가
 
-    @Column(name = "CHARGE")
-    private String CHARGE; //관람료 할인
+    @Column(name = "charge")
+    private String CHARGE; //관람료 정보
 
-    @Column(name = "PERIOD")
+    @Column(name = "period")
     private String PERIOD; //기간
 
-    @Column(name = "EVENT_PERIOD")
+    @Column(name = "event_period")
     private String EVENT_PERIOD; //시간
 
 

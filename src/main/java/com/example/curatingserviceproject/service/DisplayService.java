@@ -5,6 +5,7 @@ import com.example.curatingserviceproject.entity.Display;
 import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.json.XML;
 import java.io.BufferedReader;
@@ -13,6 +14,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,19 +22,20 @@ public class DisplayService {
 
     private final DisplayRepository displayRepository;
 
-    public List<Display> fetchANDSAVEDisplay(){
-       try {
-           String xmlData = callApi();
-           JSONObject jsonObject = XML.toJSONObject(xmlData);
-           List<Display> displays = parseDisplaysFromJson(jsonObject);
-           return displayRepository.saveAll(displays);
+    public List<Display> fetchANDSAVEDisplay() {
+        try {
+            String xmlData = callApi();
+            JSONObject jsonObject = XML.toJSONObject(xmlData);
+            List<Display> displays = parseDisplaysFromJson(jsonObject);
+            return displayRepository.saveAll(displays);
 
 
-       } catch (Exception e) {
-           e.printStackTrace();
-           return new ArrayList<>();
-       }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ArrayList<>();
+        }
     }
+
     private String callApi() throws Exception {
         StringBuilder result = new StringBuilder();
 
@@ -46,9 +49,9 @@ public class DisplayService {
         urlConnection.connect();
 
         BufferedReader bufferedReader = new BufferedReader(
-                new InputStreamReader(urlConnection.getInputStream(),  "UTF-8"));
+                new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
         String returnLine;
-        while((returnLine = bufferedReader.readLine()) != null){
+        while ((returnLine = bufferedReader.readLine()) != null) {
             result.append(returnLine).append("\n");
         }
         urlConnection.disconnect();
@@ -79,7 +82,7 @@ public class DisplayService {
                 display.setVIEW_COUNT(item.optInt("VIEW_COUNT"));
                 display.setEVENT_SITE(item.optString("EVENT_SITE", ""));
                 display.setGENRE(item.optString("GENRE", ""));
-                display.setDURATION(item.optString("DURATION", ""));
+//                display.setDURATION(item.optString("DURATION", ""));
                 display.setAUTHOR(item.optString("AUTHOR", ""));
                 display.setCHARGE(item.optString("CHARGE", ""));
                 display.setPERIOD(item.optString("PERIOD", ""));
@@ -92,8 +95,13 @@ public class DisplayService {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    return displays;
+        return displays;
+    }
 }
-    public List<Display> getAllDisplays(){
-        return displayRepository.findAll();}
-}
+//    public List<Display> getAllDisplays(){
+//        return displayRepository.findAll();}
+//
+//    @Autowired
+//    private SpaceMappingService spaceMappingService
+
+

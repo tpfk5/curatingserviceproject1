@@ -12,14 +12,14 @@ public class CongestionController {
 
     private final CongestionService congestionService;
 
-    @GetMapping(value = "/api/congestion", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping( "/api/congestion")
     public ResponseEntity<?> getCongestion(@RequestParam String spaceCode) {
-        Congestion c = congestionService.fetchANDSAVECongestion(spaceCode);
-        if (c != null) return ResponseEntity.ok(c);
+        Congestion congestion = congestionService.fetchANDSAVECongestion(spaceCode);
+        if (congestion != null) return ResponseEntity.ok(congestion);
         return ResponseEntity.status(500).body("혼잡도 API 호출 실패");
     }
 
-    // Test용!!!!
+    // Test용!!!
     @GetMapping("/api/congestion/test")
     public ResponseEntity<?> test() {
         return getCongestion("MMCA-SPACE-1001"); //제1전시실 기준
