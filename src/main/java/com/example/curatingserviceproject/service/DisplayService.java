@@ -97,11 +97,9 @@ public class DisplayService {
         }
         return displays;
     }
-}
-//    public List<Display> getAllDisplays(){
-//        return displayRepository.findAll();}
-//
-//    @Autowired
-//    private SpaceMappingService spaceMappingService
 
+    public List<Display> getAllDisplays() {
+        return displayRepository.findAll();
+    }
+}
 

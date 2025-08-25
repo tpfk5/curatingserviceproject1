@@ -1,7 +1,6 @@
 package com.example.curatingserviceproject.controller;
 
 import com.example.curatingserviceproject.entity.SpaceMapping;
-import com.example.curatingserviceproject.repository.SpaceMappingRepository;
 import com.example.curatingserviceproject.service.SpaceMappingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +18,24 @@ import java.util.Optional;
 public class SpaceMappingController {
 
     private final SpaceMappingService spaceMappingService;
+    //-----------------------------------------------------
+    //테스트용
+    @GetMapping("/test")
+    public ResponseEntity<String> test () {
+        return ResponseEntity.ok("컨트롤러 작동중!");
+    }
+
+    @GetMapping("/test-service")
+    public ResponseEntity<String> testService() {
+        try {
+            List<SpaceMapping> mappings = spaceMappingService.getAllMappings();
+            return ResponseEntity.ok("Service 연결 성공! 현재 매핑 수: " + mappings.size());
+
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("서비스 오류: " + e.getMessage());
+        }
+    }
+//-------------------------------------------------------------------------
 
     //GET(매핑 정보 조회용)
     @GetMapping
@@ -52,18 +69,25 @@ public class SpaceMappingController {
         } catch (Exception e) {
             log.error("매핑 조회 오류 발생", e);
             return ResponseEntity.status(500)
-                    .body(Map.of("error", e.getMessage()));
+                    .body(Map.of("error: ", e.getMessage()));
         }
     }
 
-    //GET(전체 매핑 리스트 조회용)
+    //GET(전체 목록 조회용)
     @GetMapping("/all")
     public ResponseEntity<?> getAllMappings() {
         try {
+            log.info("전체 목록 조회 시작!");
+
             List<SpaceMapping> allMappings = spaceMappingService.getAllMappings();
+
+            log.info("전체 매핑 목록 조회 완료! 개수: {}",  allMappings.size());
+
             return ResponseEntity.ok(allMappings);
         } catch (Exception e) {
             log.error("매핑 조회 오류 발생", e);
+            e.printStackTrace();
+
             return ResponseEntity.status(500)
                     .body(Map.of("error", e.getMessage()));
         }
