@@ -39,8 +39,8 @@ public class Display {
 //    @Column(name = "DURATION")
 //    private String DURATION; //관람시간
 
-    @Column(name = "author")
-    private String AUTHOR; //작가
+//    @Column(name = "author")
+//    private String AUTHOR; //작가
 
     @Column(name = "charge")
     private String CHARGE; //관람료 정보

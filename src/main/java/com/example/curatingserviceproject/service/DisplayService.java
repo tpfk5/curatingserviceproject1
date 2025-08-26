@@ -44,7 +44,7 @@ public class DisplayService {
         String apiUrl = "https://api.kcisa.kr/openapi/API_CCA_145/request?" +
                 "serviceKey=15cc63a0-9d9c-4ad1-bd58-6733a7487202&" +
                 "numOfRows=100&" +
-                "pageNo=1";
+                "pageNo=26";
 
         URL url = new URL(apiUrl);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -89,7 +89,7 @@ public class DisplayService {
                 display.setEVENT_SITE(item.optString("EVENT_SITE", ""));
                 display.setGENRE(item.optString("GENRE", ""));
 //                display.setDURATION(item.optString("DURATION", ""));
-                display.setAUTHOR(item.optString("AUTHOR", ""));
+//                display.setAUTHOR(item.optString("AUTHOR", ""));
                 display.setCHARGE(item.optString("CHARGE", ""));
                 display.setPERIOD(item.optString("PERIOD", ""));
                 display.setEVENT_PERIOD(item.optString("EVENT_PERIOD", ""));
