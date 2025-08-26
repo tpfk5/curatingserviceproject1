@@ -24,8 +24,8 @@ public class Display {
 //    @Column(name = "DESCRIPTION")
 //    private String DESCRIPTION; //소개
 
-    @Column(name = "view_count")
-    private Integer VIEW_COUNT; //조회수
+//    @Column(name = "view_count")
+//    private Integer VIEW_COUNT; //조회수
 
     @Column(name = "cntc_instt_nm")
     private String CNTC_INSTT_NM; //연계기간명

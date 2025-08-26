@@ -50,12 +50,6 @@ public class SpaceMappingController {
                         .body("displaySiteKey 없음");
             }
 
-//        if (trimmed.isEmpty()) {
-//            return ResponseEntity
-//                    .badRequest()
-//                    .body("displaySiteKey 없음"); // 40
-//        }
-
             Optional<SpaceMapping> opt =
                     spaceMappingService.getByDisplaySiteKey(displaySiteKey.trim());
 
@@ -85,7 +79,9 @@ public class SpaceMappingController {
 
             return ResponseEntity.ok(allMappings);
         } catch (Exception e) {
+
             log.error("매핑 조회 오류 발생", e);
+
             e.printStackTrace();
 
             return ResponseEntity.status(500)
@@ -101,10 +97,14 @@ public class SpaceMappingController {
         try {
             log.info("매핑 생성/수정 요청: {}", request);
 
+            log.info("request: {}", request);
+            log.info("!congestionNm!: '{}'", request.get("congestionNm"));
+
             String displaySiteKey = request.get("displaySiteKey");
             String agncNm = request.get("agncNm");
             String spaceNm = request.get("spaceNm");
             String spaceCode = request.get("spaceCode");
+            String congestionNm = request.get("congestionNm");
 
             if (displaySiteKey == null || displaySiteKey.trim().isEmpty()) {
                 return ResponseEntity
@@ -117,60 +117,30 @@ public class SpaceMappingController {
                         .badRequest()
                         .body(Map.of("error", "spaceCode 없음"));
             }
+
+
             SpaceMapping result = spaceMappingService.upsert(
                     displaySiteKey.trim(),
                     agncNm != null ? agncNm.trim() : "",
                     spaceNm != null ? spaceNm.trim() : "",
-                    spaceCode.trim()
+                    spaceCode.trim(),
+                    congestionNm.trim()
             );
 
             return ResponseEntity.ok(result);
 
         } catch (IllegalArgumentException e) {
+
             log.warn("잘못된 요청: {}", e.getMessage());
+
             return ResponseEntity.badRequest()
                     .body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
+
             log.error("매핑 생성/수정 중 오류 발생", e);
+
             return ResponseEntity.status(500)
                     .body(Map.of("error", "서버 오류: " + e.getMessage()));
         }
     }
 }
-
-
-//            // 기존 행 있는지 조회
-//            Optional <SpaceMapping> opt =
-//                    spaceMappingService.findByDisplaySiteKey(displaySiteKey);
-//
-//            SpaceMapping entity;
-//            // 기존 행이 있다면? -? 수정하기
-//            if  (opt.isPresent()) {
-//                entity = opt.get();
-//                entity.setAgncNm(agncNm);
-//                entity.setSpaceCode(spaceCode);
-//                entity.setDisplaySiteKey(displaySiteKey);
-//
-//                SpaceMapping saved = spaceMappingService.save(entity);
-//
-//                return ResponseEntity.ok(saved);
-//            } else {
-//                //기존 행이 없다면? -> 생성하기
-//                entity = new SpaceMapping();
-//                entity.setDisplaySiteKey(displaySiteKey);
-//                entity.setAgncNm(agncNm);
-//                entity.setSpaceCode(spaceCode);
-//
-//                SpaceMapping saved = spaceMappingService.save(entity);
-//
-//                return ResponseEntity.ok(saved);
-//
-//            }
-//        } catch (Exception e) {
-//            return ResponseEntity.status(500)
-//                    .body("오류 발생: " + e.getMessage());
-//        }
-//        }
-//
-//    }
-//

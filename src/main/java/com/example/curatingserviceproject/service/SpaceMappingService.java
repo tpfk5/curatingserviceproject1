@@ -17,6 +17,7 @@ public class SpaceMappingService {
 
     @Transactional(readOnly = true) //읽기 전용
     public Optional<SpaceMapping> getByDisplaySiteKey(String displaySiteKey) {
+
         if (displaySiteKey == null || displaySiteKey.trim().isEmpty()) {
             throw new IllegalArgumentException("Displaysitekey 없음");
         }
@@ -25,11 +26,12 @@ public class SpaceMappingService {
 
     //UPSERT
     @Transactional
-    public SpaceMapping upsert(String displaySiteKey, String agncNM,String spaceNm, String spaceCode) {
+    public SpaceMapping upsert(String displaySiteKey, String agncNM, String spaceNm, String spaceCode, String congestionNm) {
         String key = displaySiteKey;
         String agnc = agncNM;
         String space = spaceNm;
         String code = spaceCode;
+        String cg = congestionNm;
 
         if (key == null || key.isEmpty()) {
             throw new IllegalArgumentException("Displaysitekey 없음");
@@ -41,13 +43,17 @@ public class SpaceMappingService {
         Optional<SpaceMapping> opt = spaceMappingRepository
                 .findByDisplaySiteKey(key);
         SpaceMapping entity;
+
         // 업데이트 부분
         if (opt.isPresent()) {
             entity = opt.get();
             entity.setAgncNm(agnc);
             entity.setSpaceNm(space);
             entity.setSpaceCode(code);
+            entity.setCongestionNm(cg);
+
         }
+
         // 생성 부분
         else {
         entity = SpaceMapping.builder()
@@ -55,9 +61,12 @@ public class SpaceMappingService {
                 .agncNm(agnc)
                 .spaceNm(space)
                 .spaceCode(code)
+                .congestionNm(cg)
                 .build();
         }
         return spaceMappingRepository.save(entity);
+
+
     }
 
     @Transactional(readOnly = true)

@@ -16,7 +16,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
+
 
 @Service
 @RequiredArgsConstructor
@@ -32,7 +32,6 @@ public class DisplayService {
             List<Display> displays = parseDisplaysFromJson(jsonObject);
             return displayRepository.saveAll(displays);
 
-
         } catch (Exception e) {
             e.printStackTrace();
             return new ArrayList<>();
@@ -44,8 +43,9 @@ public class DisplayService {
 
         String apiUrl = "https://api.kcisa.kr/openapi/API_CCA_145/request?" +
                 "serviceKey=15cc63a0-9d9c-4ad1-bd58-6733a7487202&" +
-                "numOfRows=10&" +
+                "numOfRows=100&" +
                 "pageNo=1";
+
         URL url = new URL(apiUrl);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestMethod("GET");
@@ -76,7 +76,8 @@ public class DisplayService {
                 String agency = item.optString("CNTC_INSTT_NM", "");
                 String displaySiteKey = item.optString("TITLE", "");
 
-                if (!"국립현대미술관".equals(agency)) {
+                //'국립현대미술관' 필터링
+                if (agency == null || !agency.equals("국립현대미술관")) {
                     continue;
                 }
 
@@ -84,7 +85,7 @@ public class DisplayService {
                 display.setTITLE(item.optString("TITLE", ""));
                 display.setCOLLECTED_DATE(item.optString("COLLECTED_DATE", ""));
 //                display.setDESCRIPTION(item.optString("DESCRIPTION", ""));
-                display.setVIEW_COUNT(item.optInt("VIEW_COUNT"));
+//                display.setVIEW_COUNT(item.optInt("VIEW_COUNT"));
                 display.setEVENT_SITE(item.optString("EVENT_SITE", ""));
                 display.setGENRE(item.optString("GENRE", ""));
 //                display.setDURATION(item.optString("DURATION", ""));
@@ -94,16 +95,25 @@ public class DisplayService {
                 display.setEVENT_PERIOD(item.optString("EVENT_PERIOD", ""));
                 display.setCNTC_INSTT_NM(agency);
 
+
                 Optional<SpaceMapping> opt = spaceMappingService.getByDisplaySiteKey(displaySiteKey);
                 if (opt.isPresent()) {
                     SpaceMapping mapping = opt.get();
+
                     display.setSpaceCode(mapping.getSpaceCode());
+                    display.setCongestionNm(mapping.getCongestionNm());
+
+                    System.out.println("!혼잡도 매핑 확인!: " + mapping.getCongestionNm());
+                }
+
+                else {
+                    display.setSpaceCode("미정");
+                    display.setCongestionNm("정보 없음");
                 }
 
                 displays.add(display);
+
             }
-
-
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -120,8 +130,15 @@ public class DisplayService {
         List<DisplayCardDTO> result = new ArrayList<>();
 
         for (Display display : displays) {
+            //'국립현대미술관'만 가져오기
+            if (!"국립현대미술관".equals(display.getCNTC_INSTT_NM())){
+                continue;
+            }
+
             String spaceCode = display.getSpaceCode();
             String congestionNm = display.getCongestionNm();
+
+            System.out.println("!혼잡도 상태!: " + congestionNm);
 
             int score = 100; //임시 점수
 

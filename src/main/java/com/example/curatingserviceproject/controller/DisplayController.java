@@ -1,5 +1,6 @@
 package com.example.curatingserviceproject.controller;
 
+import com.example.curatingserviceproject.dto.DisplayCardDTO;
 import com.example.curatingserviceproject.service.DisplayService;
 import com.example.curatingserviceproject.entity.Display;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +13,7 @@ import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
-public class CuratingController {
+public class DisplayController {
 
     private final DisplayService displayService;
 
@@ -37,4 +38,14 @@ public class CuratingController {
         return displayService.getAllDisplays();
     }
 
+    //전체 전시 정보 리스트 -> 카드 형태로 생성
+    @GetMapping("/api/cards")
+    public ResponseEntity<?> getDisplayCards() {
+        try{
+            List< DisplayCardDTO> cardList = displayService.getDisplayCards();
+            return ResponseEntity.ok(cardList);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
+        }
+    }
 }
