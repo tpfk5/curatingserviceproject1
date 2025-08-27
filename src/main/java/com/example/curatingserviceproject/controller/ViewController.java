@@ -37,12 +37,12 @@ public class ViewController {
 
 
     //html
-    @GetMapping("/exhibitions")
-     public String showexhibition(Model model) {
+    @GetMapping("/main")
+     public String showmain(Model model) {
         try {
             List<DisplayCardDTO> cards = displayService.getDisplayCards();
             model.addAttribute("cards",cards);
-            return "exhibition"; // -> main.mustache 이랑 연결
+            return "main"; // -> main.mustache 이랑 연결
 
         } catch (Exception e) {
             log.error("로딩 실패", e);
