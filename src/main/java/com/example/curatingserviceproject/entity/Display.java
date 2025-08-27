@@ -24,17 +24,15 @@ public class Display {
 //    @Column(name = "DESCRIPTION")
 //    private String DESCRIPTION; //소개
 
-//    @Column(name = "view_count")
-//    private Integer VIEW_COUNT; //조회수
 
     @Column(name = "cntc_instt_nm")
     private String CNTC_INSTT_NM; //연계기간명
 
     @Column(name = "event_site")
     private String EVENT_SITE; //장소
-
-    @Column(name = "genre")
-    private String GENRE; //장르
+//
+//    @Column(name = "genre")
+//    private String GENRE; //장르
 
 //    @Column(name = "DURATION")
 //    private String DURATION; //관람시간

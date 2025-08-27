@@ -25,7 +25,7 @@ public class CongestionService {
         try {
             String apiUrl = "https://apis.data.go.kr/1371033/mmcadensity/congestion?" +
                     "serviceKey=TdJVbdw05eWxZJO%2Ff0ZX1IZOv2j1u%2BJ3JHze%2Bmp3mtBTg82ota042ELqefPV0oydKkLsP0ufsyFEqI7cqlXd%2Fw%3D%3D" +
-                    "&spaceCode=" + spaceCode; // 전시실 코드 -> Congestioncontroller 테스트 중
+                    "&spaceCode=" + spaceCode; // 전시실 코드
 
             URL url = new URL(apiUrl);
             HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();

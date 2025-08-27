@@ -25,10 +25,11 @@ public class ViewController {
             model.addAttribute("cards", cards);
 
             log.info("!카드 로딩 : {}", cards.size());
-
             return "cards";
+
         } catch (Exception e) {
-            log.error("카드 로딩 실피", e);
+            log.error("카드 로딩 실패", e);
+
             model.addAttribute("error", "데이터 로딩 실패");
             return "error";
         }
@@ -42,6 +43,7 @@ public class ViewController {
             List<DisplayCardDTO> cards = displayService.getDisplayCards();
             model.addAttribute("cards",cards);
             return "cards"; // -> cards.mustache 이랑 연결
+
         } catch (Exception e) {
             log.error("로딩 실패", e);
             model.addAttribute("error","로딩 실패");

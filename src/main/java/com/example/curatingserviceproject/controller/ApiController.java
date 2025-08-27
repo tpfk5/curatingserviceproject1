@@ -28,11 +28,15 @@ public class ApiController {
     private final CongestionService congestionService;
     private final SpaceMappingService spaceMappingService;
 
+
+    //전시 정보 불러오기
     @GetMapping("/api/displays")
     public List<Display> displays() {
         return displayService.getAllDisplays();
     }
 
+
+    //전시 정보 저장하기
     @GetMapping("/api/fetch-displays")
     public ResponseEntity<?> fetchDisplays() {
         try {
@@ -48,6 +52,8 @@ public class ApiController {
             ));
         }
     }
+
+    //전시 카드 가져오기
     @GetMapping("/api/cards")
     public ResponseEntity<?> getDisplayCards() {
         try {
@@ -62,9 +68,13 @@ public class ApiController {
         Congestion congestion = congestionService.fetchANDSAVECongestion(spaceCode);
         if (congestion != null)
             return ResponseEntity.ok(congestion);
+
         return ResponseEntity.status(500).body("혼잡도 API 호출 실패");
     }
 
+
+
+    //test !!!!!
     @GetMapping("/api/congestion/test")
     public ResponseEntity<?> testCongestion() {
         return getCongestion("MMCA-SPACE-1001");
@@ -94,7 +104,8 @@ public class ApiController {
                     .body(Map.of("error: ", e.getMessage()));
         }
     }
-
+    //db 저장된 내용 호출
+    @GetMapping("/api/mappings/all")
     public ResponseEntity<?> getAllMappings() {
         try {
             log.info("전체 목록 조회 시작!");
@@ -112,7 +123,8 @@ public class ApiController {
         }
     }
 
-    public ResponseEntity<?> upsert (@RequestBody Map<String, String> request) {
+//    @GetMapping("/api/mappings")
+    public ResponseEntity<?> upsert(@RequestBody Map<String, String> request) {
         try {
             log.info("매핑 생성 or 수정 요청: {}", request);
 

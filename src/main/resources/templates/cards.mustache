@@ -23,7 +23,7 @@
             border-radius: 10px;
             color: white;
             font-weight: bold;
-            font-size: 10px;
+            font-size: 7px;
         }
         .green{background-color: green}
         .orange{background-color: darkorange}
@@ -39,6 +39,7 @@
 {{#cards}}
     <div class="card">
         <h4>{{title}}</h4>
+        <p>{{recommendationScore}}</p>
         <p><strong> 전시실 </strong> {{agencyNm}}</p>
         <p><strong> 혼잡도 </strong>
             <span class= "badge {{#isGreen}}green{{/isGreen}}{{#isOrange}}orange{{/isOrange}} {{#isYellow}}yellow{{/isYellow}}{{#isRed}}red{{/isRed}}{{#isGray}}gray{{/isGray}}">

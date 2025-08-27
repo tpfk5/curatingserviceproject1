@@ -5,6 +5,7 @@ import com.example.curatingserviceproject.entity.SpaceMapping;
 import com.example.curatingserviceproject.repository.DisplayRepository;
 import com.example.curatingserviceproject.entity.Display;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
@@ -20,10 +21,12 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class DisplayService {
 
     private final DisplayRepository displayRepository;
     private final SpaceMappingService spaceMappingService;
+    private final RecommendationService recommendationService;
 
     public List<Display> fetchANDSAVEDisplay() {
         try {
@@ -87,7 +90,7 @@ public class DisplayService {
 //                display.setDESCRIPTION(item.optString("DESCRIPTION", ""));
 //                display.setVIEW_COUNT(item.optInt("VIEW_COUNT"));
                 display.setEVENT_SITE(item.optString("EVENT_SITE", ""));
-                display.setGENRE(item.optString("GENRE", ""));
+//                display.setGENRE(item.optString("GENRE", ""));
 //                display.setDURATION(item.optString("DURATION", ""));
 //                display.setAUTHOR(item.optString("AUTHOR", ""));
                 display.setCHARGE(item.optString("CHARGE", ""));
@@ -135,12 +138,33 @@ public class DisplayService {
                 continue;
             }
 
+            //디버깅용
+            log.info("처리중인 전시: {}", display.getTITLE());
+            log.info("EVENT_SITE: {}", display.getEVENT_SITE());
+            log.info("혼잡도: {}", display.getCongestionNm());
+            log.info("관람료: {}", display.getCHARGE());
+
+//            int score = recommendationService.calculateRecommendationScore(display);
+
+            int score;
+            try {
+                score = recommendationService.calculateRecommendationScore(display);
+
+                log.info("점수 계산 성공: {}", score);
+            } catch (Exception e) {
+                log.error("점수 계산 실패: {}", e.getMessage());
+
+                e.printStackTrace();
+                score = 50; // 기본 점수로 대체
+            }
+
+
             String spaceCode = display.getSpaceCode();
             String congestionNm = display.getCongestionNm();
 
             System.out.println("!혼잡도 상태!: " + congestionNm);
+            System.out.println("!추천 점수!: " + score);
 
-            int score = 100; //임시 점수
 
             DisplayCardDTO dto = new DisplayCardDTO(
                     display.getTITLE(),
@@ -152,6 +176,11 @@ public class DisplayService {
 
             result.add(dto);
         }
+
+        //높은 순으로 정렬???????
+        result.sort((a, b) -> Integer.compare(b.getRecommendScore(), a.getRecommendScore()));
+
         return result;
     }
+
 }
