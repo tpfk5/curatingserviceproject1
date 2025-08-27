@@ -65,8 +65,6 @@ public class SpaceMappingService {
                 .build();
         }
         return spaceMappingRepository.save(entity);
-
-
     }
 
     @Transactional(readOnly = true)

@@ -67,6 +67,7 @@ public class DisplayService {
 
     private List<Display> parseDisplaysFromJson(JSONObject jsonObject) {
         List<Display> displays = new ArrayList<>();
+
         try {
             JSONObject response = jsonObject.getJSONObject("response");
             JSONObject body = response.getJSONObject("body");
@@ -77,51 +78,51 @@ public class DisplayService {
                 JSONObject item = arr.getJSONObject(i);
 
                 String agency = item.optString("CNTC_INSTT_NM", "");
-                String displaySiteKey = item.optString("TITLE", "");
-
                 //'국립현대미술관' 필터링
                 if (agency == null || !agency.equals("국립현대미술관")) {
                     continue;
                 }
 
+                String title = item.optString("TITLE", "");
+                String eventSite = item.optString("EVENT_SITE", "");
+                String displaySiteKey = eventSite;
+
                 Display display = new Display();
                 display.setTITLE(item.optString("TITLE", ""));
                 display.setCOLLECTED_DATE(item.optString("COLLECTED_DATE", ""));
-//                display.setDESCRIPTION(item.optString("DESCRIPTION", ""));
-//                display.setVIEW_COUNT(item.optInt("VIEW_COUNT"));
+//              display.setDESCRIPTION(item.optString("DESCRIPTION", ""));
+//
                 display.setEVENT_SITE(item.optString("EVENT_SITE", ""));
-//                display.setGENRE(item.optString("GENRE", ""));
-//                display.setDURATION(item.optString("DURATION", ""));
 //                display.setAUTHOR(item.optString("AUTHOR", ""));
                 display.setCHARGE(item.optString("CHARGE", ""));
                 display.setPERIOD(item.optString("PERIOD", ""));
                 display.setEVENT_PERIOD(item.optString("EVENT_PERIOD", ""));
                 display.setCNTC_INSTT_NM(agency);
 
+                try {
+                    Optional<SpaceMapping> opt = spaceMappingService.getByDisplaySiteKey(displaySiteKey);
+                    if (opt.isPresent()) {
+                        SpaceMapping mapping = opt.get();
+                        display.setSpaceCode(mapping.getSpaceCode());
+                        display.setCongestionNm(mapping.getCongestionNm());
 
-                Optional<SpaceMapping> opt = spaceMappingService.getByDisplaySiteKey(displaySiteKey);
-                if (opt.isPresent()) {
-                    SpaceMapping mapping = opt.get();
-
-                    display.setSpaceCode(mapping.getSpaceCode());
-                    display.setCongestionNm(mapping.getCongestionNm());
-
-                    System.out.println("!혼잡도 매핑 확인!: " + mapping.getCongestionNm());
+                        System.out.println("!혼잡도 매핑 확인!: " + mapping.getCongestionNm());
+                    } else {
+                        display.setSpaceCode("미정");
+                        display.setCongestionNm("정보 없음");
+                    }
+                } catch (Exception e) {
+                    log.error("전시 파싱 실패", e);
+                    display.setSpaceCode("오류");
+                    display.setCongestionNm("오류");
                 }
-
-                else {
-                    display.setSpaceCode("미정");
-                    display.setCongestionNm("정보 없음");
-                }
-
-                displays.add(display);
-
+                displays.add(display); //리스트에 추가
             }
-        } catch (Exception e) {
-            e.printStackTrace();
+        } catch(Exception e) {
+            log.error("파싱 실패", e);
         }
-        return displays;
-    }
+            return displays;
+        }
 
     public List<Display> getAllDisplays() {
         return displayRepository.findAll();
@@ -130,10 +131,14 @@ public class DisplayService {
     //DisplayCard DTO
     public List<DisplayCardDTO> getDisplayCards() {
         List<Display> displays = displayRepository.findAll();
-        List<DisplayCardDTO> result = new ArrayList<>();
+        if (displays.isEmpty()) {
+            log.warn("getDisplayCards 없음, API 호출");
+            displays = fetchANDSAVEDisplay();
+        }
 
+        List<DisplayCardDTO> result = new ArrayList<>();
         for (Display display : displays) {
-            //'국립현대미술관'만 가져오기
+            //'국립현대미술관'만 필터링
             if (!"국립현대미술관".equals(display.getCNTC_INSTT_NM())){
                 continue;
             }
@@ -144,7 +149,6 @@ public class DisplayService {
             log.info("혼잡도: {}", display.getCongestionNm());
             log.info("관람료: {}", display.getCHARGE());
 
-//            int score = recommendationService.calculateRecommendationScore(display);
 
             int score;
             try {
@@ -165,7 +169,6 @@ public class DisplayService {
             System.out.println("!혼잡도 상태!: " + congestionNm);
             System.out.println("!추천 점수!: " + score);
 
-
             DisplayCardDTO dto = new DisplayCardDTO(
                     display.getTITLE(),
                     display.getCNTC_INSTT_NM(),
@@ -173,11 +176,10 @@ public class DisplayService {
                     congestionNm,
                     score
             );
-
             result.add(dto);
         }
 
-        //높은 순으로 정렬???????
+        //높은 순으로 정렬??????? (내림차순)
         result.sort((a, b) -> Integer.compare(b.getRecommendScore(), a.getRecommendScore()));
 
         return result;

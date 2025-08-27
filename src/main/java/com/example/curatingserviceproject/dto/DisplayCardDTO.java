@@ -14,6 +14,9 @@ public class DisplayCardDTO {
     private String congestionNm; //혼잡도 상태
     private int recommendScore; //추천 점수
 
+    private String thumUrl; //전시 이미지
+    private String tag;
+
     //CSS -> card.badge 혼잡도 색 표시
     private boolean isGreen;
     private boolean isOrange;

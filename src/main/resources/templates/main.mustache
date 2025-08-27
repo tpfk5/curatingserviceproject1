@@ -1,10 +1,131 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
     <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+    <title>Main Page</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet"/>
 
+    <style>
+        :root{
+          --bg:#f4f4f4; --fg:#0c0c0c; --ink:#000; --paper:#fff;
+          --dark:#141414; --muted:#9a9a9a;
+          --accent:#ff2e2e; --accent-2:#ffef5a; --accent-3:#8df;
+          --b:3px;           /* 굵은 보더 두께 */
+          --r:16px;          /* 둥근 정도 */
+          --shadow:10px 10px 0 var(--ink); /* 오프셋 섀도 */
+          --gap:18px;
+          }
+
+        *{box-sizing:bordwer-box}
+        html,body{height:100%}
+        body{
+          margin:0; background:var(--bg); color:var(--fg);
+          font-family:'Space Grotesk',system-ui,Arial,Helvetica,sans-serif;
+          line-height:1.35;
+        }
+         /* 헤더 */
+    .site-header{
+      padding:16px 22px;
+      display:flex; justify-content:space-between; align-items:flex-start; gap:12px;
+      border-bottom:var(--b) solid var(--ink); background:var(--paper);
+      box-shadow:var(--shadow);
+      position:sticky; top:0; z-index:10;
+    }
+    .brand h1{font-size:22px; margin:0 0 6px 0; letter-spacing:0.2px}
+    .brand p{margin:0; color:#333; font-size:13px; max-width:72ch}
+    .head-links a{font-weight:700; text-decoration:none; color:var(--fg); border:var(--b) solid var(--ink); padding:6px 10px; border-radius:10px; background:var(--accent-2); box-shadow:4px 4px 0 var(--ink); display:inline-block; margin-left:8px}
+
+    /* 메인 2열 그리드 */
+    .layout{
+      display:grid; grid-template-columns: 1.1fr 0.9fr; gap:var(--gap);
+      padding:22px; align-items:start;
+    }
+    @media (max-width: 1024px){
+      .layout{grid-template-columns:1fr}
+      .stream{position:static; height:auto}
+    }
+
+    /* 좌측 - 카드 영역 */
+        .section-title{
+      display:flex; justify-content:space-between; align-items:baseline; margin:0 0 14px 0;
+      border-bottom:var(--b) solid var(--ink);
+    }
+    .section-title h2{
+      font-size:28px; margin:0; text-transform:uppercase; letter-spacing:0.5px;
+    }
+    .section-title .minor{font-size:12px; color:var(--muted)}
+    .cards-grid{
+      display:grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap:var(--gap);
+    }
+    @media (min-width: 1200px){
+      .cards-grid{grid-template-columns: repeat(3, minmax(0,1fr))}
+    }
+    .card{
+      background:var(--paper);
+      border:var(--b) solid var(--ink);
+      border-radius:var(--r);
+      box-shadow:var(--shadow);
+      overflow:hidden;
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .card:hover{ transform:translate(-4px,-4px); box-shadow:14px 14px 0 var(--ink) }
+    .card-media{
+      aspect-ratio: 4/3; background:#eaeaea; border-bottom:var(--b) solid var(--ink);
+      display:flex; align-items:center; justify-content:center; font-weight:700;
+    }
+    .card-media img{width:100%; height:100%; object-fit:cover; display:block}
+    .card-body{padding:14px 14px 16px}
+    .card-title{
+      margin:0 0 6px 0; font-size:16px; font-weight:700; line-height:1.2;
+    }
+    .meta{font-size:12px; color:#333; display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px}
+    .chip{
+      display:inline-block; padding:4px 8px; border:var(--b) solid var(--ink);
+      border-radius:999px; background:var(--accent-2); font-weight:700; font-size:11px;
+      box-shadow:4px 4px 0 var(--ink);
+    }
+    </style>
+
+</head>
+
+<body>
+<header class="side-header">
+    <div class="brand">
+        <h4>current Exhibitions</h4>
+    </div>
+    <div class="head-links"></div>
+    <a href="/cards">cards</a>
+    <a href="/api/refresh-displays">Refresh</a>
+</header>
+
+<main class="layout">
+    <!-- 왼쪽 섹션 / 전시 카드 리스트-->
+    <section>
+        <div class="section-title">
+            <h2>Selected Exhibitions</h2>
+        </div>
+
+        <div class="cards-grid"> </div>
+        {{#cards}}
+            <article class="card"> <!--이미지 필요 -->
+                <div class="card-media">
+                    {{#thumbUrl}}
+                        <img src="{{thumbUrl}}" alt="{{title}}">
+                    {{/thumbUrl}}
+                </div>
+                <div class="card-body"></div>
+                <div class="meta">
+                </div>
+                <div class="score">
+                    <span>추천 점수</span>
+                    <span class="num">{{recommendScore}}</span>
+                </div>=
+            </article>
+            {{/cards}}
+    </section>
+
+    <!--우측 섹션 / 사용자 취향 추천 -->
+
+</main>
 </body>
 </html>

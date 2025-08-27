@@ -10,10 +10,7 @@ import com.example.curatingserviceproject.service.SpaceMappingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -29,56 +26,66 @@ public class ApiController {
     private final SpaceMappingService spaceMappingService;
 
 
-    //전시 정보 불러오기
+    //전시 정보
     @GetMapping("/api/displays")
     public List<Display> displays() {
         return displayService.getAllDisplays();
     }
 
 
-    //전시 정보 저장하기
+    //전시 정보 저장, 수집
     @GetMapping("/api/fetch-displays")
     public ResponseEntity<?> fetchDisplays() {
         try {
             List<Display> saved = displayService.fetchANDSAVEDisplay();
             return ResponseEntity.ok(Map.of(
-                    "status","ok",
-                    "savedCount",saved.size()
+                    "status", "ok",
+                    "savedCount", saved.size()
             ));
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body(Map.of(
-                    "status","error",
-                    "message",e.getMessage()
+                    "status", "error",
+                    "message", e.getMessage()
             ));
         }
     }
 
-    //전시 카드 가져오기
+    //추천 전시 카드 데이터
     @GetMapping("/api/cards")
     public ResponseEntity<?> getDisplayCards() {
         try {
             List<DisplayCardDTO> cardList = displayService.getDisplayCards();
             return ResponseEntity.ok(cardList);
         } catch (Exception e) {
-            return ResponseEntity.status(500).body(Map.of("error",e.getMessage()));
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
         }
     }
 
+
+    @GetMapping("/api/congestion")
     public ResponseEntity<?> getCongestion(@RequestParam String spaceCode) {
-        Congestion congestion = congestionService.fetchANDSAVECongestion(spaceCode);
-        if (congestion != null)
-            return ResponseEntity.ok(congestion);
+        try {
+            Congestion congestion = congestionService.fetchANDSAVECongestion(spaceCode);
+            if (congestion != null) {
+                return ResponseEntity.ok(congestion);
+            }
+                return ResponseEntity.status(404).body(Map.of("error", "혼잡도 없음"));
 
-        return ResponseEntity.status(500).body("혼잡도 API 호출 실패");
-    }
+        } catch(Exception e){
+
+            log.error("혼잡도 조회 오류", e);
+
+            return ResponseEntity.status(500).body(Map.of("error", "혼잡도 API 호출 실패"));
+            }
+        }
 
 
-
-    //test !!!!!
+    //혼잡도 테스트
     @GetMapping("/api/congestion/test")
     public ResponseEntity<?> testCongestion() {
-        return getCongestion("MMCA-SPACE-1001");
+        return getCongestion("MMCA-SPACE-1001"); //1전시실 테스트
     }
+
 
     @GetMapping("/api/mappings")
     public ResponseEntity<?> getDisplaySiteKey(@RequestParam(required = false) String displaySiteKey) {
@@ -123,16 +130,13 @@ public class ApiController {
         }
     }
 
-//    @GetMapping("/api/mappings")
-    public ResponseEntity<?> upsert(@RequestBody Map<String, String> request) {
+    @PostMapping("/api/mappings")
+    public ResponseEntity<?> createUpdateMapping(@RequestBody Map<String, String> request) {
         try {
             log.info("매핑 생성 or 수정 요청: {}", request);
 
             String displaySiteKey = request.get("displaySiteKey");
-            String agncNm = request.get("agncNm");
-            String spaceNm = request.get("spaceNm");
             String spaceCode = request.get("spaceCode");
-            String congestionNm = request.get("congestionNm");
 
             if (displaySiteKey == null || displaySiteKey.trim().isEmpty()) {
                 return ResponseEntity.badRequest()
@@ -146,41 +150,32 @@ public class ApiController {
 
             SpaceMapping result = spaceMappingService.upsert(
                     displaySiteKey.trim(),
-                    agncNm != null ? agncNm.trim() : "",
-                    spaceNm != null ? spaceNm.trim() : "",
+                    request.getOrDefault("agncNm", ""),
+                    request.getOrDefault("spaceNm", ""),
                     spaceCode.trim(),
-                    congestionNm != null ? congestionNm.trim() : ""
+                    request.getOrDefault("congestionNm", "")
             );
 
             return ResponseEntity.ok(result);
-
-        } catch (IllegalArgumentException e) {
-            log.warn("요청 잘못됨: {}", e.getMessage());
-            return ResponseEntity.badRequest()
-                    .body(Map.of("error", e.getMessage()));
         } catch (Exception e) {
-            log.error("매핑 생성 or 수정 중 오류 발생", e);
+            log.error("매핑 생성/수정 오류 발생!", e);
             return ResponseEntity.status(500)
-                    .body(Map.of("error", "서버 오류: " + e.getMessage()));
+                    .body(Map.of("error", e.getMessage()));
         }
     }
 
     // 테스트 용!!!!
-    @GetMapping("/api/mappings/test")
+    @GetMapping("/api/test")
     public ResponseEntity<String> test() {
-        return ResponseEntity.ok("컨트롤러 작동중!");
+        return ResponseEntity.ok("API 컨트롤러 작동중!");
     }
 
-    @GetMapping("/api/mappings/test-service")
-    public ResponseEntity<String> testService() {
-        try {
-            List<SpaceMapping> mappings = spaceMappingService.getAllMappings();
-            return ResponseEntity.ok("Service 연결 성공! 매핑 수: " + mappings.size());
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("서비스 오류: " + e.getMessage());
-        }
+    @GetMapping("/api/mappings/test")
+    public ResponseEntity<String> testMapping() {
+        return ResponseEntity.ok("매핑 컨트롤러 작동중!");
+            }
     }
-}
+
 
 
 
