@@ -9,7 +9,7 @@ import lombok.Setter;
 public class DisplayCardDTO {
 
     private String title; //전시 제목
-    private String image_obj; //이미지 url
+    private String imageObject; //이미지 url
     private String agencyNm; // 전시실 명
     private String spaceCode; // 전시실 코드
     private String congestionNm; //혼잡도 상태
@@ -24,9 +24,9 @@ public class DisplayCardDTO {
     private boolean isGray;
 
 
-    public DisplayCardDTO(String title, String image_obj, String agencyNm, String spaceCode, String congestionNm, int recommendScore) {
+    public DisplayCardDTO(String title, String imageObject, String agencyNm, String spaceCode, String congestionNm, int recommendScore) {
         this.title = title != null ? title : "제목 없음";
-        this.image_obj = image_obj != null ? image_obj : "이미지 없음";
+        this.imageObject = imageObject != null ? imageObject : "이미지 없음";
         this.agencyNm = agencyNm != null ? agencyNm : "기관 정보 없음";
         this.spaceCode = spaceCode != null ? spaceCode : "공간 정보 없음";
         this.congestionNm = congestionNm != null ? congestionNm : "혼잡도 정보 없음";

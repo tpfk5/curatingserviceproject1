@@ -10,6 +10,7 @@
          margin: 0;
          height: 100%;
      }
+
      body {padding: 20px;}
 
      .header {
@@ -19,6 +20,11 @@
          border-bottom: 1px solid #000000;
          box-sizing: border-box;
      }
+
+<!--     .nav-links:hover {-->
+<!--        opacity: 0.6;-->
+<!--     }-->
+
 
     .main-container {
       display: grid;
@@ -32,7 +38,6 @@
         min-width: 380px;
         background: #ffffff;
         /*padding: 32px 16px;*/
-
         color: #222;
     }
 
@@ -46,19 +51,19 @@
 
      }
 
-
     .right-section {
       min-width: 300px;
       background-color: #323232;
       color: #ffffff;
       padding: 32px 16px;
-
     }
 
      .card {
          /*border: 1px solid black;*/
          padding: 10px;
          margin-bottom: 5px;
+         position: relative;
+         background: white;
      }
 
      .badge {
@@ -74,6 +79,34 @@
      .yellow{background-color: yellow; color: black;}
      .red{background-color: red}
      .gray{background-color: gray}
+
+    .view-btn {
+        background: none;
+        border: 1px solid #000;
+        padding: 8px 20px;
+        border-radius: 20px;
+        font-size: 12px;
+        cursor: pointer;
+        transition: all 0.2s;
+        text-transform: lowercase;
+    }
+
+    .view-btn:hover {
+            background: #000;
+            color: white;
+        }
+
+    .img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-bottom: 1px solid #ddd;
+        }
+
+    .card-content {
+            padding: 20px;
+            background: white;
+        }
 
 
     </style>
@@ -91,6 +124,18 @@
         <br>
         1234567890
     </span>
+
+<!--    <div class="header-left">-->
+<!--        <div class="nav-links">-->
+<!--            <h6>Main</h6>-->
+<!--            <h6>Detail</h6>Detail-->
+<!--            <h6>My</h6>-->
+<!--        </div>-->
+<!--    </div>-->
+
+<!--    <div class="header-right">-->
+<!--        →-->
+<!--    </div>-->
 
 <!---->
 </div>
@@ -121,23 +166,22 @@
         </div>
     </div>
         <div>
-
-
         </div>
+
+
         {{#cards}}
             <div class="card">
                 <h3>{{title}}</h3>
-<!--                <IMG src={{img_obj}} class="img">-->
+                <p>imageObject: </p>
+                <button class="view-btn">view</button>
+<!--                <img src = class="img" style="width:200px; height:auto;">-->
                 <p6><strong> WHERE </strong> {{agencyNm}}</p6>
-                <br>
                 <p6><strong> Congestion </strong> {{congestionNm}}</p6>
-                <br>
                 <p6><strong> i recommend this by </strong> {{recommendScore}}</p6>
                 <span class= "badge {{#isGreen}}green{{/isGreen}}{{#isOrange}}orange{{/isOrange}} {{#isYellow}}yellow{{/isYellow}}{{#isRed}}red{{/isRed}}{{#isGray}}gray{{/isGray}}">
                 </span>
             </div>
         {{/cards}}
-
     </div>
 </div>
 
@@ -150,6 +194,11 @@
             <h4>"h i sera h i sera h i sera h i sera h i sera h i serah i sera h i sera h i
                 sera h i sera h i sera h i serah i sera h i sera h i sera h i sera h i sera
                 h i sera h i sera h i sera h i sera h i sera h i sera h i sera"</h4>
+
+            <div class="quote">
+                "We believe in the power of contemporary art to transform spaces and inspire meaningful conversations about our world."
+            </div>
+
         </span>
 
         <div class="form-check">
@@ -159,33 +208,51 @@
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="ch1" checked>
+            <input class="form-check-input" type="checkbox" id="ch1" checked>
             <label class="form-check-label" for="flexCheckChecked">
                 12334567890
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="ch2" checked>
+            <input class="form-check-input" type="checkbox" id="ch2" checked>
             <label class="form-check-label" for="flexCheckChecked">
                 I JUST WANNA GO HOME
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="ch3" checked>
+            <input class="form-check-input" type="checkbox" id="ch3" checked>
             <label class="form-check-label" for="flexCheckChecked">
                 20250828
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="ch4" checked>
+            <input class="form-check-input" type="checkbox" id="ch4" checked>
             <label class="form-check-label" for="flexCheckChecked">
                 TODAY IS THURSDAY?
             </label>
         </div>
-        <div class="example4">
-            <img src="/img/1.jpg" class="poster4 img-thumbnail" alt="이미지 예시">
-        </div>
 
+
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="modern">
+            <label class="form-check-label" for="modern">Modern Art</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="contemporary" checked>
+            <label class="form-check-label" for="contemporary">Contemporary</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="sculpture" checked>
+            <label class="form-check-label" for="sculpture">Sculpture</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="painting" checked>
+            <label class="form-check-label" for="painting">Painting</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="digital" checked>
+            <label class="form-check-label" for="digital">Digital Art</label>
+        </div>
     </div>
 
 

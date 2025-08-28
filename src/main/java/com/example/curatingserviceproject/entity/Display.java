@@ -24,7 +24,7 @@ public class Display {
 //    @Column(name = "DESCRIPTION")
 //    private String DESCRIPTION; //소개
 
-    @Column(name = "image_obj")
+    @Column(name = "image_object")
     private String IMAGE_OBJECT; //이미지 주소
 
     @Column(name = "cntc_instt_nm")

@@ -52,15 +52,19 @@ public class DisplayService {
         urlConnection.setRequestMethod("GET");
         urlConnection.connect();
 
+        try (
         BufferedReader bufferedReader = new BufferedReader(
-                new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
-        String returnLine;
-        while ((returnLine = bufferedReader.readLine()) != null) {
-            result.append(returnLine).append("\n");
-        }
-        urlConnection.disconnect();
-        return result.toString();
+                new InputStreamReader(urlConnection.getInputStream(),
+                        "UTF-8"))) {
+            String returnLine;
 
+            while ((returnLine = bufferedReader.readLine()) != null) {
+                result.append(returnLine).append("\n");
+            }
+        } finally {
+            urlConnection.disconnect();
+        }
+        return result.toString();
     }
 
     private List<Display> parseDisplaysFromJson(JSONObject jsonObject) {
@@ -81,35 +85,41 @@ public class DisplayService {
                     continue;
                 }
 
-                String title = item.optString("TITLE", "");
-                String eventSite = item.optString("EVENT_SITE", "");
-                String displaySiteKey = eventSite;
-
                 Display display = new Display();
+
                 display.setTITLE(item.optString("TITLE", ""));
                 display.setCOLLECTED_DATE(item.optString("COLLECTED_DATE", ""));
 //              display.setDESCRIPTION(item.optString("DESCRIPTION", ""));
-                display.setIMAGE_OBJECT(item.optString("IMAGE_OBJECT", ""));
                 display.setEVENT_SITE(item.optString("EVENT_SITE", ""));
                 display.setCHARGE(item.optString("CHARGE", ""));
                 display.setPERIOD(item.optString("PERIOD", ""));
                 display.setEVENT_PERIOD(item.optString("EVENT_PERIOD", ""));
                 display.setCNTC_INSTT_NM(agency);
 
+                String imageUrl = item.optString("IMAGE_OBJECT", "");
+
+                if (imageUrl.isEmpty()) {
+                    imageUrl = "/img/1.jpg"; // 임시 기본 이미지&&
+                }
+                display.setIMAGE_OBJECT(imageUrl);
+
+                log.info("!이미지 URL: {}", display.getIMAGE_OBJECT());
+
+                String displaySiteKey = display.getEVENT_SITE();
                 try {
                     Optional<SpaceMapping> opt = spaceMappingService.getByDisplaySiteKey(displaySiteKey);
                     if (opt.isPresent()) {
                         SpaceMapping mapping = opt.get();
                         display.setSpaceCode(mapping.getSpaceCode());
                         display.setCongestionNm(mapping.getCongestionNm());
+                        log.info("!혼잡도 매핑 확인!: {}",mapping.getCongestionNm() );
 
-                        System.out.println("!혼잡도 매핑 확인!: " + mapping.getCongestionNm());
                     } else {
                         display.setSpaceCode("정보 없음");
                         display.setCongestionNm("정보 없음");
                     }
                 } catch (Exception e) {
-                    log.error("전시 파싱 실패", e);
+                    log.error("SpaceMapping 조회 실패", e);
                     display.setSpaceCode("오류");
                     display.setCongestionNm("오류");
                 }
@@ -134,6 +144,7 @@ public class DisplayService {
             log.warn("getDisplayCards 없음, API 호출");
             displays = fetchANDSAVEDisplay();
         }
+
         //'국립현대미술관'만 필터링
         List<DisplayCardDTO> result = new ArrayList<>();
         for (Display display : displays) {
@@ -150,37 +161,30 @@ public class DisplayService {
             seenTitles.add(title);
 
             //디버깅용
-            log.info("처리중인 전시: {}", display.getTITLE());
-            log.info("EVENT_SITE: {}", display.getEVENT_SITE());
-            log.info("혼잡도: {}", display.getCongestionNm());
-            log.info("관람료: {}", display.getCHARGE());
+//            log.info("처리중인 전시: {}", display.getTITLE());
+//            log.info("EVENT_SITE: {}", display.getEVENT_SITE());
+//            log.info("혼잡도: {}", display.getCongestionNm());
+//            log.info("관람료: {}", display.getCHARGE());
 
-
-            int score;
             try {
-                score = recommendationService.calculateRecommendationScore(display);
+                int score = recommendationService.calculateRecommendationScore(display);
 
                 String safeCongestionNm = display.getCongestionNm() != null ?
                         display.getCongestionNm() : "정보 없음";
 
-                String spaceCode = display.getSpaceCode();
-                String congestionNm = display.getCongestionNm();
-
-                System.out.println("!혼잡도 상태!: " + congestionNm);
-                System.out.println("!추천 점수!: " + score);
 
                 DisplayCardDTO dto = new DisplayCardDTO(
                         title,
+                        display.getIMAGE_OBJECT(),
                         display.getCNTC_INSTT_NM(),
                         display.getSpaceCode(),
-                        display.getIMAGE_OBJECT(),
                         safeCongestionNm,
                         score
-
                 );
+
                 result.add(dto);
             } catch (Exception e) {
-                log.error("전시 처리 중 오류: {}", title, e);
+                log.error("!추천 점수 계산 중 오류: {}", title, e);
             }
         }
         //높은 순으로 정렬??????? (내림차순)
