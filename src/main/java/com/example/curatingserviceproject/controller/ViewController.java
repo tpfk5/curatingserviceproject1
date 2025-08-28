@@ -36,18 +36,21 @@ public class ViewController {
     }
 
 
-    //html
+    //html / css 화면 보여주기
     @GetMapping("/main")
-     public String showmain(Model model) {
+    public String showmain(Model model) {
         try {
-            List<DisplayCardDTO> cards = displayService.getDisplayCards();
-            model.addAttribute("cards",cards);
-            return "main"; // -> main.mustache 이랑 연결
+            int limit = 3;
+            List<DisplayCardDTO> cards = displayService.getDisplayCardsLimited(limit);
+            log.info("vc에서 받은 카드 수:{}", cards.size());
+
+            model.addAttribute("cards", cards);
+            return "main"; // -> main.mustache 이랑 연결하기
 
         } catch (Exception e) {
             log.error("로딩 실패", e);
-            model.addAttribute("error","로딩 실패");
+            model.addAttribute("error", "로딩 실패");
             return "error";
         }
-     }
+    }
 }

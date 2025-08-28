@@ -26,7 +26,7 @@ public class ApiController {
     private final SpaceMappingService spaceMappingService;
 
 
-    //전시 정보
+    //전시 정보 (필터링 x)
     @GetMapping("/api/displays")
     public List<Display> displays() {
         return displayService.getAllDisplays();

@@ -14,9 +14,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 
 @Service
@@ -91,9 +89,8 @@ public class DisplayService {
                 display.setTITLE(item.optString("TITLE", ""));
                 display.setCOLLECTED_DATE(item.optString("COLLECTED_DATE", ""));
 //              display.setDESCRIPTION(item.optString("DESCRIPTION", ""));
-//
+                display.setIMAGE_OBJECT(item.optString("IMAGE_OBJECT", ""));
                 display.setEVENT_SITE(item.optString("EVENT_SITE", ""));
-//                display.setAUTHOR(item.optString("AUTHOR", ""));
                 display.setCHARGE(item.optString("CHARGE", ""));
                 display.setPERIOD(item.optString("PERIOD", ""));
                 display.setEVENT_PERIOD(item.optString("EVENT_PERIOD", ""));
@@ -108,7 +105,7 @@ public class DisplayService {
 
                         System.out.println("!혼잡도 매핑 확인!: " + mapping.getCongestionNm());
                     } else {
-                        display.setSpaceCode("미정");
+                        display.setSpaceCode("정보 없음");
                         display.setCongestionNm("정보 없음");
                     }
                 } catch (Exception e) {
@@ -118,11 +115,11 @@ public class DisplayService {
                 }
                 displays.add(display); //리스트에 추가
             }
-        } catch(Exception e) {
+        } catch (Exception e) {
             log.error("파싱 실패", e);
         }
-            return displays;
-        }
+        return displays;
+    }
 
     public List<Display> getAllDisplays() {
         return displayRepository.findAll();
@@ -131,17 +128,26 @@ public class DisplayService {
     //DisplayCard DTO
     public List<DisplayCardDTO> getDisplayCards() {
         List<Display> displays = displayRepository.findAll();
+        Set<String> seenTitles = new HashSet<>(); //중복 방지용
+
         if (displays.isEmpty()) {
             log.warn("getDisplayCards 없음, API 호출");
             displays = fetchANDSAVEDisplay();
         }
-
+        //'국립현대미술관'만 필터링
         List<DisplayCardDTO> result = new ArrayList<>();
         for (Display display : displays) {
-            //'국립현대미술관'만 필터링
-            if (!"국립현대미술관".equals(display.getCNTC_INSTT_NM())){
+            if (!"국립현대미술관".equals(display.getCNTC_INSTT_NM())) {
                 continue;
             }
+
+            //중복 체크하기 -> 이미 저장됐으면 SKIP!
+            String title = display.getTITLE();
+            if (seenTitles.contains(title)) {
+                log.info("중복 skip: {}", title);
+                continue;
+            }
+            seenTitles.add(title);
 
             //디버깅용
             log.info("처리중인 전시: {}", display.getTITLE());
@@ -154,35 +160,44 @@ public class DisplayService {
             try {
                 score = recommendationService.calculateRecommendationScore(display);
 
-                log.info("점수 계산 성공: {}", score);
+                String safeCongestionNm = display.getCongestionNm() != null ?
+                        display.getCongestionNm() : "정보 없음";
+
+                String spaceCode = display.getSpaceCode();
+                String congestionNm = display.getCongestionNm();
+
+                System.out.println("!혼잡도 상태!: " + congestionNm);
+                System.out.println("!추천 점수!: " + score);
+
+                DisplayCardDTO dto = new DisplayCardDTO(
+                        title,
+                        display.getCNTC_INSTT_NM(),
+                        display.getSpaceCode(),
+                        display.getIMAGE_OBJECT(),
+                        safeCongestionNm,
+                        score
+
+                );
+                result.add(dto);
             } catch (Exception e) {
-                log.error("점수 계산 실패: {}", e.getMessage());
-
-                e.printStackTrace();
-                score = 50; // 기본 점수로 대체
+                log.error("전시 처리 중 오류: {}", title, e);
             }
-
-
-            String spaceCode = display.getSpaceCode();
-            String congestionNm = display.getCongestionNm();
-
-            System.out.println("!혼잡도 상태!: " + congestionNm);
-            System.out.println("!추천 점수!: " + score);
-
-            DisplayCardDTO dto = new DisplayCardDTO(
-                    display.getTITLE(),
-                    display.getCNTC_INSTT_NM(),
-                    spaceCode,
-                    congestionNm,
-                    score
-            );
-            result.add(dto);
         }
-
         //높은 순으로 정렬??????? (내림차순)
         result.sort((a, b) -> Integer.compare(b.getRecommendScore(), a.getRecommendScore()));
-
         return result;
     }
 
+
+    // main page 카드 개수 제한하기
+    public List<DisplayCardDTO> getDisplayCardsLimited(int limit) {
+        List<DisplayCardDTO> allcards = getDisplayCards();
+
+        if (allcards.size() > limit) {
+            return allcards.subList(0, limit);
+        }
+        return allcards;
+    }
 }
+
+

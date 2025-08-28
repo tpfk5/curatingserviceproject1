@@ -1,46 +1,195 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
-    .container {
+     html,body {
+         font-family: 'Space Grotesk', sans-serif;
+         margin: 0;
+         height: 100%;
+     }
+     body {padding: 20px;}
+
+     .header {
+         width: 100%;
+         background-color: #ffffff;
+         border-top: 1px solid #000000;
+         border-bottom: 1px solid #000000;
+         box-sizing: border-box;
+     }
+
+    .main-container {
       display: grid;
-      grid-template-columns: 2fr 1fr; /* 좌측 2칸, 우측 1칸 비율 */
-      gap: 20px; /* 칸 사이 간격 */
-      height: 100vh; /* 화면 전체 높이 */
+      grid-template-columns: 2fr 1fr;
+      gap: 40px;
+      height: calc(100vh - 60px);
+        box-sizing: border-box;
     }
 
     .left-section {
-      overflow-y: auto;
+        min-width: 380px;
+        background: #ffffff;
+        /*padding: 32px 16px;*/
+
+        color: #222;
     }
 
+     .poster1, .poster2, .poster3, .poster4 {
+         width: 200px;
+         height: 200px;
+         object-fit: contain;
+         display: block;
+         margin-left: auto;
+         margin-right: auto;
+
+     }
+
+
     .right-section {
-      background-color: #222;
-      color: white;
-      padding: 20px;
-      overflow-y: auto;
+      min-width: 300px;
+      background-color: #323232;
+      color: #ffffff;
+      padding: 32px 16px;
+
     }
+
+     .card {
+         /*border: 1px solid black;*/
+         padding: 10px;
+         margin-bottom: 5px;
+     }
+
+     .badge {
+         display: inline-block;
+         padding: 4px 10px;
+         border-radius: 10px;
+         color: white;
+         font-weight: bold;
+         font-size: 7px;
+     }
+     .green{background-color: green}
+     .orange{background-color: darkorange}
+     .yellow{background-color: yellow; color: black;}
+     .red{background-color: red}
+     .gray{background-color: gray}
 
 
     </style>
-
-
 </head>
 <body>
-<div style="display: flex;">
-    <!-- 왼쪽: 전시 카드 -->
-    <div style="flex: 2; padding: 20px;">
+<!--헤더-->
+<div class="header">
+    <span style="font-family: 'Space Grotesk', sans-serif; ">
+        <h1>Do U Like Gonna Exhibition?</h1>
+        I'll recommend it for u!
+        <br>
+        ABCDEFGHIJKLMNOPbabo
+        <br>
+        QRSTUVWXYZ
+        <br>
+        1234567890
+    </span>
 
-        <div class="card">전시 카드 1 내용</div>
-        <div class="card">전시 카드 2 내용</div>
+<!---->
+</div>
+<div class="main-container">
 
+<div class="left-section">
+    <!-- 왼쪽 섹션: 전시 카드 -->
+    <div>
+        <span style="padding:0;">
+            <h2>Selected Displays Only For U</h2>
+        </span>
+        <div style="display: flex; align-items: center;">
+        <div class="example1" >
+            <span>
+            <h5>숲</h5>
+            <img src="/img/mmcaseoul_숲.jpg" class="poster1 img-thumbnail" alt="숲 포스터">
+            </span>
+        </div>
+
+        <div class="example2">
+            <h5>drawing</h5>
+            <img src="/img/mmcacheongju_드로잉.png" class="poster2 img-thumbnail" alt="드로잉 포스터">
+        </div>
+
+        <div class="example3">
+            <h5>hometown</h5>
+            <img src="/img/mmcadeoksugung_home.jpg" class="poster3 img-thumbnail" alt="고향 포스터">
+        </div>
     </div>
-    <!-- 오른쪽: 사용자 취향 분석 -->
-    <div style="flex: 1; background: #222; color: #fff; padding: 20px;">
-        <h3>사용자 취향 분석</h3>
+        <div>
+
+
+        </div>
+        {{#cards}}
+            <div class="card">
+                <h3>{{title}}</h3>
+<!--                <IMG src={{img_obj}} class="img">-->
+                <p6><strong> WHERE </strong> {{agencyNm}}</p6>
+                <br>
+                <p6><strong> Congestion </strong> {{congestionNm}}</p6>
+                <br>
+                <p6><strong> i recommend this by </strong> {{recommendScore}}</p6>
+                <span class= "badge {{#isGreen}}green{{/isGreen}}{{#isOrange}}orange{{/isOrange}} {{#isYellow}}yellow{{/isYellow}}{{#isRed}}red{{/isRed}}{{#isGray}}gray{{/isGray}}">
+                </span>
+            </div>
+        {{/cards}}
+
     </div>
 </div>
 
+
+    <!-- 오른쪽 섹션: 사용자 취향 분석 -->
+    <div class="right-section" style="display: grid; background: black; color: #fff;">
+        <h2>What are your tastes?</h2>
+    <div>
+        <span class="">
+            <h4>"h i sera h i sera h i sera h i sera h i sera h i serah i sera h i sera h i
+                sera h i sera h i sera h i serah i sera h i sera h i sera h i sera h i sera
+                h i sera h i sera h i sera h i sera h i sera h i sera h i sera"</h4>
+        </span>
+
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+            <label class="form-check-label" for="flexCheckDefault">
+                ABCDEFGHIJKLMNOP
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="ch1" checked>
+            <label class="form-check-label" for="flexCheckChecked">
+                12334567890
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="ch2" checked>
+            <label class="form-check-label" for="flexCheckChecked">
+                I JUST WANNA GO HOME
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="ch3" checked>
+            <label class="form-check-label" for="flexCheckChecked">
+                20250828
+            </label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="ch4" checked>
+            <label class="form-check-label" for="flexCheckChecked">
+                TODAY IS THURSDAY?
+            </label>
+        </div>
+        <div class="example4">
+            <img src="/img/1.jpg" class="poster4 img-thumbnail" alt="이미지 예시">
+        </div>
+
+    </div>
+
+
+    </div>
+</div>
 </body>
 </html>

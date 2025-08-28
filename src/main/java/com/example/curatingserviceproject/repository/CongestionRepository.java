@@ -7,5 +7,4 @@ import java.util.Optional;
 
 public interface CongestionRepository extends JpaRepository<Congestion, Long> {
     Optional<Congestion> findTopBySpaceNmOrderByCollectedAtDesc(String spaceNm);
-//    Optional<Congestion> findTopByAgncNmAndSpaceNmOrderByCollectedAtDesc(String agncNm, String spaceNm);
 }

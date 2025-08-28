@@ -25,5 +25,5 @@ public class UserPreference {
     private String preferredLocations; //from RecommendationService -> 선호 장소
 
     @Column(name = "user_session")
-    private String userSession; //개인 식별자
+    private String userSession; //개인 식별자?
 }
