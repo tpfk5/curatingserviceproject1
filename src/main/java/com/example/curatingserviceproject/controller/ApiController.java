@@ -10,11 +10,13 @@ import com.example.curatingserviceproject.service.SpaceMappingService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
 
 @RestController
 @RequiredArgsConstructor
@@ -112,23 +114,23 @@ public class ApiController {
         }
     }
     //db 저장된 내용 호출
-    @GetMapping("/api/mappings/all")
-    public ResponseEntity<?> getAllMappings() {
-        try {
-            log.info("전체 목록 조회 시작!");
-
-            List<SpaceMapping> allMappings = spaceMappingService.getAllMappings();
-
-            log.info("all 매핑 목록 조회 완료! 개수:{}", allMappings.size());
-
-            return ResponseEntity.ok(allMappings);
-
-        } catch (Exception e) {
-            log.error("매핑 조회 오류 발생", e);
-            return ResponseEntity.status(500)
-                    .body(Map.of("error", e.getMessage()));
-        }
-    }
+//    @GetMapping("/api/mappings/all")
+//    public ResponseEntity<?> getAllMappings() {
+//        try {
+//            log.info("전체 목록 조회 시작!");
+//
+//            List<SpaceMapping> allMappings = spaceMappingService.getAllMappings();
+//
+//            log.info("all 매핑 목록 조회 완료! 개수:{}", allMappings.size());
+//
+//            return ResponseEntity.ok(allMappings);
+//
+//        } catch (Exception e) {
+//            log.error("매핑 조회 오류 발생", e);
+//            return ResponseEntity.status(500)
+//                    .body(Map.of("error", e.getMessage()));
+//        }
+//    }
 
     @PostMapping("/api/mappings")
     public ResponseEntity<?> createUpdateMapping(@RequestBody Map<String, String> request) {
@@ -162,6 +164,14 @@ public class ApiController {
             return ResponseEntity.status(500)
                     .body(Map.of("error", e.getMessage()));
         }
+    }
+
+    //detail page
+    @GetMapping("/detail")
+    public String detailByTitle(@RequestParam String title, Model model) {
+        Display display = displayService.getDisplayByTitle(title);
+        model.addAttribute("display", display);
+        return "detail";
     }
 
     // 테스트 용!!!!

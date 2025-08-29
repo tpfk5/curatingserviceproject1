@@ -10,6 +10,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.json.XML;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -86,20 +87,18 @@ public class DisplayService {
                 }
 
                 Display display = new Display();
-
                 display.setTITLE(item.optString("TITLE", ""));
                 display.setCOLLECTED_DATE(item.optString("COLLECTED_DATE", ""));
 //              display.setDESCRIPTION(item.optString("DESCRIPTION", ""));
                 display.setEVENT_SITE(item.optString("EVENT_SITE", ""));
                 display.setCHARGE(item.optString("CHARGE", ""));
                 display.setPERIOD(item.optString("PERIOD", ""));
-                display.setEVENT_PERIOD(item.optString("EVENT_PERIOD", ""));
                 display.setCNTC_INSTT_NM(agency);
 
+                //img url 가져오기
                 String imageUrl = item.optString("IMAGE_OBJECT", "");
-
                 if (imageUrl.isEmpty()) {
-                    imageUrl = "/img/1.jpg"; // 임시 기본 이미지&&
+                    imageUrl = "/img/temp.jpg"; // && 임시 기본 이미지&&
                 }
                 display.setIMAGE_OBJECT(imageUrl);
 
@@ -179,21 +178,23 @@ public class DisplayService {
                         display.getCNTC_INSTT_NM(),
                         display.getSpaceCode(),
                         safeCongestionNm,
-                        score
+                        score,
+                        display.getPERIOD()
                 );
+
+                log.info("@@이미지 URL: {}", display.getIMAGE_OBJECT());
 
                 result.add(dto);
             } catch (Exception e) {
                 log.error("!추천 점수 계산 중 오류: {}", title, e);
             }
         }
-        //높은 순으로 정렬??????? (내림차순)
+        //점수 높은 순으로 정렬? (내림차순)
         result.sort((a, b) -> Integer.compare(b.getRecommendScore(), a.getRecommendScore()));
         return result;
     }
 
-
-    // main page 카드 개수 제한하기
+    // main page에서 카드 개수 제한하기(3)
     public List<DisplayCardDTO> getDisplayCardsLimited(int limit) {
         List<DisplayCardDTO> allcards = getDisplayCards();
 
@@ -202,6 +203,17 @@ public class DisplayService {
         }
         return allcards;
     }
+
+    //main.view btn -> detail 페이지로 이동
+    public Display getDisplayByTitle(String title) {
+        List<Display> displays = displayRepository.findAll();
+
+        return displays.stream()
+                .filter(display -> display.getTITLE().equals(title))
+                .findFirst()
+                .orElse(null);
+    }
+
 }
 
 

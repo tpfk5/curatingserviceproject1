@@ -25,14 +25,14 @@ public class Display {
 //    private String DESCRIPTION; //소개
 
     @Column(name = "image_object")
-    private String IMAGE_OBJECT; //이미지 주소
+    private String IMAGE_OBJECT; //이미지 Url
 
     @Column(name = "cntc_instt_nm")
     private String CNTC_INSTT_NM; //연계기간명
 
     @Column(name = "event_site")
     private String EVENT_SITE; //장소
-//
+
 //    @Column(name = "genre")
 //    private String GENRE; //장르
 

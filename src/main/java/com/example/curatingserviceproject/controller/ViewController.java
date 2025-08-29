@@ -42,9 +42,14 @@ public class ViewController {
         try {
             int limit = 3;
             List<DisplayCardDTO> cards = displayService.getDisplayCardsLimited(limit);
+            List<DisplayCardDTO> allExhibitions = displayService.getDisplayCards();
+
             log.info("vc에서 받은 카드 수:{}", cards.size());
+            log.info("전체 전시 수: {}", allExhibitions.size());
 
             model.addAttribute("cards", cards);
+            model.addAttribute("allExhibitions", allExhibitions);
+
             return "main"; // -> main.mustache 이랑 연결하기
 
         } catch (Exception e) {

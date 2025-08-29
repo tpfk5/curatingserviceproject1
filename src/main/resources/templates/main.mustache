@@ -2,16 +2,21 @@
 <html lang="en">
 <head>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
     <meta charset="UTF-8">
     <title>Title</title>
     <style>
-     html,body {
+     html {
          font-family: 'Space Grotesk', sans-serif;
          margin: 0;
          height: 100%;
      }
-
-     body {padding: 20px;}
+     body {
+         font-family: 'Inter' ,sans-serif;
+         margin: 0;
+         padding: 20px;
+     }
 
      .header {
          width: 100%;
@@ -21,16 +26,11 @@
          box-sizing: border-box;
      }
 
-<!--     .nav-links:hover {-->
-<!--        opacity: 0.6;-->
-<!--     }-->
-
-
     .main-container {
-      display: grid;
-      grid-template-columns: 2fr 1fr;
-      gap: 40px;
-      height: calc(100vh - 60px);
+        display: grid;
+        grid-template-columns: 2fr 1fr;
+        gap: 40px;
+        height: calc(100vh - 60px);
         box-sizing: border-box;
     }
 
@@ -41,15 +41,6 @@
         color: #222;
     }
 
-     .poster1, .poster2, .poster3, .poster4 {
-         width: 200px;
-         height: 200px;
-         object-fit: contain;
-         display: block;
-         margin-left: auto;
-         margin-right: auto;
-
-     }
 
     .right-section {
       min-width: 300px;
@@ -59,11 +50,31 @@
     }
 
      .card {
-         /*border: 1px solid black;*/
-         padding: 10px;
-         margin-bottom: 5px;
+         margin-bottom: 20px;
          position: relative;
          background: white;
+         /*max-width: 250px;*/
+
+     }
+
+     .card-header {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         margin-bottom: 16px;
+     }
+
+     .place, .congestion, .recomnd_score, .period {
+         font-size: 18px;
+         margin: 4px 0;
+         font-weight: 400;
+     }
+
+     .cards-grid {
+         display: grid;
+         grid-template-columns: repeat(3, 1fr);
+         gap: 30px;
+         margin-top: 20px;
      }
 
      .badge {
@@ -83,12 +94,15 @@
     .view-btn {
         background: none;
         border: 1px solid #000;
-        padding: 8px 20px;
+        padding: 3px 5px;
         border-radius: 20px;
         font-size: 12px;
         cursor: pointer;
         transition: all 0.2s;
         text-transform: lowercase;
+        text-decoration: none;
+        color: #000;
+        display: inline-block;
     }
 
     .view-btn:hover {
@@ -96,22 +110,49 @@
             color: white;
         }
 
-    .img {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-            border-bottom: 1px solid #ddd;
+    .card-image {
+        width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+
+        }
+    .card-details {
+        border-top: 1px solid #000;
+        padding-top: 5px;
+    }
+
+     .detail-item {
+         border-bottom: 1px solid #000;
+         width: 100%;
+     }
+
+     .exhibition-list{
+         border-top: 1px solid #000000;
         }
 
-    .card-content {
-            padding: 20px;
-            background: white;
-        }
+    .exhibition-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid #000000;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
 
+    .exhibition-item:hover {
+        background-color: #f5f5f5;
+    }
+
+     .search-container input:focus {
+         outline: none;
+         border-color: #000;
+     }
 
     </style>
 </head>
+
 <body>
+
 <!--헤더-->
 <div class="header">
     <span style="font-family: 'Space Grotesk', sans-serif; ">
@@ -125,138 +166,195 @@
         1234567890
     </span>
 
-<!--    <div class="header-left">-->
-<!--        <div class="nav-links">-->
-<!--            <h6>Main</h6>-->
-<!--            <h6>Detail</h6>Detail-->
-<!--            <h6>My</h6>-->
-<!--        </div>-->
-<!--    </div>-->
-
-<!--    <div class="header-right">-->
-<!--        →-->
-<!--    </div>-->
-
-<!---->
 </div>
+
+<!--본문-->
 <div class="main-container">
 
+    <!-- 왼쪽 섹션 -->
 <div class="left-section">
-    <!-- 왼쪽 섹션: 전시 카드 -->
     <div>
-        <span style="padding:0;">
-            <h2>Selected Displays Only For U</h2>
-        </span>
+        <h2>Selected Displays Only For U</h2>
         <div style="display: flex; align-items: center;">
-        <div class="example1" >
-            <span>
-            <h5>숲</h5>
-            <img src="/img/mmcaseoul_숲.jpg" class="poster1 img-thumbnail" alt="숲 포스터">
-            </span>
-        </div>
-
-        <div class="example2">
-            <h5>drawing</h5>
-            <img src="/img/mmcacheongju_드로잉.png" class="poster2 img-thumbnail" alt="드로잉 포스터">
-        </div>
-
-        <div class="example3">
-            <h5>hometown</h5>
-            <img src="/img/mmcadeoksugung_home.jpg" class="poster3 img-thumbnail" alt="고향 포스터">
-        </div>
     </div>
-        <div>
-        </div>
 
-
+        <!--추천 전시 카드-->
+        <div class="cards-grid">
         {{#cards}}
             <div class="card">
-                <h3>{{title}}</h3>
-                <p>imageObject: </p>
-                <button class="view-btn">view</button>
-<!--                <img src = class="img" style="width:200px; height:auto;">-->
-                <p6><strong> WHERE </strong> {{agencyNm}}</p6>
-                <p6><strong> Congestion </strong> {{congestionNm}}</p6>
-                <p6><strong> i recommend this by </strong> {{recommendScore}}</p6>
-                <span class= "badge {{#isGreen}}green{{/isGreen}}{{#isOrange}}orange{{/isOrange}} {{#isYellow}}yellow{{/isYellow}}{{#isRed}}red{{/isRed}}{{#isGray}}gray{{/isGray}}">
-                </span>
+                <div class="card-header">
+                <h5 style=" margin: 0; font-size: 22px; ">{{title}}</h5>
+                    <span class= "badge {{#isGreen}}green{{/isGreen}}{{#isOrange}}orange{{/isOrange}} {{#isYellow}}yellow{{/isYellow}}{{#isRed}}red{{/isRed}}{{#isGray}}gray{{/isGray}}"></span>
+                <a href="/detail/{{title}}" class="view-btn">VIEW</a>
+                </div>
+                <img src = "{{imageObject}}" class="card-image"> <!--! 문제 구역 !-->
+                <div class="card-details"></div>
+                <div class="detail-item">
+                    <h5 class="place">WHERE {{agencyNm}}</h5></div>
+                <div class="detail-item">
+                    <h5 class="congestion">Congestion {{congestionNm}}</h5> </div>
+                <div class="detail-item">
+                 <h5 class="recomnd_score"> i recommend this by {{recommendScore}}</h5> </div>
+                <div class="detail-item">
+                    <h5 class="period">{{period}}</h5></div>
             </div>
         {{/cards}}
+        </div>
+        </div>
+
+
+    <!--전시 전체 리스트 들어갈 자리!-->
+        <div class="all-exhibition-list" style="margin-top: 40px;">
+            <h2>current exhibitions list</h2>
+
+            <!--검색창 자리-->  <!--엔터로 처리하기- 노 버튼-->
+            <div class="seach-container" style="margin-bottom: 20px;">
+                <div style="position: relative;">
+                    <input type="text" class="seach-box" placeholder="search exhibitions" STYLE="width: 100%; padding: 10px; border: 1px solid #000;">
+                </div>
+            </div>
+
+            <!--전시 리스트 자리-->
+            <div class="exhibition-list">
+                {{#allExhibitions}}
+                    <div class="exhibition-item">
+                    <span class="title-info" style="font-size: 15px; flex: 1">{{title}}</span>
+                    <span class="period-info" style="font-size: 15px; min-width: 120px; margin-right: 15px">{{period}}</span>
+
+                    </div>
+                {{/allExhibitions}}
+            </div>
     </div>
+
 </div>
 
 
     <!-- 오른쪽 섹션: 사용자 취향 분석 -->
     <div class="right-section" style="display: grid; background: black; color: #fff;">
-        <h2>What are your tastes?</h2>
+        <div class="sub-title">
+            <h5 style="font-family: 'Inter',sans-serif;">What are your tastes?</h5>
+        </div>
+
+ <!--{name} 이름 인풋 넣기????-->
     <div>
-        <span class="">
-            <h4>"h i sera h i sera h i sera h i sera h i sera h i serah i sera h i sera h i
-                sera h i sera h i sera h i serah i sera h i sera h i sera h i sera h i sera
-                h i sera h i sera h i sera h i sera h i sera h i sera h i sera"</h4>
+        <span class="test" style=" font-family: 'Intel', sans-serif; color: darkgray;">
+            <h5>"h i sera h i sera h i sera h i sera h i sera h i serah i sera h i sera h i
+                sera h i sera h i sera h i serah "jibegagosipeo jinjjaru neomu jollyeo" i sera h i sera h i sera h i sera h i sera
+                h i sera h i sera h i sera h i sera h i sera h i sera h i sera "</h5>
+              </span>
+    </div>
 
-            <div class="quote">
-                "We believe in the power of contemporary art to transform spaces and inspire meaningful conversations about our world."
+        <!--테스트용 질문-->
+        <div class="question0"> @...I'M TESTING...@ muyaho? </div>
+        <div class="answer0">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox"  id="ch0">
+                <label class="form-check-label" for="flexCheckDefault">
+                    ABCDEFGHIJKLMNOP
+                </label>
             </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="ch1">
+                <label class="form-check-label" for="flexCheckDefault">
+                    12334567890
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="ch2" >
+                <label class="form-check-label" for="flexCheckChecked">
+                    I JUST WANNA GO HOME
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="ch3" >
+                <label class="form-check-label" for="flexCheckDefault">
+                    20250829
+                </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="ch4" checked>
+                <label class="form-check-label" for="flexCheckDefault">
+                    TODAY IS FRIDAY </label>
+            </div>
+        </div>
 
-        </span>
 
+        <!--첫번째 질문-->
+        <div class="question1"> 1. Are there any museums you're interested in? </div>
+        <div class="answer1">
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-            <label class="form-check-label" for="flexCheckDefault">
-                ABCDEFGHIJKLMNOP
+            <input class="form-check-input" type="checkbox" value="서울" id="서울">
+            <label class="form-check-label" for="서울">
+                서울
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="ch1" checked>
-            <label class="form-check-label" for="flexCheckChecked">
-                12334567890
+            <input class="form-check-input" type="checkbox" id="과천" value="과천" >
+            <label class="form-check-label" for="과천">
+               과천
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="ch2" checked>
-            <label class="form-check-label" for="flexCheckChecked">
-                I JUST WANNA GO HOME
+            <input class="form-check-input" type="checkbox" id="덕수궁" value="덕수궁" >
+            <label class="form-check-label" for="덕수궁">
+                덕수궁
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="ch3" checked>
-            <label class="form-check-label" for="flexCheckChecked">
-                20250828
+            <input class="form-check-input" type="checkbox" id="청주" value="청주" checked>
+            <label class="form-check-label" for="청주">
+                청주
             </label>
         </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="ch4" checked>
-            <label class="form-check-label" for="flexCheckChecked">
-                TODAY IS THURSDAY?
-            </label>
-        </div>
-
-
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="modern">
-            <label class="form-check-label" for="modern">Modern Art</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="contemporary" checked>
-            <label class="form-check-label" for="contemporary">Contemporary</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="sculpture" checked>
-            <label class="form-check-label" for="sculpture">Sculpture</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="painting" checked>
-            <label class="form-check-label" for="painting">Painting</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="digital" checked>
-            <label class="form-check-label" for="digital">Digital Art</label>
-        </div>
-    </div>
-
-
-    </div>
 </div>
+
+        <!--두번째 질문-->
+        <div class="question2"> 2. When is the favorite time to visit the exhibition? </div>
+
+        <div class="ask2" style="padding-top: 10px;">
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="Morning" id="Morning">
+            <label class="form-check-label" for="Morning">Morning</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="Afternoon" value="Afternoon">
+            <label class="form-check-label" for="Afternoon">Afternoon</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="Evening" value="Evening" checked>
+            <label class="form-check-label" for="Evening">Evening</label>
+        </div>
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="Any" value="Any" >
+            <label class="form-check-label" for="Any">Any Time</label>
+        </div>
+    </div>
+
+        <!--세번째 질문-->
+        <div class="question3"> 3. What kind of admission do you prefer? </div>
+        <div class="ask3" style="padding-top: 10px;">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="유료" id="유료">
+                <label class="form-check-label" for="유료"> 유료 </label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="무료" value="무료" checked>
+                <label class="form-check-label" for="무료">무료</label>
+            </div>
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" id="상관 없음" value="상관 없음" >
+                <label class="form-check-label" for="상관 없음">상관 없음</label>
+            </div>
+        </div>
+
+        <button class="complete_input">IM READY!!!</button>
+
+    </div>
+
+</div>
+
+
+</div>
+
 </body>
 </html>

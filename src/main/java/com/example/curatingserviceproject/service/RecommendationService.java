@@ -112,7 +112,7 @@ public class RecommendationService {
                 userPreference.getPreferredLocations().split(",")
         );
 
-        if (preferredLocations.contains("전체") || preferredLocations.contains(location)) {
+        if (preferredLocations.contains("상관 없음") || preferredLocations.contains(location)) {
             return 15;
         }
         return 2;
@@ -153,6 +153,8 @@ public class RecommendationService {
             return 3;
         }
     }
+
+    //  @@@유료/무료/노상관 선택지에 따른 사용자 선호 점수제로 할건지 결정해야함@@ 0829 14:29
 
     // 인기도 계산 15
     private int calculatePopularityScore(String eventSite) {
