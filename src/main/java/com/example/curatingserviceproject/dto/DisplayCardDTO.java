@@ -42,12 +42,20 @@ public class DisplayCardDTO {
         switch (congestionNm) {
             case "여유":
                 isGreen = true;
+                break;
+
             case "보통":
                 isOrange = true;
+                break;
+
             case "약간붐빔":
                 isYellow = true;
+                break;
+
             case "붐빔":
                 isRed = true;
+                break;
+
             default: //미정
                 isGray = true;
 

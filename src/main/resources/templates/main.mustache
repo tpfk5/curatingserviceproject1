@@ -143,10 +143,10 @@
         background-color: #f5f5f5;
     }
 
-     .search-container input:focus {
+    .search-container input:focus {
          outline: none;
          border-color: #000;
-     }
+    }
 
     </style>
 </head>
@@ -157,13 +157,9 @@
 <div class="header">
     <span style="font-family: 'Space Grotesk', sans-serif; ">
         <h1>Do U Like Gonna Exhibition?</h1>
-        I'll recommend it for u!
         <br>
-        ABCDEFGHIJKLMNOPbabo
-        <br>
-        QRSTUVWXYZ
-        <br>
-        1234567890
+		<br>
+		<br>
     </span>
 
 </div>
@@ -185,14 +181,15 @@
                 <div class="card-header">
                 <h5 style=" margin: 0; font-size: 22px; ">{{title}}</h5>
                     <span class= "badge {{#isGreen}}green{{/isGreen}}{{#isOrange}}orange{{/isOrange}} {{#isYellow}}yellow{{/isYellow}}{{#isRed}}red{{/isRed}}{{#isGray}}gray{{/isGray}}"></span>
-                <a href="/detail/{{title}}" class="view-btn">VIEW</a>
+                <a href="/detail?title={{title}}" class="view-btn">VIEW</a>
                 </div>
-                <img src = "{{imageObject}}" class="card-image"> <!--! 문제 구역 !-->
+                <img src = "{{imageObject}}" class="card-image" loading="lazy"> <!--! 문제 구역 !-->
                 <div class="card-details"></div>
                 <div class="detail-item">
                     <h5 class="place">WHERE {{agencyNm}}</h5></div>
-                <div class="detail-item">
-                    <h5 class="congestion">Congestion {{congestionNm}}</h5> </div>
+<!--                <div class="detail-item">-->
+<!--&lt;!&ndash;                    <h5 class="congestion">Congestion {{congestionNm}}</h5> &ndash;&gt;-->
+<!--                </div>-->
                 <div class="detail-item">
                  <h5 class="recomnd_score"> i recommend this by {{recommendScore}}</h5> </div>
                 <div class="detail-item">
@@ -357,4 +354,42 @@
 </div>
 
 </body>
+
+<!--localStrage 캐싱-->
+<script>
+    const cacheKey = 'displayCardsCache';
+    const cacheTTL = 5 * 60 * 1000; // 5분
+
+    async function fetchDisplayCards() {
+      const cached = localStorage.getItem(cacheKey);
+      if (cached) {
+        const { timestamp, data } = JSON.parse(cached);
+        if (Date.now() - timestamp < cacheTTL) {
+          renderCards(data); // 캐시 데이터로 화면 렌더링 함수 호출
+          return;
+        }
+      }
+      // 캐시 없거나 만료 시 서버 API 호출
+      try {
+        const res = await fetch('/api/cards');
+        const data = await res.json();
+        localStorage.setItem(cacheKey, JSON.stringify({ timestamp: Date.now(), data }));
+        renderCards(data);
+      } catch (e) {
+        console.error('API 호출 실패', e);
+      }
+    }
+
+    // 실제 카드를 화면에 렌더링하는 함수 (Mustache 탬플릿 엔진이 있다면 사용)
+    function renderCards(cards) {
+      // 템플릿 라이브러리 이용해 #cards 부분에 렌더링 로직 적용
+      // 예: Mustache.render(template, { cards })
+      // 또는 DOM 직접 조작으로 화면 그리기
+      console.log(cards); // 디버그용
+    }
+
+    // 페이지 로드 시 실행
+    window.addEventListener('DOMContentLoaded', fetchDisplayCards);
+</script>
+
 </html>

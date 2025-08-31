@@ -15,6 +15,6 @@ public class DisplayAdminController {
 
     @GetMapping("/refresh-displays")
     public int refreshDisplays() {
-        return displayService.fetchANDSAVEDisplay().size();
+        return displayService.fetchANDSAVEDisplay(26,27).size();
     }
 }

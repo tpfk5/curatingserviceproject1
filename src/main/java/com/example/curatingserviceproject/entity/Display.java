@@ -36,8 +36,6 @@ public class Display {
 //    @Column(name = "genre")
 //    private String GENRE; //장르
 
-//    @Column(name = "DURATION")
-//    private String DURATION; //관람시간
 
 //    @Column(name = "author")
 //    private String AUTHOR; //작가
@@ -50,6 +48,9 @@ public class Display {
 
     @Column(name = "event_period")
     private String EVENT_PERIOD; //시간
+
+    @Column(name = "local_id")
+    private String LOCAL_ID; //전시 id
 
     @Column(name = "space_code")
     private String SpaceCode;

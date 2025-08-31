@@ -39,7 +39,7 @@ public class ApiController {
     @GetMapping("/api/fetch-displays")
     public ResponseEntity<?> fetchDisplays() {
         try {
-            List<Display> saved = displayService.fetchANDSAVEDisplay();
+            List<Display> saved = displayService.fetchANDSAVEDisplay(26,27);
             return ResponseEntity.ok(Map.of(
                     "status", "ok",
                     "savedCount", saved.size()
@@ -113,24 +113,6 @@ public class ApiController {
                     .body(Map.of("error: ", e.getMessage()));
         }
     }
-    //db 저장된 내용 호출
-//    @GetMapping("/api/mappings/all")
-//    public ResponseEntity<?> getAllMappings() {
-//        try {
-//            log.info("전체 목록 조회 시작!");
-//
-//            List<SpaceMapping> allMappings = spaceMappingService.getAllMappings();
-//
-//            log.info("all 매핑 목록 조회 완료! 개수:{}", allMappings.size());
-//
-//            return ResponseEntity.ok(allMappings);
-//
-//        } catch (Exception e) {
-//            log.error("매핑 조회 오류 발생", e);
-//            return ResponseEntity.status(500)
-//                    .body(Map.of("error", e.getMessage()));
-//        }
-//    }
 
     @PostMapping("/api/mappings")
     public ResponseEntity<?> createUpdateMapping(@RequestBody Map<String, String> request) {
@@ -166,13 +148,6 @@ public class ApiController {
         }
     }
 
-    //detail page
-    @GetMapping("/detail")
-    public String detailByTitle(@RequestParam String title, Model model) {
-        Display display = displayService.getDisplayByTitle(title);
-        model.addAttribute("display", display);
-        return "detail";
-    }
 
     // 테스트 용!!!!
     @GetMapping("/api/test")
@@ -184,7 +159,11 @@ public class ApiController {
     public ResponseEntity<String> testMapping() {
         return ResponseEntity.ok("매핑 컨트롤러 작동중!");
             }
+
+
     }
+
+
 
 
 
