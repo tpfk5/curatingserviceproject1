@@ -15,6 +15,8 @@ public class DisplayCardDTO {
     private String congestionNm; //혼잡도 상태
     private int recommendScore; //추천 점수
     private String period; //전시 기간
+    private String description; //전시 설명
+    private String author; //작가
 
 
     //main page -> card.badge 혼잡도 색 표시
@@ -25,7 +27,7 @@ public class DisplayCardDTO {
     private boolean isGray;
 
 
-    public DisplayCardDTO(String title, String imageObject, String agencyNm, String spaceCode, String congestionNm, int recommendScore, String period) {
+    public DisplayCardDTO(String title, String imageObject, String agencyNm, String spaceCode, String congestionNm, int recommendScore, String period, String description, String author) {
         this.title = title != null ? title : "제목 없음";
         this.imageObject = imageObject != null ? imageObject : "/img/temp.jpg";
         this.agencyNm = agencyNm != null ? agencyNm : "기관 정보 없음";
@@ -33,12 +35,14 @@ public class DisplayCardDTO {
         this.congestionNm = congestionNm != null ? congestionNm : "혼잡도 정보 없음";
         this.recommendScore = recommendScore;
         this.period = period;
+        this.description = description;
+        this.author = author;
         // 추가 및 수정 해야 할 듯?
 
 
 
         //혼잡도 상태
-        //여유, 보통, 약간붐빔, 붐빔, 미정(OR 정보없음)
+        //여유, 보통, 약간붐빔, 붐빔, 미정(OR 정보없음, 기본 표시)
         switch (congestionNm) {
             case "여유":
                 isGreen = true;

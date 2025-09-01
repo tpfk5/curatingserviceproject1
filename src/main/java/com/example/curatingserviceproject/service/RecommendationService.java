@@ -2,6 +2,7 @@ package com.example.curatingserviceproject.service;
 
 import com.example.curatingserviceproject.entity.Display;
 import com.example.curatingserviceproject.entity.UserPreference;
+import com.example.curatingserviceproject.repository.UserPreferenceRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,12 +31,14 @@ import static com.example.curatingserviceproject.enums.TimePreference.*;
 @Slf4j
 public class RecommendationService {
 
+    private final UserPreferenceRepository userPreferenceRepository;
+
     //추천 점수 계산
     public int calculateRecommendationScore(Display display) {
         return calculateRecommendationScore(display, null);
     }
 
-    // 개인화 추천 점수 계산
+    // 개인 추천 점수 계산
     public int calculateRecommendationScore(Display display, UserPreference userPreference) {
         log.info("전시 추천>> {}", display.getTITLE());
 
@@ -194,5 +197,11 @@ public class RecommendationService {
         }
         return "기타";
     }
+
+    public void saveUserPreference(UserPreference userPreference) {
+        userPreferenceRepository.save(userPreference);
+
+        log.info("사용자 취향 저장 완료: {}", userPreference);
     }
+}
 

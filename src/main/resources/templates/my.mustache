@@ -38,6 +38,38 @@
 		border-bottom: none;
 	}
 
+    .cards-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 0;
+        height: 100%;
+        border-left: 1px solid black;
+    }
+
+    .favorite-img img {
+        max-width: 100%;
+        max-height:120px;
+        object-fit: cover;
+        display: block;
+    }
+
+    .favorite-img {
+        width: 100%;
+        height: 140px;
+        overflow: hidden;
+    }
+
+    .cards-grid .card {
+        border-left: 1px solid black;
+        border-top: none;
+        border-right: none;
+        border-bottom: none;
+        box-sizing: border-box;
+        padding: 10px;
+        height: 140px;
+    }
+
+
 	/* 상단바 */
 	#top-left   { grid-row: 1; grid-column: 1;  background: linear-gradient(to right, #f9c, #c6f); justify-content: flex-start;}
 	#top-center { grid-row: 1; grid-column: 2;  justify-content: flex-start;}
@@ -83,19 +115,53 @@
 	</div>
 
 	<div class="grid-item" id="image" style="font-size: 16px;">
-		여기는 뭘 넣어야 하지 후
+		여기는 뭘 넣어야 하더라????
 	</div>
 
-	<div class="grid-item" id="favorites" style=" font-size: 16px; ">
-			<p>FAVORITES LIST</p>
-			<p>FAVORITES COUNT</p>
 
-	</div>
+    <!--관심 리스트 버튼 클릭시!-->
+	<div class="grid-item" id="favorites">
+        <span class="favorites" style="font-weight: bold; font-size: 40px">FAVORITES</span>
+        <div id="favorites-list" style="border-left: none;" class="cards-grid">
+
+<!--            <div class="card">-->
+<!--                <div class="favorite-index" style="font-size: 20px; font-weight: bold"><strong>1</strong></div>-->
+<!--            <div class="favorite-day">MON</div>-->
+<!--            <div class="favorite-img"><img src="img/mmcaseoul_숲.jpg"></div>-->
+<!--            <div class="favorite-title">MMCA 다원예술 2025: 숲</div>-->
+<!--            <div class="favorite-location">국립현대미술관</div>-->
+<!--            <div class="favorite-period">2025-05-23~2026-01-15</div>-->
+<!--        </div>-->
+
+
+<!--        <div class="card">-->
+<!--            <div class="favorite-index" style="font-size: 20px; font-weight: bold"><strong>1</strong></div>-->
+<!--            <div class="favorite-day">MON</div>-->
+<!--            <div class="favorite-img"><img src="img/mmcaseoul_숲.jpg"></div>-->
+<!--            <div class="favorite-title">MMCA 다원예술 2025: 숲</div>-->
+<!--            <div class="favorite-location">국립현대미술관</div>-->
+<!--            <div class="favorite-period">2025-05-23~2026-01-15</div>-->
+<!--        </div>-->
+
+<!--        <div class="card">-->
+<!--            <div class="favorite-index" style="font-size: 20px; font-weight: bold"><strong>1</strong></div>-->
+<!--            <div class="favorite-day">MON</div>-->
+<!--            <div class="favorite-img"><img src="img/mmcaseoul_숲.jpg"></div>-->
+<!--            <div class="favorite-title">MMCA 다원예술 2025: 숲</div>-->
+<!--            <div class="favorite-location">국립현대미술관</div>-->
+<!--            <div class="favorite-period">2025-05-23~2026-01-15</div>-->
+<!--        </div>-->
+<!--	</div>-->
+    </div>
 
 	<div class="grid-item" id="empty" style="font-size: 16px;">
 		전시 둘러보기 아니면 추천받은 전시/?????
 	</div>
-	</div>
-
+</div>
+</div>
 </body>
+
+<script>
+
+</script>
 </html>

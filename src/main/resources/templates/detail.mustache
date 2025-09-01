@@ -12,9 +12,9 @@
 			margin: 0;
 			padding:0;
 			box-sizing:border-box;
-			font-family: 'Times New Roman', Georgia, serif;
+			font-family: 'inter', sans-serif;
 			background: #fff;
-			line-height: 1.6;
+			line-height: 1;
 			}
 
 
@@ -30,12 +30,14 @@
 			}
 
 		.title-container {
-			max-width: 1200px;
+			/*max-width: 1400px;*/
 			margin: 0 auto;
 			display: flex;
 			align-items: baseline;
 			justify-content: space-between;
+            text-underline: black;
 		}
+
 		.exhibition-tag {
 			font-size: 14px;
 		}
@@ -44,11 +46,34 @@
 		/*메인 콘텐츠*/
 		.main-content{
 			display: grid;
-			grid-template-columns: 1fr 1fr;
-			gap: 60px;
-			padding: 60px 40px;
-			max-width: 1400px;
-		}
+            grid-template-columns: 320px 1fr 400px;
+			gap: 0;
+			padding: 0;
+            width: 100vw;
+            height: 100vh;
+            border-left: 2px solid #000;
+            border-top: 2px solid #000;
+            border-bottom: 2px solid #000;
+            box-sizing: border-box;
+        }
+
+        .left-section {
+            border-right: 2px solid #000;
+            padding: 0 10px;
+            overflow-y: auto;
+            height: 100vh;
+            box-sizing: border-box;
+            background: #fafafa;
+
+        }
+
+        .right-section {
+            border-right: 2px solid #000;
+            padding: 10px;
+            overflow-y: auto;
+            height: 100vh;
+            box-sizing: border-box;
+        }
 
 
         /* 왼쪽 구역 */
@@ -56,18 +81,18 @@
         	padding-right: 20px;
         }
 
-		/* description */
+		/* {description} */
         .exhibition-description {
-            font-size: 22px;
-            line-height: 1.8;
+            font-size: 40px;
+            /*line-height: 1.8;*/
             color: #333;
-            margin-bottom: 40px;
+            margin-bottom: 20px;
             text-align: justify;
 			font-weight: bold;
         }
 
 		.exhibition-info {
-			font-size: 14px;
+			font-size: 18px;
 			margin-top: 20px;
 		}
 
@@ -83,14 +108,15 @@
 
 		/*오르쪽 구역 - 이미지*/
 		.image-section {
-			display: flex;
-			flex-direction: column;
-			gap: 20px;
+            padding: 10px;
+            overflow-y: auto;
+            height: 100vh;
+            box-sizing: border-box;
 		}
 
 		.exhibition-image {
-			width: 100%;
-			height: 350px;
+			width: 150%;
+			height: 400px;
 			object-fit: cover;
 		}
 
@@ -117,99 +143,124 @@
 			margin: 0 auto;
 		}
 
+        .left-section {
+            background: #fafafa;
+            padding: 10px;
+        }
+
+        .exhibition-item:hover {
+            background-color: #f0f7ff;
+        }
+
+
+
 
     </style>
 </head>
 
-<body>
+<body  data-display-id="123">
 
 <!--HEADER-->
 <!--전시 제목 구역-->
 <header>
 <div class="header">
 	<div class="title-container">
-		<!--                <h1 class="exhibition-title">{title}</h1>-->
-		<h1 class="exhibition-title">김환기: 어디서 무엇이 되어 다시 만나랴</h1>
+		<h1 class="exhibition-title">{{TITLE}}</h1>
 		<span class="exhibition-tag" style="margin-left: auto">(Exhibition)</span>
 	</div>
 </div>
 </header>
 
 
-<!--전시 내용 디테일 구역-->
 <div class="main-content">
 
-	<!--전시 설명 구역-->
-<section class="left-section">
-		<div class="exhibition-description">
-			이 전시는 한국 추상미술의 선구자 김환기(1913-1974)의 예술 세계를 조망하는 대규모 회고전입니다.
-			작가의 초기 구상 작품부터 뉴욕 시대의 점화에 이르기까지, 그의 예술적 여정과 한국 현대미술사에
-			미친 영향을 종합적으로 살펴볼 수 있습니다. 특히 그의 대표작들과 함께 미공개 작품들도 선보여
-			김환기 예술의 새로운 면모를 발견할 수 있는 기회를 제공합니다.
+    <!--왼쪽 / 전시 리스트 구역-->
+    <aside class="left-section">
+    <div class="exhibition-list">
+        {{#allExhibitions}}
+            <div class="exhibition-item">
+                <span class="title-info" style="font-size: 15px; flex: 1">{{title}}</span>
+                <span class="period-info" style="font-size: 15px; min-width: 120px; margin-right: 15px">{{period}}</span>
+            </div>
+        {{/allExhibitions}}
+    </div>
+    </aside>
+
+
+
+	<!--중간 / 전시 설명 구역-->
+<section class="right-section">
+            <div class="exhibition-description">{{{DESCRIPTION}}}</div>
+		<div class="exhibition-info">
+			<div><strong>Author:</strong> {{AUTHOR}}</div>
+			<div><strong>Institution:</strong> {{AGENCY}}</div>
+			<div><strong>Period:</strong> {{PERIOD}}</div>
+			<div><strong>congestion:</strong> {{congestionNm}}</div>
 		</div>
 
-	<!--예시-->
-		<div class="exhibition-info">
-			<div><strong>Author:</strong> 김환기</div>
-			<div><strong>Institution:</strong> 국립현대미술관 덕수궁</div>
-			<div><strong>Period:</strong> 2024-11-01~2025-02-28</div>
-			<div><strong>congestion:</strong> 여유</div>
-		</div>
-	</section>
+
+    <!--중간 선-->
+<!--    <div class="middle" style="	border-top: 1px solid #000000;-->
+<!--			margin: 10px 20px; "></div>-->
+
+    <!--@@@수정해야함@@@-->
+    <!-- 다운 섹션: 통계 ???-->
+    <section class="down-section">
+        <h2 class="stats-title">Exhibition Analystics</h2>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-label">Congestion Score</div>
+                <span class="stat-number" id="congestionScore">35</span>
+            </div>
+
+            <div class="stat-item">
+                <div class="stat-label">Location Score</div>
+                <span class="stat-number" id="locationScore">15</span>
+            </div>
+
+            <div class="stat-item">
+                <div class="stat-label">Time Score</div>
+                <span class="stat-number" id="timeScore">12</span>
+
+            </div>
+
+            <div class="stat-item">
+                <div class="stat-label">Popularity Score</div>
+                <span class="stat-number" id="popularityScore">8</span>
+            </div>
+
+            <!--추천 점슈 & 이유-->
+            <div class="recommendation-details">
+                <div class="recommendation-score" id="totalScore">85</div>
+                <div class="recommendation-text" id="recommendationText">@@@ Highly recommended @@@</div>
+            </div>
+        </div>
+
+    </section>
+</section>
 
 
 	<!--우측 이미지 구역-->
 	<section class="image-section">
 		        <div class="image-container">
-		<!--            <img src="{imageObject}" class="exhibition-image" >-->
-					<img src="/img/temp.jpg" class="exhibition-image"></div>
+		            <img src="{{imageObject}}" class="exhibition-image" >
 
+
+        <!--버튼-->
 		<div class="action-buttons">
-			<a href="#" class="btn btn-primary"> Add to Favorites</a>
 			<a href="/main" class="btn"> View More Exhibitions</a>
 		</div>
-	</section>
+
+                </div>
+        </section>
+
 </div>
-
-<!--중간 선-->
-	<div class="middle" style="	border-top: 1px solid #000000;
-			margin: 10px 20px; "></div>
-
-    <!-- 다운 섹션: 통계 ???-->
-    <section class="down-section">
-        <div class="stats-container">
-            <h2 class="stats-title">Exhibition Analystics</h2>
-
-        <div class="stats-grid">
-            <div class="stat-item">
-				<div class="stat-label">Congestion Score</div>
-                <span class="stat-number" id="congestionScore">35</span>
-        </div>
-
-        <div class="stat-item">
-			<div class="stat-label">Location Score</div>
-            <span class="stat-number" id="locationScore">15</span>
-        </div>
-
-        <div class="stat-item">
-			<div class="stat-label">Time Score</div>
-            <span class="stat-number" id="timeScore">12</span>
-
-        </div>
-
-        <div class="stat-item">
-			<div class="stat-label">Popularity Score</div>
-            <span class="stat-number" id="popularityScore">8</span>
-        </div>
-
-		<!--추천 점슈 & 이유-->
-		<div class="recommendation-details">
-			<div class="recommendation-score" id="totalScore">85</div>
-			<div class="recommendation-text" id="recommendationText">@@@ Highly recommended @@@</div>
-		</div>
-		</div>
-
-		</div>
-</section>
 </body>
+
+
+
+<script>
+
+
+</script>
 </html>

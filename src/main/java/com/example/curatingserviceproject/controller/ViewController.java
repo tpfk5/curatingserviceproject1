@@ -21,7 +21,7 @@ public class ViewController {
 
     private final DisplayService displayService;
 
-    @GetMapping("/cards")
+    @GetMapping("/cards-view")
     public String showCards(Model model) {
         try {
             List<DisplayCardDTO> cards = displayService.getDisplayCards();
@@ -63,22 +63,28 @@ public class ViewController {
     }
 
 
-    //detail ui 수정 테스트용임@@@@
-    @GetMapping("/detail-ui")
-    public String detailUI(Model model) {
+    //detail page
+    @GetMapping("/detail")
+    public String detailByTitle(@RequestParam(required = false) String title, Model model) {
+        Display display = displayService.getDisplayByTitle(title);
+        model.addAttribute("display", display);
 
-        Display testDisplay = new Display();
-        testDisplay.setTITLE("김환기: 어디서 무엇이 되어 다시 만나랴");
-        testDisplay.setCNTC_INSTT_NM("국립현대미술관");
-        testDisplay.setEVENT_SITE("국립현대미술관 덕수궁 1전시실");
-        testDisplay.setPERIOD("2024-11-01~2025-02-28");
-        testDisplay.setCHARGE("4000원");
-        testDisplay.setIMAGE_OBJECT("/img/temp.jpg");
-        testDisplay.setCongestionNm("여유");
+        if (display == null) {
+            return "error";
+        }
 
-        model.addAttribute("display", testDisplay);
+        model.addAttribute("TITLE", display.getTITLE());
+        model.addAttribute("DESCRIPTION", display.getDESCRIPTION());
+        model.addAttribute("AUTHOR", display.getAUTHOR());
+        model.addAttribute("AGENCY", display.getCNTC_INSTT_NM());
+        model.addAttribute("PERIOD", display.getPERIOD());
+        model.addAttribute("congestionNm", display.getCongestionNm());
+        model.addAttribute("imageObject", display.getIMAGE_OBJECT());
+
         return "detail";
     }
+
+
 
     //my ui 수정 테스트용@@@@
     @GetMapping("/my-ui")

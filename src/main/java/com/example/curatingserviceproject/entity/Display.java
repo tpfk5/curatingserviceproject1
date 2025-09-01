@@ -21,8 +21,9 @@ public class Display {
     @Column(name = "collected_date")
     private String COLLECTED_DATE; //수집일
 
-//    @Column(name = "DESCRIPTION")
-//    private String DESCRIPTION; //소개
+    @Lob
+    @Column(name = "DESCRIPTION", length = 10000)
+    private String DESCRIPTION; //소개
 
     @Column(name = "image_object")
     private String IMAGE_OBJECT; //이미지 Url
@@ -33,12 +34,8 @@ public class Display {
     @Column(name = "event_site")
     private String EVENT_SITE; //장소
 
-//    @Column(name = "genre")
-//    private String GENRE; //장르
-
-
-//    @Column(name = "author")
-//    private String AUTHOR; //작가
+    @Column(name = "author")
+    private String AUTHOR; //작가
 
     @Column(name = "charge")
     private String CHARGE; //관람료 정보

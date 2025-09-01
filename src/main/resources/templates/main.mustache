@@ -37,7 +37,6 @@
     .left-section {
         min-width: 380px;
         background: #ffffff;
-        /*padding: 32px 16px;*/
         color: #222;
     }
 
@@ -111,9 +110,9 @@
         }
 
     .card-image {
-        width: 100%;
+        width: 90%;
         height: auto;
-        margin-bottom: 20px;
+        margin-bottom: 25px;
 
         }
     .card-details {
@@ -148,6 +147,14 @@
          border-color: #000;
     }
 
+    .question1, .question2, .question3 {
+        padding: 0;
+
+    }
+    .answer1, .answer2, .answer3 {
+
+    }
+
     </style>
 </head>
 
@@ -155,11 +162,9 @@
 
 <!--헤더-->
 <div class="header">
-    <span style="font-family: 'Space Grotesk', sans-serif; ">
-        <h1>Do U Like Gonna Exhibition?</h1>
-        <br>
-		<br>
-		<br>
+    <span style="font-family: 'Space Grotesk', sans-serif; font-size: 25px;">
+        <h1>Exhibition Curating Service</h1>
+
     </span>
 
 </div>
@@ -170,7 +175,7 @@
     <!-- 왼쪽 섹션 -->
 <div class="left-section">
     <div>
-        <h2>Selected Displays Only For U</h2>
+        <h2>Selected Displays</h2>
         <div style="display: flex; align-items: center;">
     </div>
 
@@ -181,17 +186,15 @@
                 <div class="card-header">
                 <h5 style=" margin: 0; font-size: 22px; ">{{title}}</h5>
                     <span class= "badge {{#isGreen}}green{{/isGreen}}{{#isOrange}}orange{{/isOrange}} {{#isYellow}}yellow{{/isYellow}}{{#isRed}}red{{/isRed}}{{#isGray}}gray{{/isGray}}"></span>
-                <a href="/detail?title={{title}}" class="view-btn">VIEW</a>
+
+                <a href="/detail?title={{title}}" class="view-btn"> VIEW </a>
                 </div>
-                <img src = "{{imageObject}}" class="card-image" loading="lazy"> <!--! 문제 구역 !-->
+                <img src = "{{imageObject}}" class="card-image" loading="lazy">
                 <div class="card-details"></div>
                 <div class="detail-item">
-                    <h5 class="place">WHERE {{agencyNm}}</h5></div>
-<!--                <div class="detail-item">-->
-<!--&lt;!&ndash;                    <h5 class="congestion">Congestion {{congestionNm}}</h5> &ndash;&gt;-->
-<!--                </div>-->
+                    <h5 class="place"> {{agencyNm}}</h5></div>
                 <div class="detail-item">
-                 <h5 class="recomnd_score"> i recommend this by {{recommendScore}}</h5> </div>
+                 <h5 class="recomnd_score"> 추천 {{recommendScore}}</h5> </div>
                 <div class="detail-item">
                     <h5 class="period">{{period}}</h5></div>
             </div>
@@ -205,9 +208,9 @@
             <h2>current exhibitions list</h2>
 
             <!--검색창 자리-->  <!--엔터로 처리하기- 노 버튼-->
-            <div class="seach-container" style="margin-bottom: 20px;">
+            <div class="seach-container" style="margin-bottom: 20px; ">
                 <div style="position: relative;">
-                    <input type="text" class="seach-box" placeholder="search exhibitions" STYLE="width: 100%; padding: 10px; border: 1px solid #000;">
+                    <input type="text" class="seach-box" placeholder="search exhibitions" STYLE="width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid gray;">
                 </div>
             </div>
 
@@ -222,62 +225,26 @@
                 {{/allExhibitions}}
             </div>
     </div>
-
 </div>
 
-
+<!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
     <!-- 오른쪽 섹션: 사용자 취향 분석 -->
     <div class="right-section" style="display: grid; background: black; color: #fff;">
-        <div class="sub-title">
-            <h5 style="font-family: 'Inter',sans-serif;">What are your tastes?</h5>
-        </div>
 
- <!--{name} 이름 인풋 넣기????-->
-    <div>
+        <!--{name} 이름 인풋 넣기????-->
+        <div>
         <span class="test" style=" font-family: 'Intel', sans-serif; color: darkgray;">
-            <h5>"h i sera h i sera h i sera h i sera h i sera h i serah i sera h i sera h i
-                sera h i sera h i sera h i serah "jibegagosipeo jinjjaru neomu jollyeo" i sera h i sera h i sera h i sera h i sera
-                h i sera h i sera h i sera h i sera h i sera h i sera h i sera "</h5>
               </span>
-    </div>
-
-        <!--테스트용 질문-->
-        <div class="question0"> @...I'M TESTING...@ muyaho? </div>
-        <div class="answer0">
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox"  id="ch0">
-                <label class="form-check-label" for="flexCheckDefault">
-                    ABCDEFGHIJKLMNOP
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="ch1">
-                <label class="form-check-label" for="flexCheckDefault">
-                    12334567890
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="ch2" >
-                <label class="form-check-label" for="flexCheckChecked">
-                    I JUST WANNA GO HOME
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="ch3" >
-                <label class="form-check-label" for="flexCheckDefault">
-                    20250829
-                </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="ch4" checked>
-                <label class="form-check-label" for="flexCheckDefault">
-                    TODAY IS FRIDAY </label>
-            </div>
         </div>
 
+        <div class="sub-title">
+            <h5 style="font-family: 'Inter',sans-serif; font-size: 40px;">What are your tastes?</h5>
+        </div>
 
         <!--첫번째 질문-->
-        <div class="question1"> 1. Are there any museums you're interested in? </div>
+        <div class="question1" style="font-size: 20px">
+            1. Are there any museums you're interested in? </div>
+
         <div class="answer1">
         <div class="form-check">
             <input class="form-check-input" type="checkbox" value="서울" id="서울">
@@ -303,12 +270,13 @@
                 청주
             </label>
         </div>
+
 </div>
+        <!--두번째 질문(시간대)-->
+        <div class="question2" style="font-size: 20px">
+            2. When is the favorite time to visit the exhibition? </div>
 
-        <!--두번째 질문-->
-        <div class="question2"> 2. When is the favorite time to visit the exhibition? </div>
-
-        <div class="ask2" style="padding-top: 10px;">
+        <div class="answer2" style="padding-top: 10px;">
         <div class="form-check">
             <input class="form-check-input" type="checkbox" value="Morning" id="Morning">
             <label class="form-check-label" for="Morning">Morning</label>
@@ -327,9 +295,11 @@
         </div>
     </div>
 
-        <!--세번째 질문-->
-        <div class="question3"> 3. What kind of admission do you prefer? </div>
-        <div class="ask3" style="padding-top: 10px;">
+        <!--세번째 질문(관람비)-->
+        <div class="question3" style="font-size: 20px">
+            3. What kind of admission do you prefer? </div>
+
+        <div class="answer3" style="padding-top: 10px;">
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" value="유료" id="유료">
                 <label class="form-check-label" for="유료"> 유료 </label>
@@ -347,49 +317,11 @@
         <button class="complete_input">IM READY!!!</button>
 
     </div>
-
-</div>
-
-
 </div>
 
 </body>
-
-<!--localStrage 캐싱-->
 <script>
-    const cacheKey = 'displayCardsCache';
-    const cacheTTL = 5 * 60 * 1000; // 5분
 
-    async function fetchDisplayCards() {
-      const cached = localStorage.getItem(cacheKey);
-      if (cached) {
-        const { timestamp, data } = JSON.parse(cached);
-        if (Date.now() - timestamp < cacheTTL) {
-          renderCards(data); // 캐시 데이터로 화면 렌더링 함수 호출
-          return;
-        }
-      }
-      // 캐시 없거나 만료 시 서버 API 호출
-      try {
-        const res = await fetch('/api/cards');
-        const data = await res.json();
-        localStorage.setItem(cacheKey, JSON.stringify({ timestamp: Date.now(), data }));
-        renderCards(data);
-      } catch (e) {
-        console.error('API 호출 실패', e);
-      }
-    }
-
-    // 실제 카드를 화면에 렌더링하는 함수 (Mustache 탬플릿 엔진이 있다면 사용)
-    function renderCards(cards) {
-      // 템플릿 라이브러리 이용해 #cards 부분에 렌더링 로직 적용
-      // 예: Mustache.render(template, { cards })
-      // 또는 DOM 직접 조작으로 화면 그리기
-      console.log(cards); // 디버그용
-    }
-
-    // 페이지 로드 시 실행
-    window.addEventListener('DOMContentLoaded', fetchDisplayCards);
 </script>
 
 </html>

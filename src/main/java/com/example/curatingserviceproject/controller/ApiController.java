@@ -4,13 +4,10 @@ import com.example.curatingserviceproject.dto.DisplayCardDTO;
 import com.example.curatingserviceproject.entity.Congestion;
 import com.example.curatingserviceproject.entity.Display;
 import com.example.curatingserviceproject.entity.SpaceMapping;
-import com.example.curatingserviceproject.service.CongestionService;
-import com.example.curatingserviceproject.service.DisplayService;
-import com.example.curatingserviceproject.service.SpaceMappingService;
+import com.example.curatingserviceproject.service.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -26,11 +23,12 @@ public class ApiController {
     private final DisplayService displayService;
     private final CongestionService congestionService;
     private final SpaceMappingService spaceMappingService;
+    private final RecommendationService recommendationService;
 
-
-    //전시 정보 (필터링 x)
+    //전시 정보
     @GetMapping("/api/displays")
     public List<Display> displays() {
+
         return displayService.getAllDisplays();
     }
 
@@ -39,7 +37,7 @@ public class ApiController {
     @GetMapping("/api/fetch-displays")
     public ResponseEntity<?> fetchDisplays() {
         try {
-            List<Display> saved = displayService.fetchANDSAVEDisplay(26,27);
+            List<Display> saved = displayService.fetchANDSAVEDisplay(1,30);
             return ResponseEntity.ok(Map.of(
                     "status", "ok",
                     "savedCount", saved.size()
@@ -83,10 +81,10 @@ public class ApiController {
 
 
     //혼잡도 테스트
-    @GetMapping("/api/congestion/test")
-    public ResponseEntity<?> testCongestion() {
-        return getCongestion("MMCA-SPACE-1001"); //1전시실 테스트
-    }
+//    @GetMapping("/api/congestion/test")
+//    public ResponseEntity<?> testCongestion() {
+//        return getCongestion("MMCA-SPACE-1001"); //1전시실 테스트
+//    }
 
 
     @GetMapping("/api/mappings")
@@ -148,8 +146,16 @@ public class ApiController {
         }
     }
 
+    //사용자 취향 분석 저장
+//    @PostMapping("/api/savePreference")
+//    public ResponseEntity<?> saveUserPreference(@RequestBody UserPreference userPreference) {
+//        recommendationService.saveUserPreference(userPreference);
+//        return ResponseEntity.ok("사용자 취향 저장 완료!");
+//    }
 
-    // 테스트 용!!!!
+
+
+    //% 테스트 용!!!!%
     @GetMapping("/api/test")
     public ResponseEntity<String> test() {
         return ResponseEntity.ok("API 컨트롤러 작동중!");
