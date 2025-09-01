@@ -9,86 +9,141 @@
 
     <style>
         html, body {
-			margin: 0;
-			padding:0;
-			box-sizing:border-box;
-			font-family: 'inter', sans-serif;
-			background: #fff;
-			line-height: 1;
-			}
+			height: 100vh;
+			overflow: hidden;
+		}
 
 
 		/* 헤더 부분 */
-        .header {
-            padding: 10px 20px;
-        }
-
-		.exhibition-title {
-			font-size: 15px;
-			margin: 0;
-
-			}
-
-		.title-container {
-			/*max-width: 1400px;*/
-			margin: 0 auto;
+		.top-header {
+			position: fixed;
+			top: 0;
+			left: 0;
+			width: 100vw;
+			height: 104px;
+			border-bottom: 1px solid #000;
+			z-index: 1000;
 			display: flex;
-			align-items: baseline;
+			flex-direction: column;
+		}
+
+		.header-row {
+			display: flex;
 			justify-content: space-between;
-            text-underline: black;
+			align-items: center;
+			padding: 0 32px;
+			height: 80px;
+			font-size: 16px;
+			font-weight: 600;
+		}
+
+		.header-menu {
+			display: flex;
+			gap: 24px;
+			font-weight: 500;
+		}
+
+		.header-bar {
+			height: 40px;
+			border-top: 1px solid #000;
+			border-bottom: 1px solid #000;
+		}
+
+		.header-menu-link {
+			text-decoration: none;
+			font-weight: 600;
+			font-size: 15px;
+			padding: 0 8px;
 		}
 
 		.exhibition-tag {
 			font-size: 14px;
+			font-weight: 700;
 		}
 
 
 		/*메인 콘텐츠*/
-		.main-content{
+		.main-content {
 			display: grid;
-            grid-template-columns: 320px 1fr 400px;
-			gap: 0;
-			padding: 0;
-            width: 100vw;
-            height: 100vh;
-            border-left: 2px solid #000;
-            border-top: 2px solid #000;
-            border-bottom: 2px solid #000;
-            box-sizing: border-box;
-        }
+			position: fixed;
+			grid-template-columns: 360px 1fr 450px;
+			top: 104px;
+			bottom: 45px;
+			left: 0;
+			right: 0;
+			border-top: 1px solid #000;
+			overflow: hidden;
+		}
 
+		.left-section,
+		.center-section,
+		.image-section {
+			overflow-y: auto;
+			height: 100%;
+			box-sizing: border-box;
+		}
+
+		/*왼쪽 구역*/
         .left-section {
-            border-right: 2px solid #000;
-            padding: 0 10px;
+            border-right: 1px solid #000;
+			padding: 15px 20px;
             overflow-y: auto;
-            height: 100vh;
-            box-sizing: border-box;
-            background: #fafafa;
-
-        }
-
-        .right-section {
-            border-right: 2px solid #000;
-            padding: 10px;
-            overflow-y: auto;
-            height: 100vh;
             box-sizing: border-box;
         }
 
+		.exhibition-list {
+			display: flex;
+			flex-direction: column;
+			border-top: 1px solid #000;
+		}
 
-        /* 왼쪽 구역 */
-        .left-section {
-        	padding-right: 20px;
+		.exhibition-item {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 12px 8px;
+			border-bottom: 1px solid #000;
+			transition: background-color 0.2s;
+			cursor: pointer;
+		}
+
+		.exhibition-item:hover {
+			background-color: #f5f5f5;
+		}
+
+		.title-info {
+			font-size: 15px;
+			font-weight: 600;
+			color: #111;
+			flex: 1;
+		}
+
+		.period-info {
+			font-size: 15px;
+			font-weight: 400;
+			min-width: 110px;
+			text-align: right;
+			color: #555;
+		}
+
+
+
+
+
+		/*중간 구역*/
+		.center-section {
+            border-right: 1px solid #000;
+			padding: 20px 30px;
+            overflow-y: auto;
+            box-sizing: border-box;
         }
 
-		/* {description} */
+
         .exhibition-description {
             font-size: 40px;
-            /*line-height: 1.8;*/
-            color: #333;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
             text-align: justify;
-			font-weight: bold;
+			font-weight: 700;
         }
 
 		.exhibition-info {
@@ -102,30 +157,39 @@
 
 		.meta-info strong {
 			text-decoration: underline;
-			text-underline-offset: 2px;
+			text-underline-offset: 4px;
+			margin-right: 6px;
 		}
 
 
-		/*오르쪽 구역 - 이미지*/
+		/*오른쪽 구역 */
 		.image-section {
             padding: 10px;
             overflow-y: auto;
             height: 100vh;
             box-sizing: border-box;
+			align-items: flex-start;
+			gap: 20px;
 		}
 
 		.exhibition-image {
-			width: 150%;
-			height: 400px;
+			width: 250px;
+			height: auto;
 			object-fit: cover;
+		}
+
+
+		.btn {
+			padding: 8px 16px;
+			text-decoration: none;
+			font-weight: 600;
+			font-size: 14px;
 		}
 
         /* 통계 구역*/
 		.down-section {
-			padding: 20px 0;
-			margin: 0 auto;
+			margin-top: 40px;
 			max-width: 600px;
-			margin-left: 40px;
 		}
 
 		.stat-item {
@@ -138,103 +202,97 @@
 			font-weight: bold;
 		}
 
-		.stats-container {
-			max-width: 1200px;
-			margin: 0 auto;
+
+		/*푸터 구역*/
+		.site-footer {
+			position: fixed;
+			bottom: 0;
+			left: 0;
+			width: 100vw;
+			height: 45px;
+			border-top: 1px solid #000;
+			display: flex;
+			justify-content: flex-end;
+			align-items: center;
+			padding: 0 24px;
+			z-index: 1000;
 		}
-
-        .left-section {
-            background: #fafafa;
-            padding: 10px;
-        }
-
-        .exhibition-item:hover {
-            background-color: #f0f7ff;
-        }
-
-
-
 
     </style>
 </head>
-
-<body  data-display-id="123">
-
+<body>
 <!--HEADER-->
 <!--전시 제목 구역-->
-<header>
-<div class="header">
-	<div class="title-container">
-		<h1 class="exhibition-title">{{TITLE}}</h1>
-		<span class="exhibition-tag" style="margin-left: auto">(Exhibition)</span>
+<header class="top-header">
+	<div class="header-row">
+		<span class="header-left" style="font-weight: 400">{{TITLE}}</span>
+		<div class="header-menu">
+			<a href="#" class="header-menu-link">Everything</a>
+			<span class="header-menu-link">2025</span>
+			<span class="header-menu-link">art</span>
+		</div>
+		<span class="exhibition-tag" style="font-size: 15px;">(Exhibition)</span>
 	</div>
-</div>
+		<div class="header-bar">
+	</div>
 </header>
 
 
 <div class="main-content">
 
     <!--왼쪽 / 전시 리스트 구역-->
-    <aside class="left-section">
+    <div class="left-section">
     <div class="exhibition-list">
         {{#allExhibitions}}
             <div class="exhibition-item">
-                <span class="title-info" style="font-size: 15px; flex: 1">{{title}}</span>
-                <span class="period-info" style="font-size: 15px; min-width: 120px; margin-right: 15px">{{period}}</span>
-            </div>
-        {{/allExhibitions}}
+                <span class="title-info" style="font-size: 15px;">{{title}}</span>
+                <span class="period-info" style="font-size: 15px;">{{period}}</span>
+		</div>
+		{{/allExhibitions}}
+			</div>
     </div>
-    </aside>
-
 
 
 	<!--중간 / 전시 설명 구역-->
-<section class="right-section">
+<section class="center-section">
             <div class="exhibition-description">{{{DESCRIPTION}}}</div>
-		<div class="exhibition-info">
-			<div><strong>Author:</strong> {{AUTHOR}}</div>
-			<div><strong>Institution:</strong> {{AGENCY}}</div>
-			<div><strong>Period:</strong> {{PERIOD}}</div>
-			<div><strong>congestion:</strong> {{congestionNm}}</div>
+
+	<!--중간 선-->
+	    <div class="middle" style="	border-top: 1px solid #000000;
+				margin: 10px 20px; "></div>
+
+
+	<!--@@@수정해야함@@@-->
+	<!-- 다운 섹션: 통계 ???-->
+	<section class="down-section">
+		<h2 class="stats-title">Exhibition Analystics</h2>
+		<div class="stats-grid">
+			<div class="stat-item">
+				<div class="stat-label">Congestion Score</div>
+				<span class="stat-number" id="congestionScore">{congestionScore}</span>
+			</div>
+
+			<div class="stat-item">
+				<div class="stat-label">Location Score</div>
+				<span class="stat-number" id="locationScore">{locationScore}</span>
+			</div>
+
+			<div class="stat-item">
+				<div class="stat-label">Time Score</div>
+				<span class="stat-number" id="timeScore">{timeScore}</span>
+			</div>
+
+			<div class="stat-item">
+				<div class="stat-label">Popularity Score</div>
+				<span class="stat-number" id="popularityScore">{popularityScore}</span>
+			</div>
+
+			<!--추천 점슈 & 이유-->
+			<div class="recommendation-details" style="margin-top: 10px; font-weight: bold;">
+				<div class="recommendation-score" id="totalScore">Total Recommendation: {recommendScore}</div>
+				<div class="recommendation-text" id="recommendationText">@@@ Highly recommended @@@</div>
+			</div>
 		</div>
-
-
-    <!--중간 선-->
-<!--    <div class="middle" style="	border-top: 1px solid #000000;-->
-<!--			margin: 10px 20px; "></div>-->
-
-    <!--@@@수정해야함@@@-->
-    <!-- 다운 섹션: 통계 ???-->
-    <section class="down-section">
-        <h2 class="stats-title">Exhibition Analystics</h2>
-        <div class="stats-grid">
-            <div class="stat-item">
-                <div class="stat-label">Congestion Score</div>
-                <span class="stat-number" id="congestionScore">35</span>
-            </div>
-
-            <div class="stat-item">
-                <div class="stat-label">Location Score</div>
-                <span class="stat-number" id="locationScore">15</span>
-            </div>
-
-            <div class="stat-item">
-                <div class="stat-label">Time Score</div>
-                <span class="stat-number" id="timeScore">12</span>
-
-            </div>
-
-            <div class="stat-item">
-                <div class="stat-label">Popularity Score</div>
-                <span class="stat-number" id="popularityScore">8</span>
-            </div>
-
-            <!--추천 점슈 & 이유-->
-            <div class="recommendation-details">
-                <div class="recommendation-score" id="totalScore">85</div>
-                <div class="recommendation-text" id="recommendationText">@@@ Highly recommended @@@</div>
-            </div>
-        </div>
 
     </section>
 </section>
@@ -242,25 +300,32 @@
 
 	<!--우측 이미지 구역-->
 	<section class="image-section">
-		        <div class="image-container">
-		            <img src="{{imageObject}}" class="exhibition-image" >
-
+		<div class="image-container">
+			<img src="{{imageObject}}" class="exhibition-image" >
 
         <!--버튼-->
 		<div class="action-buttons">
 			<a href="/main" class="btn"> View More Exhibitions</a>
 		</div>
+		</div>
 
-                </div>
-        </section>
+		<div class="exhibition-info">
+			<div><strong>Author:</strong> {{AUTHOR}}</div>
+			<div><strong>Institution:</strong> {{AGENCY}}</div>
+			<div><strong>Period:</strong> {{PERIOD}}</div>
+			<div><strong>congestion:</strong> {{congestionNm}}</div>
+		</div>
+	</section>
 
 </div>
+
+
+<!-- FOOTER (하단) -->
+<footer class="site-footer">
+	<span class="footer-code">20250901</span>
+</footer>
+
 </body>
-
-
-
 <script>
-
-
 </script>
 </html>
