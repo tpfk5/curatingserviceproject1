@@ -2,6 +2,7 @@ package com.example.curatingserviceproject.service;
 
 import com.example.curatingserviceproject.dto.DisplayCardDTO;
 import com.example.curatingserviceproject.entity.SpaceMapping;
+import com.example.curatingserviceproject.entity.UserPreference;
 import com.example.curatingserviceproject.repository.DisplayRepository;
 import com.example.curatingserviceproject.entity.Display;
 import lombok.RequiredArgsConstructor;
@@ -194,13 +195,12 @@ public class DisplayService {
     }
 
 
-    //DisplayCard DTO
-    public List<DisplayCardDTO> getDisplayCards() {
+
+    //DisplayCard DTO <- 사용자 취향 반영@
+    public List<DisplayCardDTO> getDisplayCards(UserPreference preference) {
         Set<String> seenTitles = new HashSet<>(); //중복 방지용
-
         List<Display> displays = displayRepository.findAll();
-        log.info("DB 전체 전시: {}", displays.size());
-
+        List<DisplayCardDTO> result = new ArrayList<>();
 
         if (displays.isEmpty()) {
             log.warn("DB 없음. 새 데이터 수집 시작!");
@@ -210,15 +210,14 @@ public class DisplayService {
         }
 
         //'국립현대미술관'만 필터링
-        List<DisplayCardDTO> result = new ArrayList<>();
         for (Display display : displays) {
             if (!"국립현대미술관".equals(display.getCNTC_INSTT_NM())) {
                 continue;
             }
 
-//            if (!isCurrentlyExhibited(display.getPERIOD())) {
-//                continue;
-//            }
+            if (!isCurrentlyExhibited(display.getPERIOD())) {
+                continue;
+            }
 
             //중복 체크하기 -> 이미 저장됐으면 SKIP!
             String title = display.getTITLE();
@@ -230,10 +229,9 @@ public class DisplayService {
             seenTitles.add(title);
 
             try {
-                int score = recommendationService.calculateRecommendationScore(display);
+                int score = recommendationService.calculateRecommendationScore(display, preference);
+                String safeCongestionNm = display.getCongestionNm() != null ? display.getCongestionNm() : "정보 없음";
 
-                String safeCongestionNm = display.getCongestionNm() != null ?
-                        display.getCongestionNm() : "정보 없음";
 
                 DisplayCardDTO dto = new DisplayCardDTO(
                         title,
@@ -255,16 +253,24 @@ public class DisplayService {
                 log.error("!추천 점수 계산 중 오류: {}", title, e);
             }
         }
-        log.info("최종 전시 개수: {}", result.size());
 
+        if (preference != null) {
+            // 사용자 취향 0 -> 점수 높은 순 정렬
+            result.sort((a, b) -> Integer.compare(b.getRecommendScore(), a.getRecommendScore()));
+            log.info("점수 순 정렬");
+        }
 
-        //점수 높은 순으로 정렬? (내림차순)
-        result.sort((a, b) -> Integer.compare(b.getRecommendScore(), a.getRecommendScore()));
+        else {
+            // x -> 랜덤 정렬
+            Collections.shuffle(result);
+            log.info("랜덤 정렬");
+        }
+
         return result;
     }
 
 
-    // main page에서 카드 개수 제한하기(우선 3개만)
+    // main page에서 카드 개수 제한하기(우선 3개만 랜덤으로)
     public List<DisplayCardDTO> getDisplayCardsLimited(int limit) {
         List<DisplayCardDTO> allcards = getDisplayCards();
 
@@ -282,6 +288,11 @@ public class DisplayService {
                 .filter(display -> display.getTITLE().equals(title))
                 .findFirst()
                 .orElse(null);
+    }
+
+//    메서드 오버라이딩>?
+    public List<DisplayCardDTO> getDisplayCards() {
+        return getDisplayCards(null);
     }
 
 

@@ -1,5 +1,8 @@
 package com.example.curatingserviceproject.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum TimePreference {
     MORNING("오전"),
     AFTERNOON("오후"),
@@ -10,8 +13,5 @@ public enum TimePreference {
 
     TimePreference(String displayName) {
         this.displayName = displayName;
-    }
-    public String getDisplayName() {
-        return displayName;
     }
 }

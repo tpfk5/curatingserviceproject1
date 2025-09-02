@@ -25,6 +25,7 @@
 			z-index: 1000;
 			display: flex;
 			flex-direction: column;
+
 		}
 
 		.header-row {
@@ -35,18 +36,32 @@
 			height: 80px;
 			font-size: 16px;
 			font-weight: 600;
+            background-color: #000;
+            color: white;
 		}
 
 		.header-menu {
 			display: flex;
+            grid-column: 2 / 4;
 			gap: 24px;
 			font-weight: 500;
+            align-items: flex-start;
 		}
+        .list {
+            font-size: 16px;
+            font-weight: 600;
+            border-right: 1px solid #000;
+            display: flex;
+        }
 
 		.header-bar {
-			height: 40px;
-			border-top: 1px solid #000;
-			border-bottom: 1px solid #000;
+            height: 40px;
+            border-top: 1px solid #000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            border-right: 1px solid #000;
 		}
 
 		.header-menu-link {
@@ -56,17 +71,12 @@
 			padding: 0 8px;
 		}
 
-		.exhibition-tag {
-			font-size: 14px;
-			font-weight: 700;
-		}
-
 
 		/*메인 콘텐츠*/
 		.main-content {
 			display: grid;
 			position: fixed;
-			grid-template-columns: 360px 1fr 450px;
+			grid-template-columns: 500px 1fr 800px;
 			top: 104px;
 			bottom: 45px;
 			left: 0;
@@ -127,9 +137,6 @@
 		}
 
 
-
-
-
 		/*중간 구역*/
 		.center-section {
             border-right: 1px solid #000;
@@ -140,16 +147,31 @@
 
 
         .exhibition-description {
-            font-size: 40px;
-            margin-bottom: 24px;
-            text-align: justify;
-			font-weight: 700;
+            font-size: 20px !important;
+            text-align: justify !important;
+            line-height: 1 !important;
+			font-weight: 700 !important;
+            margin: 0 !important;
+            padding: 0 !important;
+        }
+
+        .exhibition-description p {
+            margin-bottom: 16px !important;
+            font-size: 18px !important;
+        }
+
+        .exhibition-description span {
+            font-size: inherit !important;
         }
 
 		.exhibition-info {
 			font-size: 18px;
 			margin-top: 20px;
 		}
+
+        .exhibition-item.selected {
+            background-color: #00FF00 !important;
+        }
 
 		.meta-info div {
 			margin-bottom: 6px;
@@ -162,7 +184,7 @@
 		}
 
 
-		/*오른쪽 구역 */
+		/*이미지 구역 */
 		.image-section {
             padding: 10px;
             overflow-y: auto;
@@ -173,7 +195,8 @@
 		}
 
 		.exhibition-image {
-			width: 250px;
+			width: 100%;
+            max-width: 800px;
 			height: auto;
 			object-fit: cover;
 		}
@@ -181,9 +204,9 @@
 
 		.btn {
 			padding: 8px 16px;
-			text-decoration: none;
 			font-weight: 600;
 			font-size: 14px;
+
 		}
 
         /* 통계 구역*/
@@ -205,18 +228,39 @@
 
 		/*푸터 구역*/
 		.site-footer {
-			position: fixed;
-			bottom: 0;
-			left: 0;
-			width: 100vw;
-			height: 45px;
-			border-top: 1px solid #000;
-			display: flex;
-			justify-content: flex-end;
-			align-items: center;
-			padding: 0 24px;
-			z-index: 1000;
-		}
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100vw;
+            height: 45px;
+            border-top: 1px solid #000;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 0 24px;
+            z-index: 1000;
+            background-color: #000;
+            color: white;
+        }
+
+
+            /*js*/
+            .search-highlight {
+                background-color: #fff3cd !important;
+                border-left: 4px solid #ffc107 !important;
+                font-weight: bold;
+            }
+
+            .exhibition-item.search-highlight:hover {
+                background-color: #fff3cd !important;
+            }
+
+
+            .exhibition-item.selected.search-highlight {
+                background-color: #d4edda !important;
+                border-left: 4px solid #28a745 !important;
+            }
+
 
     </style>
 </head>
@@ -225,36 +269,54 @@
 <!--전시 제목 구역-->
 <header class="top-header">
 	<div class="header-row">
-		<span class="header-left" style="font-weight: 400">{{TITLE}}</span>
-		<div class="header-menu">
-			<a href="#" class="header-menu-link">Everything</a>
-			<span class="header-menu-link">2025</span>
-			<span class="header-menu-link">art</span>
+		<span class="header-left" style="font-size: 20px";>{{TITLE}}</span>
+
+        <!--버튼-->
+		<div class="action-buttons">
+			<a href="/main" class="btn"> View More Exhibitions</a>
 		</div>
-		<span class="exhibition-tag" style="font-size: 15px;">(Exhibition)</span>
 	</div>
+
 		<div class="header-bar">
-	</div>
+            <div class="list">Everything</div>
+
+            <div class="header-menu">
+                <span class="header-menu-link">2025</span>
+                <span class="header-menu-link">detail info</span>
+            </div>
+        </div>
 </header>
 
 
 <div class="main-content">
 
-    <!--왼쪽 / 전시 리스트 구역-->
+
+    <!--왼쪽 -->
     <div class="left-section">
+
+        <!--검색 구역-->
+        <div class="seach-container" style="margin-bottom: 20px; ">
+            <div style="position: relative;">
+                <input type="text" class="seach-box" placeholder="search exhibitions"
+                       STYLE="width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid gray;"
+                        onkeyup="filterExhibitions();">
+            </div>
+        </div>
+
+        <!--전시 리스트 구역-->
     <div class="exhibition-list">
         {{#allExhibitions}}
-            <div class="exhibition-item">
-                <span class="title-info" style="font-size: 15px;">{{title}}</span>
-                <span class="period-info" style="font-size: 15px;">{{period}}</span>
-		</div>
+            <a href="/detail?title={{title}}" class="exhibition-item" style="text-decoration: none; color: inherit;">
+            <span class="title-info" style="font-size: 15px; flex: 1">{{title}}</span>
+            <span class="period-info" style="font-size: 15px; min-width: 120px; margin-right: 15px">{{period}}</span>
+            </a>
 		{{/allExhibitions}}
 			</div>
     </div>
 
 
 	<!--중간 / 전시 설명 구역-->
-<section class="center-section">
+    <section class="center-section">
             <div class="exhibition-description">{{{DESCRIPTION}}}</div>
 
 	<!--중간 선-->
@@ -269,27 +331,27 @@
 		<div class="stats-grid">
 			<div class="stat-item">
 				<div class="stat-label">Congestion Score</div>
-				<span class="stat-number" id="congestionScore">{congestionScore}</span>
+				<span class="stat-number" id="congestionScore">10</span>
 			</div>
 
 			<div class="stat-item">
 				<div class="stat-label">Location Score</div>
-				<span class="stat-number" id="locationScore">{locationScore}</span>
+				<span class="stat-number" id="locationScore">20</span>
 			</div>
 
 			<div class="stat-item">
 				<div class="stat-label">Time Score</div>
-				<span class="stat-number" id="timeScore">{timeScore}</span>
+				<span class="stat-number" id="timeScore">30</span>
 			</div>
 
 			<div class="stat-item">
 				<div class="stat-label">Popularity Score</div>
-				<span class="stat-number" id="popularityScore">{popularityScore}</span>
+				<span class="stat-number" id="popularityScore">40</span>
 			</div>
 
 			<!--추천 점슈 & 이유-->
 			<div class="recommendation-details" style="margin-top: 10px; font-weight: bold;">
-				<div class="recommendation-score" id="totalScore">Total Recommendation: {recommendScore}</div>
+				<div class="recommendation-score" id="totalScore">Total Recommendation: 50</div>
 				<div class="recommendation-text" id="recommendationText">@@@ Highly recommended @@@</div>
 			</div>
 		</div>
@@ -303,11 +365,6 @@
 		<div class="image-container">
 			<img src="{{imageObject}}" class="exhibition-image" >
 
-        <!--버튼-->
-		<div class="action-buttons">
-			<a href="/main" class="btn"> View More Exhibitions</a>
-		</div>
-		</div>
 
 		<div class="exhibition-info">
 			<div><strong>Author:</strong> {{AUTHOR}}</div>
@@ -327,5 +384,37 @@
 
 </body>
 <script>
+    //전시 검색하기 ('제목만')
+    function filterExhibitions () {
+        const searchTerm = document.getElementById('searchItem').value.toLowerCase();
+        const exhibitions = document.querySelectorAll('.exhibition-item');
+
+        exhibitions.forEach(item => {
+            const titleElement = item.querySelector('.title-info');
+            const title = titleElement ? titleElement.textContent.toLocaleLowerCase() : '';
+
+            item.style.display = 'flex';
+
+            if (searchTerm && title.includes(searchTerm)) {
+                item.classList.add('search-highlight');
+            } else {
+                item.classList.remove('search-highlight');
+            }
+        });
+    }
+
+    // 현재 페이지의 전시 하이라이트 효과 주기
+    document.addEventListener('DOMContentLoaded', function() {
+        const currentTitle = document.querySelector('.header-left').textContent;
+        const exhibitions = document.querySelectorAll('.exhibition-item');
+
+        exhibitions.forEach(item => {
+            const titleElement = item.querySelector('.title-info');
+            if (titleElement && titleElement.textContent === currentTitle) {
+                item.classList.add('selected');
+            }
+        });
+    });
+
 </script>
 </html>

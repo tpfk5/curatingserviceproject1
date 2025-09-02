@@ -1,5 +1,6 @@
 package com.example.curatingserviceproject.service;
 
+import com.example.curatingserviceproject.dto.UserPreferenceDTO;
 import com.example.curatingserviceproject.entity.Display;
 import com.example.curatingserviceproject.entity.UserPreference;
 import com.example.curatingserviceproject.repository.UserPreferenceRepository;
@@ -18,9 +19,9 @@ import static com.example.curatingserviceproject.enums.TimePreference.*;
 * 1. 혼잡도 상태 (35)
 * 2. 개인 장소 선호(서울/과천/덕수궁/청주) (15)
 * 3. 시간대 선호 (오전:10-12/오후:12-17/야간개장:17-21/노상관) (각 15,,,)
-* 4. 관람비 선호 (유료/무료/노상관) (5)
+* 4. 상설/기획 선택 선호 (상설/기획) (10)
 * 5. 인기 점수 (10)
-* 기본 점수(20)
+* 기본 점수(15)
 * 점수 구간 별 분류(ex. 80점 이상-> "지금 가기 좋은 전시" 등등 표시하기)
 * 추천 이유도 적으면 좋을 것 같다?? 언젠가
 */
@@ -39,10 +40,10 @@ public class RecommendationService {
     }
 
     // 개인 추천 점수 계산
-    public int calculateRecommendationScore(Display display, UserPreference userPreference) {
+    public int calculateRecommendationScore(Display display, UserPreference  userPreference) {
         log.info("전시 추천>> {}", display.getTITLE());
 
-        int baseScore = 20; // 기본 점수 20
+        int baseScore = 15; // 기본 점수 15
 
         // 1. 혼잡도 35
         int congestionScore = calculateCongestionScore(display.getCongestionNm());
@@ -50,7 +51,7 @@ public class RecommendationService {
 
         log.debug("혼잡도 점수: {}", congestionScore);
 
-        // 2. 인기 20
+        // 2. 인기 10
         int locationPreferenceScore = calculateLocationPreferenceScore(display.getEVENT_SITE(), userPreference);
         baseScore += locationPreferenceScore;
 
@@ -62,11 +63,11 @@ public class RecommendationService {
 
         log.debug("시간대 점수: {}", timePreferenceScore);
 
-        // 4. 관람비 5
-        int chargeScore = calculateChargeScore(display.getCHARGE());
-        baseScore += chargeScore;
+        // 4. 전시 유형 10
+        int typepreferenceScore = calculateTypePreferenceScore(userPreference, display);
+        baseScore += typepreferenceScore;
 
-        log.debug("관람비 점수: {}", chargeScore);
+        log.debug("전시 유형 점수: {}", typepreferenceScore);
 
         // 5. 인기 10
         int popularityScore = calculatePopularityScore(display.getEVENT_SITE());
@@ -144,20 +145,27 @@ public class RecommendationService {
         }
     }
 
-    // 관람비 점수 계산 5
-    private int calculateChargeScore(String charge) {
-        if (charge == null || charge.trim().isEmpty()) {
-            return 1;
+    // 상설전,기획전 선택 점수 계산 10
+    private int calculateTypePreferenceScore(UserPreference userPreference, Display display) {
+        if (userPreference == null || userPreference.getPreferredType() == null) {
+            return 5;
         }
 
-        if (charge.contains("무료") || charge.equals("0")) {
+        List<String> preferredTypes = userPreference.getPreferredType();
+
+        String title = display.getTITLE() != null ? display.getTITLE() : "";
+        boolean isPermanent = title.contains("상설");
+
+        if (isPermanent && preferredTypes.contains("상설전")) {
             return 5;
-        } else { //!수정해야함!
+        }
+            if (!isPermanent && preferredTypes.contains("기획전")) {
+                return 5;
+            }
             return 3;
         }
-    }
 
-    //  @@@유료/무료/노상관 선택지에 따른 사용자 선호 점수제로 할건지 결정해야함@@ 0829 14:29
+
 
     // 인기도 계산 15
     private int calculatePopularityScore(String eventSite) {
@@ -202,6 +210,11 @@ public class RecommendationService {
         userPreferenceRepository.save(userPreference);
 
         log.info("사용자 취향 저장 완료: {}", userPreference);
+    }
+
+    public UserPreference getUserPreferenceBySession(String sessionId) {
+        return userPreferenceRepository.findBySessionId(sessionId)
+                .orElse(null);
     }
 }
 

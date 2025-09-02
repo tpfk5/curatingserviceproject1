@@ -4,6 +4,8 @@ import com.example.curatingserviceproject.enums.TimePreference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -24,6 +26,11 @@ public class UserPreference {
     @Column(name = "preferred_locations")
     private String preferredLocations; //from RecommendationService -> 선호 장소
 
-    @Column(name = "user_session")
-    private String userSession; //개인 식별자?
+    @ElementCollection
+    @CollectionTable(name = "preferred_types", joinColumns = @JoinColumn(name = "user_preference_id"))
+    @Column(name = "preferred_type")
+    private List<String> preferredType; // from RecommendationService -> 선호 전시 유형
+
+    @Column(name = "session_id", nullable = false)
+    private String sessionId; //개인 식별자@@@
 }

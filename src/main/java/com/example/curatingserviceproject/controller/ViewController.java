@@ -70,10 +70,78 @@ public class ViewController {
 
 
     //detail page
-//    @GetMapping("/detail")
+    @GetMapping("/detail")
+    public String detailByTitle(@RequestParam(required = false) String title, Model model) {
+        try {
+            List<DisplayCardDTO> allExhibitions = displayService.getDisplayCards();
+            model.addAttribute("allExhibitions", allExhibitions);
+
+            Display display;
+
+
+            if (title != null && !title.isEmpty()) {
+                display = displayService.getDisplayByTitle(title);
+            } else {
+                if (!allExhibitions.isEmpty()) {
+                    display = displayService.getDisplayByTitle(allExhibitions.get(0).getTitle());
+                } else {
+                    log.error("전시 데이터가 없습니다.");
+                    return "error";
+                }
+            }
+
+            if (display == null) {
+                log.error("해당 전시를 찾을 수 없습니다: {}", title);
+                return "error";
+            }
+
+            model.addAttribute("TITLE", display.getTITLE());
+            model.addAttribute("DESCRIPTION", display.getDESCRIPTION());
+            model.addAttribute("AUTHOR", display.getAUTHOR());
+            model.addAttribute("AGENCY", display.getCNTC_INSTT_NM());
+            model.addAttribute("PERIOD", display.getPERIOD());
+            model.addAttribute("congestionNm", display.getCongestionNm());
+            model.addAttribute("imageObject", display.getIMAGE_OBJECT());
+
+            // @@임시 분석 점수@@@
+            model.addAttribute("congestionScore", "8.5");
+            model.addAttribute("locationScore", "7.2");
+            model.addAttribute("timeScore", "6.8");
+            model.addAttribute("popularityScore", "9.1");
+            model.addAttribute("recommendScore", "50");
+
+            log.info("Detail page - 선택 전시: {}, 전체 수: {}",
+                    display.getTITLE(), allExhibitions.size());
+
+
+            return "detail";
+        } catch (Exception e) {
+
+            log.error("Detail 페이지 로딩 실패", e);
+
+            model.addAttribute("error", "전시 정보 로딩 실패.");
+            return "error";
+        }
+    }
+
+//    @GetMapping("/detail-ui")
 //    public String detailByTitle(@RequestParam(required = false) String title, Model model) {
-//        Display display = displayService.getDisplayByTitle(title);
-//        model.addAttribute("display", display);
+//
+//        Display display;
+//
+//        if (title == null || title.isEmpty()) {
+//            // title 파라미터 없으면 더미 데이터 생성
+//            display = new Display();
+//            display.setTITLE("Patty Chang’s Arbitrary Acts of Devotion");
+//            display.setDESCRIPTION("Alternating between particular and general experience—the death of one whale, ...");
+//            display.setAUTHOR("Erin Schwartz");
+//            display.setCNTC_INSTT_NM("NY Review of Books");
+//            display.setPERIOD("January 14, 2018");
+//            display.setCongestionNm("Moderate");
+//            display.setIMAGE_OBJECT("/images/sample-image.jpg"); // 프로젝트 내 임시 이미지 경로
+//        } else {
+//            display = displayService.getDisplayByTitle(title);
+//        }
 //
 //        if (display == null) {
 //            return "error";
@@ -89,40 +157,6 @@ public class ViewController {
 //
 //        return "detail";
 //    }
-
-    @GetMapping("/detail-ui")
-    public String detailByTitle(@RequestParam(required = false) String title, Model model) {
-
-        Display display;
-
-        if (title == null || title.isEmpty()) {
-            // title 파라미터 없으면 더미 데이터 생성
-            display = new Display();
-            display.setTITLE("Patty Chang’s Arbitrary Acts of Devotion");
-            display.setDESCRIPTION("Alternating between particular and general experience—the death of one whale, ...");
-            display.setAUTHOR("Erin Schwartz");
-            display.setCNTC_INSTT_NM("NY Review of Books");
-            display.setPERIOD("January 14, 2018");
-            display.setCongestionNm("Moderate");
-            display.setIMAGE_OBJECT("/images/sample-image.jpg"); // 프로젝트 내 임시 이미지 경로
-        } else {
-            display = displayService.getDisplayByTitle(title);
-        }
-
-        if (display == null) {
-            return "error";
-        }
-
-        model.addAttribute("TITLE", display.getTITLE());
-        model.addAttribute("DESCRIPTION", display.getDESCRIPTION());
-        model.addAttribute("AUTHOR", display.getAUTHOR());
-        model.addAttribute("AGENCY", display.getCNTC_INSTT_NM());
-        model.addAttribute("PERIOD", display.getPERIOD());
-        model.addAttribute("congestionNm", display.getCongestionNm());
-        model.addAttribute("imageObject", display.getIMAGE_OBJECT());
-
-        return "detail";
-    }
 
 
     //my ui 수정 테스트용@@@@

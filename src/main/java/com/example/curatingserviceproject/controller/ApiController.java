@@ -1,10 +1,14 @@
 package com.example.curatingserviceproject.controller;
 
 import com.example.curatingserviceproject.dto.DisplayCardDTO;
+import com.example.curatingserviceproject.dto.UserPreferenceDTO;
 import com.example.curatingserviceproject.entity.Congestion;
 import com.example.curatingserviceproject.entity.Display;
 import com.example.curatingserviceproject.entity.SpaceMapping;
+import com.example.curatingserviceproject.entity.UserPreference;
+import com.example.curatingserviceproject.enums.TimePreference;
 import com.example.curatingserviceproject.service.*;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -52,14 +56,37 @@ public class ApiController {
 
     //추천 전시 카드 데이터
     @GetMapping("/api/cards")
-    public ResponseEntity<?> getDisplayCards() {
-        try {
-            List<DisplayCardDTO> cardList = displayService.getDisplayCards();
-            return ResponseEntity.ok(cardList);
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
+    public ResponseEntity<?> getDisplayCardsWithPreference
+    (@RequestParam(required = false) String sessionId,
+     @RequestParam(required = false) String preferredLocations,
+     @RequestParam(required = false) String timePreference,
+     @RequestParam(required = false) String preferredTypes
+    ){
+        UserPreference userPreference = null;
+
+        if (sessionId != null && !sessionId.trim().isEmpty()) {
+            userPreference = recommendationService.getUserPreferenceBySession(sessionId);
+
+        } else if (preferredLocations != null || timePreference != null || preferredTypes != null) {
+            userPreference = new UserPreference();
+            userPreference.setPreferredLocations(preferredLocations);
+
+            try {
+                userPreference.setTimePreference(TimePreference.valueOf(timePreference));
+
+            } catch (Exception e) {
+                log.warn("시간 오류: {}", timePreference);
+            }
+
+            if (preferredTypes != null) {
+                userPreference.setPreferredType(List.of(preferredTypes.split(",")));
+            }
         }
-    }
+
+        List<DisplayCardDTO> cardList = displayService.getDisplayCards(userPreference);
+        return ResponseEntity.ok(cardList);
+        }
+
 
 
     @GetMapping("/api/congestion")
@@ -146,12 +173,31 @@ public class ApiController {
         }
     }
 
+
+
     //사용자 취향 분석 저장
-//    @PostMapping("/api/savePreference")
-//    public ResponseEntity<?> saveUserPreference(@RequestBody UserPreference userPreference) {
-//        recommendationService.saveUserPreference(userPreference);
-//        return ResponseEntity.ok("사용자 취향 저장 완료!");
-//    }
+    @PostMapping("/api/preference")
+    public ResponseEntity<?> submitPreference(@RequestBody UserPreferenceDTO dto,
+                                              HttpServletRequest request) {
+        try {
+            String sessionId = request.getSession().getId();
+
+            UserPreference userPreference = UserPreference.builder()
+                    .sessionId(sessionId)
+                    .timePreference(dto.getTimePreference())
+                    .preferredLocations(dto.getPreferredLocation())
+                    .preferredType(dto.getPreferredType() != null ?
+                            List.of(dto.getPreferredType()) : List.of())
+                    .build();
+
+
+            recommendationService.saveUserPreference(userPreference);
+
+            return ResponseEntity.ok(Map.of("status", "saved"));
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
+        }
+    }
 
 
 

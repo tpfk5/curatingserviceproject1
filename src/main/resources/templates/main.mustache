@@ -8,52 +8,80 @@
     <title>Title</title>
     <style>
      html {
-         font-family: 'Space Grotesk', sans-serif;
+         font-family: 'Inter' ,sans-serif;
          margin: 0;
          height: 100%;
      }
+
      body {
          font-family: 'Inter' ,sans-serif;
          margin: 0;
-         padding: 20px;
      }
 
      .header {
+         position: fixed;
+         top: 0;
+         left: 0;
+         width: 100vw;
+         height: 100px;
+         z-index: 1000;
+         display: flex;
+         flex-direction: column;
+     }
+     .top-header {
          width: 100%;
+         height: 100px;
+         background-color: #000000;
+         color: white;
+         /*border-bottom: 1px solid #ddd;*/
+         padding: 20px;
+     }
+
+     .header-row {
+         display: flex;
+         justify-content: space-between;
+         align-items: center;
+         height: 60px;
+         font-size: 16px;
+         font-weight: 600;
          background-color: #ffffff;
-         border-top: 1px solid #000000;
+         padding: 20px;
          border-bottom: 1px solid #000000;
-         box-sizing: border-box;
      }
 
     .main-container {
         display: grid;
-        grid-template-columns: 2fr 1fr;
-        gap: 40px;
-        height: calc(100vh - 60px);
+        padding: 0 30px;
+        margin: 0 auto;
+        margin-top: 140px;
+
+    }
+
+    .top-section {
+        background: #ffffff;
+        color: #222;
         box-sizing: border-box;
     }
 
-    .left-section {
-        min-width: 380px;
-        background: #ffffff;
-        color: #222;
-    }
+     .empty-section {
+         margin-top: 40px;
+         padding: 20px 0;
+         background-color: #00FF00;
+         border: 1px solid #000000;
+     }
 
 
-    .right-section {
-      min-width: 300px;
-      background-color: #323232;
-      color: #ffffff;
-      padding: 32px 16px;
+    .center-section {
+        /*border-: 1px solid #000;*/
+        /*padding: 30px;*/
+        margin-bottom: 40px;
+        /*grid-template-columns: 1fr 1fr 1fr*/
+        grid-template-columns: repeat(3, 1fr);
     }
 
      .card {
-         margin-bottom: 20px;
+         margin-bottom: 10px;
          position: relative;
-         background: white;
-         /*max-width: 250px;*/
-
      }
 
      .card-header {
@@ -62,18 +90,18 @@
          align-items: center;
          margin-bottom: 16px;
      }
-
      .place, .congestion, .recomnd_score, .period {
          font-size: 18px;
          margin: 4px 0;
          font-weight: 400;
      }
-
      .cards-grid {
          display: grid;
-         grid-template-columns: repeat(3, 1fr);
-         gap: 30px;
-         margin-top: 20px;
+         grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+         gap: 40px;
+         /*margin-top: 20px;*/
+         padding: 0 40px;
+         box-sizing: border-box;
      }
 
      .badge {
@@ -90,33 +118,15 @@
      .red{background-color: red}
      .gray{background-color: gray}
 
-    .view-btn {
-        background: none;
-        border: 1px solid #000;
-        padding: 3px 5px;
-        border-radius: 20px;
-        font-size: 12px;
-        cursor: pointer;
-        transition: all 0.2s;
-        text-transform: lowercase;
-        text-decoration: none;
-        color: #000;
-        display: inline-block;
-    }
-
-    .view-btn:hover {
-            background: #000;
-            color: white;
-        }
 
     .card-image {
-        width: 90%;
+        width: 100%;
         height: auto;
         margin-bottom: 25px;
 
         }
     .card-details {
-        border-top: 1px solid #000;
+        /*border-top: 1px solid #000;*/
         padding-top: 5px;
     }
 
@@ -125,36 +135,39 @@
          width: 100%;
      }
 
-     .exhibition-list{
-         border-top: 1px solid #000000;
-        }
+     .question-container {
+         display: flex;
+         gap: 60px;
+         justify-content: space-between;
+         margin-top: 40px;
+     }
+     .question-block {
+         flex: 1;
+         min-width: 200px;
+         font-size: 18px;
+     }
+     .question {
+         margin-bottom: 12px;
+         font-weight: 600;
+     }
 
-    .exhibition-item {
-        display: flex;
-        align-items: center;
-        padding: 12px 0;
-        border-bottom: 1px solid #000000;
-        cursor: pointer;
-        transition: background-color 0.2s;
+     .answer .form-check {
+         margin-bottom: 6px;
+     }
+
+     .titleandbtn {
+         display: flex;
+         align-items: center;
+         margin-bottom: 30px;
+     }
+
+
+    .footer {
+     background-color: #000;
+     height: 60px;
+     border-top: 1px solid #000;
+     color: white;
     }
-
-    .exhibition-item:hover {
-        background-color: #f5f5f5;
-    }
-
-    .search-container input:focus {
-         outline: none;
-         border-color: #000;
-    }
-
-    .question1, .question2, .question3 {
-        padding: 0;
-
-    }
-    .answer1, .answer2, .answer3 {
-
-    }
-
     </style>
 </head>
 
@@ -162,32 +175,33 @@
 
 <!--헤더-->
 <div class="header">
-    <span style="font-family: 'Space Grotesk', sans-serif; font-size: 25px;">
-        <h1>Exhibition Curating Service</h1>
-
-    </span>
-
+    <div class="top-header"></div>
+    <div class="header-row"> TESTING</div>
 </div>
 
 <!--본문-->
 <div class="main-container">
 
-    <!-- 왼쪽 섹션 -->
-<div class="left-section">
+    <!-- top 섹션 -->
+<div class="top-section">
     <div>
         <h2>Selected Displays</h2>
-        <div style="display: flex; align-items: center;">
+        <div style="display: flex;">
     </div>
 
         <!--추천 전시 카드-->
-        <div class="cards-grid">
+        <div class="cards-grid" id="recommendationContainer">
         {{#cards}}
             <div class="card">
                 <div class="card-header">
-                <h5 style=" margin: 0; font-size: 22px; ">{{title}}</h5>
+                <h5 style=" margin: 0; padding:0; font-size: 22px; ">{{title}}</h5>
                     <span class= "badge {{#isGreen}}green{{/isGreen}}{{#isOrange}}orange{{/isOrange}} {{#isYellow}}yellow{{/isYellow}}{{#isRed}}red{{/isRed}}{{#isGray}}gray{{/isGray}}"></span>
 
-                <a href="/detail?title={{title}}" class="view-btn"> VIEW </a>
+                <div class="action-buttons" style="padding: 8px 16px;
+         text-decoration: none; font-weight: 600;font-size: 20px; ">
+                <a href="/detail?title={{title}}" class="view-btn" > VIEW </a>
+                </div>
+
                 </div>
                 <img src = "{{imageObject}}" class="card-image" loading="lazy">
                 <div class="card-details"></div>
@@ -201,35 +215,16 @@
         {{/cards}}
         </div>
         </div>
-
-
-    <!--전시 전체 리스트 들어갈 자리!-->
-        <div class="all-exhibition-list" style="margin-top: 40px;">
-            <h2>current exhibitions list</h2>
-
-            <!--검색창 자리-->  <!--엔터로 처리하기- 노 버튼-->
-            <div class="seach-container" style="margin-bottom: 20px; ">
-                <div style="position: relative;">
-                    <input type="text" class="seach-box" placeholder="search exhibitions" STYLE="width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid gray;">
-                </div>
-            </div>
-
-            <!--전시 리스트 자리-->
-            <div class="exhibition-list">
-                {{#allExhibitions}}
-                    <div class="exhibition-item">
-                    <span class="title-info" style="font-size: 15px; flex: 1">{{title}}</span>
-                    <span class="period-info" style="font-size: 15px; min-width: 120px; margin-right: 15px">{{period}}</span>
-
-                    </div>
-                {{/allExhibitions}}
-            </div>
     </div>
-</div>
+
+<!--    구역 나누기-->
+    <section class="empty-section">
+    </section>
+
 
 <!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
-    <!-- 오른쪽 섹션: 사용자 취향 분석 -->
-    <div class="right-section" style="display: grid; background: black; color: #fff;">
+    <!-- 중간 섹션: 사용자 취향 분석 -->
+    <div class="center-section">
 
         <!--{name} 이름 인풋 넣기????-->
         <div>
@@ -237,90 +232,195 @@
               </span>
         </div>
 
+        <div class="titleandbtn">
         <div class="sub-title">
-            <h5 style="font-family: 'Inter',sans-serif; font-size: 40px;">What are your tastes?</h5>
+            <h5 style="font-size: 40px;  margin: 0; padding: 0;">What are your tastes?</h5>
         </div>
+        <button class="complete_input">IM READY!!!</button>
+        </div>
+        <div class="question-container">
 
         <!--첫번째 질문-->
+        <div class="question-block">
         <div class="question1" style="font-size: 20px">
             1. Are there any museums you're interested in? </div>
 
         <div class="answer1">
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="서울" id="서울">
+            <input class="form-check-input" name="location" type="radio" value="서울" id="서울">
             <label class="form-check-label" for="서울">
                 서울
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="과천" value="과천" >
+            <input class="form-check-input" name="location" type="radio" id="과천" value="과천" >
             <label class="form-check-label" for="과천">
                과천
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="덕수궁" value="덕수궁" >
+            <input class="form-check-input" name="location" type="radio" id="덕수궁" value="덕수궁" >
             <label class="form-check-label" for="덕수궁">
                 덕수궁
             </label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="청주" value="청주" checked>
+            <input class="form-check-input" name="location" type="radio" id="청주" value="청주">
             <label class="form-check-label" for="청주">
                 청주
             </label>
         </div>
+        </div>
 
 </div>
         <!--두번째 질문(시간대)-->
+            <div class="question-block">
         <div class="question2" style="font-size: 20px">
             2. When is the favorite time to visit the exhibition? </div>
 
         <div class="answer2" style="padding-top: 10px;">
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" value="Morning" id="Morning">
-            <label class="form-check-label" for="Morning">Morning</label>
+            <input class="form-check-input" name="time" type="radio" value="MORNING" id="MORNING">
+            <label class="form-check-label" for="MORNING">Morning</label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="Afternoon" value="Afternoon">
-            <label class="form-check-label" for="Afternoon">Afternoon</label>
+            <input class="form-check-input" name="time" type="radio" id="AFTERNOON" value="AFTERNOON">
+            <label class="form-check-label" for="AFTERNOON">Afternoon</label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="Evening" value="Evening" checked>
-            <label class="form-check-label" for="Evening">Evening</label>
+            <input class="form-check-input" name="time" type="radio" id="EVENING" value="EVENING" >
+            <label class="form-check-label" for="EVENING">Evening</label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="Any" value="Any" >
-            <label class="form-check-label" for="Any">Any Time</label>
+            <input class="form-check-input" name="time" type="radio" id="ANY" value="ANY" >
+            <label class="form-check-label" for="ANY">Any Time</label>
         </div>
     </div>
+            </div>
 
-        <!--세번째 질문(관람비)-->
+        <!--세번째 질문(상설전 선택)-->
+            <div class="question-block">
         <div class="question3" style="font-size: 20px">
-            3. What kind of admission do you prefer? </div>
+            3. What kind of type of exhibition do you prefer? </div>
 
         <div class="answer3" style="padding-top: 10px;">
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" value="유료" id="유료">
-                <label class="form-check-label" for="유료"> 유료 </label>
+                <input class="form-check-input" name="type" type="radio"  value="상설전" id="상설전">
+                <label class="form-check-label" for="상설전"> 자체 소장품 엄선한 미술관의 대표 전시 </label>
             </div>
             <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="무료" value="무료" checked>
-                <label class="form-check-label" for="무료">무료</label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" type="checkbox" id="상관 없음" value="상관 없음" >
-                <label class="form-check-label" for="상관 없음">상관 없음</label>
+                <input class="form-check-input" name="type" type="radio" id="기획전" value="기획전">
+                <label class="form-check-label" for="기획전"> 트렌디하고 주제가 있는 전시 </label>
             </div>
         </div>
-
-        <button class="complete_input">IM READY!!!</button>
+        </div>
+        </div>
 
     </div>
 </div>
+<footer class="footer">
 
+</footer>
 </body>
 <script>
+    // 버튼 누르면 업데이트 하기
+    document.addEventListener('DOMContentLoaded', function() {
+        const readyButton = document.querySelector('.complete_input');
+        if (readyButton) {
+            readyButton.addEventListener('click', function() {
+                updateRecommendations();
+            });
+        }
+    });
+
+
+    async function updateRecommendations() {
+        const preferences = collectPreferences();
+
+        console.log('전송할 데이터:', preferences);
+
+        try {
+
+            const response = await fetch('/api/preference', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(preferences)
+        });
+            console.log('POST 응답:', response.status);
+
+
+            if (!response.ok) {
+            console.error('서버 오류:', response.status, await response.text());
+            return;
+        }
+
+        //업데이트된 리스트!!!
+        const cardsResponse = await fetch('/api/cards');
+        const cards = await cardsResponse.json();
+
+        updateCardDisplay(cards);
+        } catch (error) {
+            console.error('요청 실패:', error);
+        }
+    }
+
+    function collectPreferences() {
+        const getCheckedValues = (selector) =>
+                Array.from(document.querySelectorAll(selector + ' input:checked'))
+                        .map(el => el.value);
+
+        return {
+            preferredLocation: document.querySelector('input[name="location"]:checked')?.value || '',
+            timePreference: document.querySelector('input[name="time"]:checked')?.value || null,
+            preferredType: document.querySelector('input[name="type"]:checked')?.value || ''
+        };
+    }
+
+    //취향 반영 카드 업데이트 하기
+    function updateCardDisplay(cards) {
+        console.log('updateCardDisplay 호출됨, 카드 개수:', cards.length);
+
+        const container = document.getElementById('recommendationContainer');
+        if (!container) return;
+
+        container.innerHTML = '';
+
+        //카드 개수 제한하기 (3개만)
+        const limitedCards = cards.slice(0, 3);
+
+        limitedCards.forEach(card => {
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'card';
+            cardDiv.innerHTML = `
+            <div class="card-header">
+                <h5 style="margin: 0; font-size: 22px;">${card.title}</h5>
+                <div class="action-buttons">
+                    <a href="/detail?title=${card.title}" class="view-btn">VIEW</a>
+                </div>
+            </div>
+            <img src="${card.imageObject}" class="card-image" loading="lazy">
+            <div class="card-details">
+                <div class="detail-item">
+                    <h5 class="place">${card.agencyNm}</h5>
+                </div>
+                <div class="detail-item">
+                    <h5 class="recomnd_score">추천 ${card.recommendScore}</h5>
+                </div>
+                <div class="detail-item">
+                    <h5 class="period">${card.period}</h5>
+                </div>
+            </div>
+        `;
+            container.appendChild(cardDiv);
+        });
+    }
+
+
+
+
+
 
 </script>
 
