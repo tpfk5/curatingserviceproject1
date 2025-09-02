@@ -273,12 +273,12 @@
 
         <!--버튼-->
 		<div class="action-buttons">
-			<a href="/main" class="btn"> View More Exhibitions</a>
+			<a href="/main" class="btn"> GO BACK HOME</a>
 		</div>
 	</div>
 
 		<div class="header-bar">
-            <div class="list">Everything</div>
+            <div class="list">Current Exhibitions List</div>
 
             <div class="header-menu">
                 <span class="header-menu-link">2025</span>
@@ -327,31 +327,31 @@
 	<!--@@@수정해야함@@@-->
 	<!-- 다운 섹션: 통계 ???-->
 	<section class="down-section">
-		<h2 class="stats-title">Exhibition Analystics</h2>
+		<h2 class="stats-title">Taste Analystics</h2>
 		<div class="stats-grid">
 			<div class="stat-item">
 				<div class="stat-label">Congestion Score</div>
-				<span class="stat-number" id="congestionScore">10</span>
+				<span class="stat-number" id="congestionScore">{{scoreDetail.congestionScore}}</span>
 			</div>
 
 			<div class="stat-item">
 				<div class="stat-label">Location Score</div>
-				<span class="stat-number" id="locationScore">20</span>
+				<span class="stat-number" id="locationScore">{{scoreDetail.locationScore}}</span>
 			</div>
 
 			<div class="stat-item">
 				<div class="stat-label">Time Score</div>
-				<span class="stat-number" id="timeScore">30</span>
+				<span class="stat-number" id="timeScore">{{scoreDetail.timeScore}}</span>
 			</div>
 
 			<div class="stat-item">
 				<div class="stat-label">Popularity Score</div>
-				<span class="stat-number" id="popularityScore">40</span>
+				<span class="stat-number" id="popularityScore">{{scoreDetail.popularityScore}}</span>
 			</div>
 
 			<!--추천 점슈 & 이유-->
 			<div class="recommendation-details" style="margin-top: 10px; font-weight: bold;">
-				<div class="recommendation-score" id="totalScore">Total Recommendation: 50</div>
+				<div class="recommendation-score" id="totalScore">Total Recommendation: {{recommendScore}} </div>
 				<div class="recommendation-text" id="recommendationText">@@@ Highly recommended @@@</div>
 			</div>
 		</div>
@@ -363,7 +363,7 @@
 	<!--우측 이미지 구역-->
 	<section class="image-section">
 		<div class="image-container">
-			<img src="{{imageObject}}" class="exhibition-image" >
+			<img src="{{imageObject}}" class="exhibition-image" onerror="this.onerror=null; this.src='/img/temp.jpg';" >
 
 
 		<div class="exhibition-info">

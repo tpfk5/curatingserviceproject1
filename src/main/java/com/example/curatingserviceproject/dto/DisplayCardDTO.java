@@ -17,6 +17,8 @@ public class DisplayCardDTO {
     private String period; //전시 기간
     private String description; //전시 설명
     private String author; //작가
+    private ScoreDetail scoreDetail;
+
 
 
     //main page -> card.badge 혼잡도 색 표시
@@ -25,6 +27,7 @@ public class DisplayCardDTO {
     private boolean isRed;
     private boolean isYellow;
     private boolean isGray;
+
 
 
     public DisplayCardDTO(String title, String imageObject, String agencyNm, String spaceCode, String congestionNm, int recommendScore, String period, String description, String author) {
@@ -37,9 +40,6 @@ public class DisplayCardDTO {
         this.period = period;
         this.description = description;
         this.author = author;
-        // 추가 및 수정 해야 할 듯?
-
-
 
         //혼잡도 상태
         //여유, 보통, 약간붐빔, 붐빔, 미정(OR 정보없음, 기본 표시)
@@ -64,6 +64,28 @@ public class DisplayCardDTO {
                 isGray = true;
 
         }
+
+    }
+
+
+    @Getter @Setter
+    public static class ScoreDetail {
+        private int congestionScore;
+        private int locationScore;
+        private int timeScore;
+        private int typeScore;
+        private int popularityScore;
+        private int baseScore = 15;
+    }
+
+    public void setScoreDetail(int congestionScore, int locationScore, int timeScore, int typeScore, int popularityScore) {
+        ScoreDetail detail = new ScoreDetail();
+        detail.setCongestionScore(congestionScore);
+        detail.setLocationScore(locationScore);
+        detail.setTimeScore(timeScore);
+        detail.setTypeScore(typeScore);
+        detail.setPopularityScore(popularityScore);
+        this.scoreDetail = detail;
     }
 }
 

@@ -49,31 +49,31 @@ public class RecommendationService {
         int congestionScore = calculateCongestionScore(display.getCongestionNm());
         baseScore += congestionScore;
 
-        log.debug("혼잡도 점수: {}", congestionScore);
+        log.info("혼잡도 점수: {}", congestionScore);
 
         // 2. 인기 10
         int locationPreferenceScore = calculateLocationPreferenceScore(display.getEVENT_SITE(), userPreference);
         baseScore += locationPreferenceScore;
 
-        log.debug("인기 점수: {}", locationPreferenceScore);
+        log.info("인기 점수: {}", locationPreferenceScore);
 
         // 3. 시간대 15
         int timePreferenceScore = calculateTimePreferenceScore(userPreference);
         baseScore += timePreferenceScore;
 
-        log.debug("시간대 점수: {}", timePreferenceScore);
+        log.info("시간대 점수: {}", timePreferenceScore);
 
         // 4. 전시 유형 10
         int typepreferenceScore = calculateTypePreferenceScore(userPreference, display);
         baseScore += typepreferenceScore;
 
-        log.debug("전시 유형 점수: {}", typepreferenceScore);
+        log.info("전시 유형 점수: {}", typepreferenceScore);
 
         // 5. 인기 10
         int popularityScore = calculatePopularityScore(display.getEVENT_SITE());
         baseScore += popularityScore;
 
-        log.debug("인기 점수: {}", popularityScore);
+        log.info("인기 점수: {}", popularityScore);
 
         // 총 점수 0-100
         int finalScore = Math.max(0, Math.min(100, baseScore));
@@ -209,12 +209,13 @@ public class RecommendationService {
     public void saveUserPreference(UserPreference userPreference) {
         userPreferenceRepository.save(userPreference);
 
-        log.info("사용자 취향 저장 완료: {}", userPreference);
     }
 
     public UserPreference getUserPreferenceBySession(String sessionId) {
         return userPreferenceRepository.findBySessionId(sessionId)
                 .orElse(null);
+
+
     }
 }
 

@@ -21,32 +21,52 @@
 
 
         .header {
-            background-color: white;
-            height: 80px;
-            border-bottom: 1px solid #000;
-        }
+            background-color: #ffffff;
+            height: 60px;
+            border: 2px solid #000;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
 
-        .main {
+		.header-inner {
+			width: 100%;
+			max-width: 100%;
+			display: flex;
+			justify-content: flex-start;
+			align-items: center;
+			padding: 0 24px;
+			box-sizing: border-box;
+		}
+
+		.sub-title {
+			font-size: 27px;
+			font-weight: 550;
+			color: black;
+		}
+
+		.left-header {
+			display: flex;
+			align-items: center;
+			gap: 12px;
+		}
+
+
+		.main {
             flex: 1;
             background-color: #ffffff;
             position: relative;
         }
 
-		/*.main-container {*/
-		/*	width: 100%;*/
-		/*	height: 100%;*/
-		/*	border: 1px solid black;*/
-		/*	position: relative;*/
-		/*	overflow: hidden;*/
-		/*	background-color: #fff;*/
-		/*}*/
 
 		.background-image {
 			position: absolute;
-            background-position: center;
+            /*background-position: center;*/
 			width: 100%;
 			height: 100%;
-			object-fit: cover;
+			overflow: hidden;
+			z-index: 1;
+
 		}
 
 		.title {
@@ -70,7 +90,7 @@
 		}
 
 		.text-box h1 {
-			font-size: 60px;
+			font-size: 70px;
 			line-height: 1.1;
 			text-shadow: 1px 1px 2px black;
 		}
@@ -101,53 +121,88 @@
             height: 60px;
             border-top: 1px solid #000;
             color: white;
+			font-size: 15px;
         }
 
-
-
-
-		/* 팝업  */
 		.popup {
-			display: none;
 			position: fixed;
-			top: 0; left: 0;
-			width: 100%; height: 100%;
-			background: rgba(0,0,0,0.5);
-			justify-content: center;
+			top: 100px;
+			right: 60px;
+			width: auto;
+			z-index: 9999;
+			display: block;
 			align-items: center;
+			justify-content: center;
 		}
-
-		.popup-content {
-			background: white;
-			padding: 30px;
-			border-radius: 8px;
-			text-align: center;
-			width: 300px;
+		.popup-box {
+			width: 320px;
+			background: #fff;
+			border: 3px solid #111111;
+			box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+			overflow: hidden;
 		}
+		.popup-header {
+			height: 30px;
+			background: #000;
+			display: flex;
+			justify-content: flex-end;
+			align-items: center;
+			padding: 0 16px;
 
-		.popup-content button {
-			margin-top: 20px;
-			padding: 8px 16px;
-			border: none;
-			background: #00FF00;
-			font-weight: 600;
+		}
+		.popup-close {
+			font-size: 32px;
+			color: #fff;
+			line-height: 1;
 			cursor: pointer;
+			font-weight: bold;
+			user-select: none;
+		}
+
+		.custom-popup-body {
+			padding: 0 18px 30px 18px;
+			min-height: 120px;
+			background: #fff;
+			box-sizing: border-box;
 		}
 
 	</style>
 </head>
 <body>
+
+
 <!--헤더-->
 <header class="header">
-
+	<div class="header-inner">
+		<div class="left-header">
+		<div class="sub-title">Midterm project</div>
+	</div>
+	</div>
 </header>
+
+<!--팝업-->
+<div class="popup" id="Popup">
+	<div class="popup-box">
+		<div class="popup-header">
+			<span class="popup-close">&times;</span>
+		</div>
+		<div class="custom-popup-body">
+			<p style="margin:10px 0; text-align:start; color:#111;">
+				국립현대미술관 @무료@ 특별 개방!!<br>
+				9월 1일 - 9월 10일 10일간 <br>
+				과천 / 덕수궁 / 청주 月요일 휴무 <br>
+				서울은 휴무 없음 <br>
+			</p>
+		</div>
+	</div>
+</div>
 
 
 <!--메인 구역-->
 <div class="main">
 	<!-- 배경 이미지 -->
     <div class="background-image">
-	<img src="c230381a-1e4e-486c-8005-d15dc7ddb76e.png"></div>
+	<img src="img/intro.png" style="width: 100%; height: 100%; object-fit: cover; object-position: center;"></div>
     <div class="main-container"></div>
 
 
@@ -155,44 +210,16 @@
 	<div class="title">
 		<div class="text-box">
 			<h1>
-				PUBLIC <br>
-				DATA <br>
-				OPEN API <br>
-				PROJECT
+				EXHIBITION <br>
+				CURATING <br>
+				SERVICE
 			</h1>
 			<a href="/main" class="enter-btn">ENTER</a>
 		</div>
 	</div>
 </div>
 
-<div class="footer">
-
-</div>
-
-
-
-<!-- @@@@팝업 창 띄우기??? -->
-<div class="popup" id="popup">
-	<div class="popup-content">
-		<h2>Welcome!</h2>
-		<p>^0^</p>
-		<button onclick="goMain()">확인</button>
-		<button onclick="closePopup()"> X </button>
-	</div>
-</div>
-
-<script>
-	function openPopup() {
-		document.getElementById("popup").style.display = "flex";
-	}
-	function closePopup() {
-		document.getElementById("popup").style.display = "none";
-	}
-	function goMain() {
-		window.location.href = "/main";
-	}
-</script>
-
+<div class="footer"> 20250903</div>
 
 
 </body>
