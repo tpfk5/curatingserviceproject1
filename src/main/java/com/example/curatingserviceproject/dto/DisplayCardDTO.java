@@ -18,8 +18,6 @@ public class DisplayCardDTO {
     private String description; //전시 설명
     private String author; //작가
     private ScoreDetail scoreDetail; // 추천 상세 점수
-    private String exhibitionType; //전시 유형
-
 
 
     //main page -> card.badge 혼잡도 색 표시
@@ -31,7 +29,7 @@ public class DisplayCardDTO {
 
 
 
-    public DisplayCardDTO(String title, String imageObject, String agencyNm, String spaceCode, String congestionNm, int recommendScore, String period, String description, String author, String exhibitionType) {
+    public DisplayCardDTO(String title, String imageObject, String agencyNm, String spaceCode, String congestionNm, int recommendScore, String period, String description, String author) {
         this.title = title != null ? title : "제목 없음";
         this.imageObject = imageObject != null ? imageObject : "/img/temp.jpg";
         this.agencyNm = agencyNm != null ? agencyNm : "기관 정보 없음";
@@ -41,7 +39,6 @@ public class DisplayCardDTO {
         this.period = period;
         this.description = description;
         this.author = author;
-        this.exhibitionType = exhibitionType != null ? exhibitionType : "기획전";
 
         //혼잡도 상태
         //여유, 보통, 약간붐빔, 붐빔, 미정(OR 정보없음, 기본 표시)
@@ -74,16 +71,14 @@ public class DisplayCardDTO {
     public static class ScoreDetail {
         private int congestionScore;
         private int locationScore;
-        private int typeScore;
         private int tagScore;
         private int baseScore = 20;
     }
 
-    public void setScoreDetail(int congestionScore, int locationScore, int typeScore, int tagScore) {
+    public void setScoreDetail(int congestionScore, int locationScore, int tagScore) {
         ScoreDetail detail = new ScoreDetail();
         detail.setCongestionScore(congestionScore);
         detail.setLocationScore(locationScore);
-        detail.setTypeScore(typeScore);
         detail.setTagScore(tagScore);
 
         this.scoreDetail = detail;

@@ -61,21 +61,16 @@ public class ApiController {
     public ResponseEntity<?> getDisplayCardsWithPreference
     (@RequestParam(required = false) String sessionId,
      @RequestParam(required = false) String preferredLocations,
-     @RequestParam(required = false) String preferredTypes
-//     @RequestParam(required = false) String preferredTag
+     @RequestParam(required = false) String preferredTag
     ){
         UserPreference userPreference = null;
 
         if (sessionId != null && !sessionId.trim().isEmpty()) {
             userPreference = recommendationService.getUserPreferenceBySession(sessionId);
 
-        } else if (preferredLocations != null || preferredTypes != null) {
+        } else if (preferredLocations != null ) {
             userPreference = new UserPreference();
             userPreference.setPreferredLocations(preferredLocations);
-
-            if (preferredTypes != null) {
-                userPreference.setPreferredType(preferredTypes);
-            }
         }
 
         List<DisplayCardDTO> cardList = displayService.getDisplayCards(userPreference);
@@ -172,7 +167,6 @@ public class ApiController {
                     .sessionId(sessionId)
                     .userName(dto.getUserName())
                     .preferredLocations(dto.getPreferredLocation())
-                    .preferredType(dto.getPreferredType())
                     .preferredTag(dto.getPreferredTag())
                     .build();
 
@@ -185,7 +179,7 @@ public class ApiController {
         }
     }
 
-    //태그 생성하기
+    //전시 추천 태그 생성하기
     @PostMapping("/api/admin/generate-tags")
     public ResponseEntity<?> generateTags() {
         List<Display> displays = displayService.getAllDisplays();
@@ -195,6 +189,8 @@ public class ApiController {
             String tags = tagExtractionService.extractTags(display);
             display.setTags(tags);
             tagCount++;
+
+            log.info("전시: '{}' -> 태그: '{}'", display.getTITLE(), tags);
         }
         displayRepository.saveAll(displays);
 
@@ -205,19 +201,11 @@ public class ApiController {
 
         ));
     }
-
-
-
-    //% 테스트 용!!!!%
-//    @GetMapping("/api/test")
-//    public ResponseEntity<String> test() {
-//        return ResponseEntity.ok("API 컨트롤러 작동중!");
-//    }
-//
-//    @GetMapping("/api/mappings/test")
-//    public ResponseEntity<String> testMapping() {
-//        return ResponseEntity.ok("매핑 컨트롤러 작동중!");
-//            }
+    //테스트용@
+    @GetMapping("/api/admin/generate-tags-get")
+    public ResponseEntity<?> generateTagsGet() {
+        return generateTags();
+    }
 
 
     }

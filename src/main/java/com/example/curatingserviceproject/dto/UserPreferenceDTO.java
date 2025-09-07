@@ -10,7 +10,6 @@ import lombok.Setter;
 public class UserPreferenceDTO {
     private String userName;
     private String preferredLocation;
-    private String preferredType;
     private  String preferredTag;
 }
 

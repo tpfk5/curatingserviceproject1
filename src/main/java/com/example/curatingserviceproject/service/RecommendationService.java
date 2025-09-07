@@ -18,7 +18,6 @@ import java.util.List;
 * 2. 개인 장소 선호(서울/과천/덕수궁/청주) (15)
 * 3. 태그 선호 (20)
 * 4. 상설/기획 선택 선호 (상설/기획) (10)
- *
 * 기본 점수(30)
 * 점수 구간 별 분류(ex. 80점 이상-> "지금 가기 좋은 전시" 등등 표시하기)
 * 추천 이유도 적으면 좋을 것 같다?? 언젠가
@@ -161,8 +160,6 @@ public class RecommendationService {
     private String classifyExhibitionType(Display display) {
         String title = display.getTITLE();
         String exhibitionType = (title != null && title.contains("상설")) ? "상설전" : "기획전";
-
-        log.info("@@전시 분류: '{}' -> {}", title, exhibitionType);
 
         return exhibitionType;
     }

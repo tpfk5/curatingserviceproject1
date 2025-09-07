@@ -196,7 +196,7 @@
 
 		.exhibition-image {
 			width: 100%;
-            max-width: 800px;
+            max-width: 500px;
 			height: auto;
 			object-fit: cover;
 		}
@@ -344,11 +344,6 @@
 				<span class="stat-number" id="tagScore">{{scoreDetail.tagScore}}</span>
 			</div>
 
-			<div class="stat-item">
-				<div class="stat-label">Type Score</div>
-				<span class="stat-number" id="typeScore">{{scoreDetail.typeScore}}</span>
-			</div>
-
 			<!--추천 점수 & 이유-->
 			<div class="recommendation-details" style="margin-top: 10px; font-weight: bold;">
 				<div class="recommendation-score" id="recommenDScore"> Recommend Score: {{recommendScore}} </div>
@@ -384,7 +379,7 @@
 
 </body>
 <script>
-    //전시 검색하기 (제목만@@)
+    //전시 검색하기 (제목만)
     function filterExhibitions () {
         const searchTerm = document.getElementById('searchInput').value.toLowerCase();
         const exhibitions = document.querySelectorAll('.exhibition-item');

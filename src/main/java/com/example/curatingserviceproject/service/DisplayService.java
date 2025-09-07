@@ -172,7 +172,6 @@ public class DisplayService {
 
     //현재 전시중인 전시만 필터링 학기
     private boolean isCurrentlyExhibited(String period) {
-        log.info("@날짜 필터링 시작: '{}'", period);
         if (period == null || !period.contains("~")) {
             return false;
         }
@@ -246,7 +245,6 @@ public class DisplayService {
             try {
                 int score = recommendationService.calculateRecommendationScore(display, preference);
                 String safeCongestionNm = display.getCongestionNm() != null ? display.getCongestionNm() : "정보 없음";
-                String exhibitionType = (title != null && title.contains("상설")) ? "상설전" : "기획전";
 
                 DisplayCardDTO dto = new DisplayCardDTO(
                         title,
@@ -257,9 +255,7 @@ public class DisplayService {
                         score,
                         display.getPERIOD(),
                         display.getDESCRIPTION(),
-                        display.getAUTHOR(),
-                        exhibitionType
-
+                        display.getAUTHOR()
                 );
                 log.info("@이미지 URL: {}", display.getIMAGE_OBJECT());
 
@@ -267,10 +263,9 @@ public class DisplayService {
                 if (preference != null) {
                     int congestionScore = recommendationService.calculateCongestionScore(display.getCongestionNm());
                     int locationScore = recommendationService.calculateLocationPreferenceScore(display.getEVENT_SITE(), preference);
-                    int typeScore = recommendationService.calculateTypePreferenceScore(preference, display);
                     int tagScore = recommendationService.calculateTagScore(display, preference);
 
-                    dto.setScoreDetail(congestionScore, locationScore, typeScore, tagScore);
+                    dto.setScoreDetail(congestionScore, locationScore, tagScore);
                 }
 
                 result.add(dto);

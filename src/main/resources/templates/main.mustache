@@ -33,7 +33,6 @@
          height: 100px;
          background-color: #000000;
          color: white;
-         /*border-bottom: 1px solid #ddd;*/
          padding: 20px;
      }
 
@@ -51,85 +50,85 @@
 
     .main-container {
         display: grid;
-        padding: 0 30px;
         margin: 0 auto;
         margin-top: 100px;
 
     }
 
     .top-section {
-        background: #ffffff;
-        color: #222;
+        background: #000000;
+        color: #ffffff;
         box-sizing: border-box;
+		padding-bottom: 30px;
+
     }
-
-     .empty-section {
-         margin-top: 40px;
-         padding: 20px 0;
-         background-color: #00FF00;
-         border: 1px solid #000000;
-     }
-
 
     .center-section {
 		margin-top: 20px;
         margin-bottom: 40px;
         grid-template-columns: repeat(3, 1fr);
-    }
+		padding: 0 30px;
+	}
 
      .card {
-         margin-bottom: 10px;
-         position: relative;
+		 position: relative;
+		 overflow: hidden;
+		 border-radius: 16px;
+		 background: #ccc;
+		 aspect-ratio: 2/3;
+		 height: 100%;
+		 margin: 0;
+		 padding: 0;
      }
 
-     .card-header {
-         display: flex;
-         justify-content: space-between;
-         align-items: center;
-         margin-bottom: 16px;
-     }
-     .place, .recomnd_score, .period {
-         font-size: 18px;
-         margin: 4px 0;
-         font-weight: 400;
-     }
      .cards-grid {
          display: grid;
-         grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-         /*padding: 0 40px;*/
-         box-sizing: border-box;
+		 grid-template-columns: repeat(4, 1fr);
+		 grid-template-rows: 1fr;
+		 gap: 1px;
+		 width: 100%;
+		 max-width: 1400px;
+		 margin: 0 auto;
+		 height: 500px;
      }
 
-     .badge {
-         display: inline-block;
-         padding: 4px 10px;
-         border-radius: 10px;
-         color: white;
-         font-weight: bold;
-         font-size: 10px;
-     }
-     .green{background-color: green}
-     .orange{background-color: darkorange}
-     .yellow{background-color: yellow; color: black;}
-     .red{background-color: red}
-     .gray{background-color: gray}
+	 .color-card {
+		 position: relative;
+		 height: 100%;
+		 background-color: #ffffff;
+		 display: flex;
+		 align-items: center;
+		 justify-content: center;
+		 border-radius: 17px;
+		 overflow: hidden;
+		 aspect-ratio: 2/3;
+	 }
+
+	 .color-card-content {
+		 text-align: center;
+		 color: #000000;
+		 font-size: 32px;
+		 font-weight: 700;
+		 letter-spacing: 2px;
+	 }
 
 
 	 .card-image {
 		 width: 100%;
-		 height: 500px;
+		 height: 100%;
 		 object-fit: cover;
-		 margin: 0;
-		 padding: 0;
 		 display: block;
-		 border: 1px solid #000000;
 		 transition: transform 0.3s ease;
 	 }
 
 	 .image-wrapper {
 		 position: relative;
-		 display: inline-block;
 		 overflow: hidden;
+		 height: 100%;
+		 width: 100%;
+		 border-radius: 17px;
+		 margin: 0;
+		 padding: 0;
 	 }
 
 	 .image-overlay {
@@ -148,16 +147,6 @@
 	 }
 
 
-	 .card-details {
-        /*border-top: 1px solid #000;*/
-        padding-top: 5px;
-    }
-
-     .detail-item {
-         /*border-bottom: 1px solid #000;*/
-         width: 100%;
-     }
-
      .question-container {
          display: flex;
          gap: 60px;
@@ -167,10 +156,14 @@
      }
 
 	 .question-block {
-		 border-right: 1px solid #000;
 		 padding-right: 20px;
 		 margin-top: 30px;
-		 /*margin-right: 20px;*/
+	 }
+
+	 .question-block.name-block {
+		 display: flex;
+		 align-items: center;
+		 gap: 15px;
 	 }
 
      .answer .form-check {
@@ -194,6 +187,13 @@
      border-top: 1px solid #000;
      color: white;
     }
+
+	 @media (max-width: 768px) {
+		 .cards-grid {
+			 grid-template-columns: repeat(2, 1fr);
+		 }
+	 }
+
     </style>
 </head>
 
@@ -211,10 +211,10 @@
     <!-- top 섹션 -->
 <div class="top-section">
     <div>
-		<h2 style="font-size: 50px; margin-top: 15px; padding: 0;">
-			Selected Displays @
+		<h2 style="font-size: 40px; margin-top: 15px; padding: 0; ">
+			Selected Displays for
 			{{#userName}}{{userName}}{{/userName}}
-			{{^userName}}YOU{{/userName}}
+			{{^userName}}TestUser{{/userName}}
 		</h2>
         <div style="display: flex;">
     </div>
@@ -224,7 +224,7 @@
         {{#cards}}
             <div class="card">
                 <div class="card-header">
-                <h5 style=" font-size: 22px;">{{title}}</h5>
+<!--                <h5 style=" font-size: 22px;">{title}</h5>-->
 <!--                    <span class= "badge {#isGreen}green{/isGreen}{#isOrange}orange{/isOrange} {#isYellow}yellow{/isYellow}{#isRed}red{/isRed}}{#isGray}gray{/isGray}"></span>-->
 <!--                <div class="action-buttons" style="padding: 8px 16px;-->
 <!--         text-decoration: none; font-weight: 600;font-size: 20px; ">-->
@@ -237,16 +237,11 @@
 					<div class="image-overlay"></div>
 					</a>
 				</div>
-
-<!--                <div class="card-details"></div>-->
-<!--                <div class="detail-item">-->
-<!--                    <h5 class="place"> {agencyNm}</h5></div>-->
-<!--                <div class="detail-item">-->
-<!--                 <h5 class="recomnd_score"> Recommend Score : {recommendScore}</h5> </div>-->
-<!--                <div class="detail-item">-->
-<!--                    <h5 class="period">{period}</h5></div>-->
             </div>
         {{/cards}}
+			<div class="color-card">
+				<div class="color-card-content">NEW</div>
+			</div>
         </div>
         </div>
     </div>
@@ -266,14 +261,14 @@
 
         <div class="titleandbtn">'
         <div class="sub-title">
-            <h5 style="font-size: 50px;  margin: 20px; margin-top: 7px;">What are your tastes?</h5>
+            <h5 style="font-size: 40px;  margin: 20px; margin-top: 7px;">What are your tastes?</h5>
         </div>
-        <button class="complete_input" style="font-size: 20px">IM READY!!!</button>
+			<button class="complete_input" style="font-size: 20px" onclick="directSave()">IM READY!!!</button>
         </div>
         <div class="question-container">
 
         <!--첫번째 질문-->
-        <div class="question-block">
+        <div class="question-block name-block">
 			<!--이름 적는 칸-->
 			<div class="question0" style="font-size: 23px">
 				0. What's u r name or nickname? </div>
@@ -283,6 +278,7 @@
 					   style="width: 30%; padding: 20px; padding-left: 20px; border: 1px solid #000000; ">
 			</div>
 
+		<div class="question-block">
         <div class="question1" style="font-size: 23px; padding-top: 15px">
             1. Are there any museums you're interested in? </div>
 
@@ -317,13 +313,14 @@
 				상관 없음
 			</label>
 		</div>
+		</div>
         </div>
 
 </div>
         <!--두번째 질문(태그 / 선택 사항)-->
             <div class="question-block">
         <div class="question2" style="font-size: 23px">
-			2. What kind of art interests you? (Optional) </div>
+			2. What kind of art interests you? (다중 선택 가중) </div>
 
         <div class="answer2" style="padding-top: 15px;">
         <div class="form-check">
@@ -354,25 +351,16 @@
 			<input class="form-check-input" name="tags" type="checkbox" id="rookie" value="신인작가" >
 			<label class="form-check-label" for="rookie">신인작가</label>
 		</div>
+		<div class="form-check">
+			<input class="form-check-input" name="tags" type="checkbox" id="permanent" value="상설전" >
+			<label class="form-check-label" for="permanent">상설전</label>
+		</div>
+		<div class="form-check">
+			<input class="form-check-input" name="tags" type="checkbox" id="special" value="기획전" >
+			<label class="form-check-label" for="special">기획전</label>
+		</div>
     </div>
             </div>
-
-        <!--세번째 질문(상설전/기획전 선택)-->
-            <div class="question-block">
-        <div class="question3" style="font-size: 23px">
-            3. What kind of type of exhibition do you prefer? </div>
-
-        <div class="answer3" style="padding-top: 30px;">
-            <div class="form-check">
-                <input class="form-check-input" name="type" type="radio"  value="상설전" id="상설전">
-                <label class="form-check-label" for="상설전"> 자체 소장품을 엄선한 미술관의 대표 전시 </label>
-            </div>
-            <div class="form-check">
-                <input class="form-check-input" name="type" type="radio" id="기획전" value="기획전">
-                <label class="form-check-label" for="기획전"> 트렌디하고 주제가 있는 전시 </label>
-            </div>
-        </div>
-        </div>
         </div>
 
     </div>
@@ -384,108 +372,98 @@
 <script>
     // 암 레디 버튼 누르면 업데이트 하기
     document.addEventListener('DOMContentLoaded', function() {
+		console.log('$페이지 로드 완료');
+
+        generateTagsOnce(); //태그 실행하기
+
         const readyButton = document.querySelector('.complete_input');
+		console.log('$버튼 찾기 결과:', readyButton);
+
         if (readyButton) {
             readyButton.addEventListener('click', function() {
+				console.log('$IM READY 버튼 클릭됨!');
                 updateRecommendations();
             });
         }
     });
 
-    async function updateRecommendations() {
-		const preferences = collectPreferences();
-
-		if (!preferences) {
-			return;
-		}
-
-		console.log('전송할 데이터:', preferences);
-
-		try {
-			const response = await fetch('/api/preference', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(preferences)
+    async function generateTagsOnce() {
+        try {
+            const response = await fetch('/api/admin/generate-tags',{
+                method: 'POST'
 			});
-
-			console.log('POST 응답:', response.status);
-
-			if (response.ok) {
-				window.location.reload();
-			} else {
-				console.error('서버 오류:', response.status, await response.text());
-				alert('취향 저장 실패! 다시 시도해주세요.');
+            if (response.ok) {
+                const date = await response.json();
+                console.log("태그 생성 완료!:",date);
 			}
-
 		} catch (error) {
-			console.error('요청 실패:', error);
-			alert('네트워크 오류가 발생! 다시 시도해주세요.');
+            console.log('태그 생성 중 오류 발생',error)
+		}
+	}
+
+	function directSave() {
+		console.log('직접 클릭 감지됨!');
+
+        const preferences = collectPreferences();
+        if (!preferences) {
+            return;
 		}
 
+		fetch('/api/preference', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/json' },
+			body: JSON.stringify({
+				userName: preferences.userName,
+				preferredLocation: preferences.preferredLocation,
+				preferredTag: preferences.preferredTags
+			})
+		})
+				.then(r => r.json())
+				.then(data => {
+					console.log('저장 성공:', data);
+					alert('취향 저장 완료!');
+					location.reload();
+				})
+				.catch(error => {
+					console.error('저장 실패:', error);
+					alert('저장 실패');
+				});
 	}
 
 
     function collectPreferences() {
 		const userName = document.getElementById('userName').value || '';
 		const preferredLocation = document.querySelector('input[name="location"]:checked')?.value || '';
-		const preferredType = document.querySelector('input[name="type"]:checked')?.value || '';
+
+        const selectedTags = Array.from(document.querySelectorAll('input[name="tags"]:checked'))
+				.map(input => input.value);
+        const preferredTags = selectedTags.join(',');
+
+
+		console.log('$수집완료:', {
+			userName: userName,
+			location: preferredLocation,
+			tags: preferredTags
+		});
 
 		if (!userName.trim()) {
 			alert('이름을 입력하세요');
 			return null;
 		}
-        if (!preferredLocation || !preferredType) {
+
+        if (!preferredLocation) {
 			alert('모든 선택 사항을 체크해주세요');
 			return null;
 		}
 
-        return {
+        const result = {
             userName: userName,
 			preferredLocation: preferredLocation,
-			preferredType: preferredType
+			preferredTags: preferredTags
         };
+        return result;
     }
 
-    //취향 반영 카드 업데이트 하기
-    function updateCardDisplay(cards) {
-        console.log('updateCardDisplay 호출됨, 카드 개수:', cards.length);
-        const container = document.getElementById('recommendationContainer');
-
-        if (!container) return;
-        container.innerHTML = '';
-
-        //카드 개수 제한하기 (3개만)
-        const limitedCards = cards.slice(0, 3);
-
-        limitedCards.forEach(card => {
-            const cardDiv = document.createElement('div');
-            cardDiv.className = 'card';
-			cardDiv.innerHTML = `
-    <div class="card-header">
-        <h5 style="font-size: 22px;">${card.title}</h5>
-    </div>
-    <div class="image-wrapper">
-        <a href="/detail?title=${card.title}">
-            <img src="${card.imageObject}" onerror="this.onerror=null; this.src='/img/temp.jpg';" class="card-image" loading="lazy">
-            <div class="image-overlay"></div>
-        </a>
-    </div>
-    <div class="card-details"></div>
-    <div class="detail-item">
-        <h5 class="place">${card.agencyNm}</h5>
-    </div>
-    <div class="detail-item">
-        <h5 class="recomnd_score">Recommend Score : ${card.recommendScore}</h5>
-    </div>
-    <div class="detail-item">
-        <h5 class="period">${card.period}</h5>
-    </div>
-`;
-            container.appendChild(cardDiv);
-        });
-    }
 </script>
 
 </html>

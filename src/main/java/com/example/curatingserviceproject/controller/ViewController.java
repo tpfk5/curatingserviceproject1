@@ -88,13 +88,12 @@ public class ViewController {
 
     //detail page
     @GetMapping("/detail")
-    public String detailByTitle(@RequestParam(required = false) String title, Model model) {
+    public String detailByTitle(@RequestParam(required = false) String title, Model model, HttpServletRequest request) {
         try {
             List<DisplayCardDTO> allExhibitions = displayService.getDisplayCards();
             model.addAttribute("allExhibitions", allExhibitions);
 
             Display display;
-
 
             if (title != null && !title.isEmpty()) {
                 display = displayService.getDisplayByTitle(title);
@@ -106,7 +105,6 @@ public class ViewController {
                     return "error";
                 }
             }
-
             if (display == null) {
                 log.error("해당 전시를 찾을 수 없습니다: {}", title);
                 return "error";
@@ -121,19 +119,19 @@ public class ViewController {
             model.addAttribute("congestionNm", display.getCongestionNm());
             model.addAttribute("imageObject", display.getIMAGE_OBJECT());
 
-            //추천 기본 점수 계산 <-사용자 취향 x ver.
-            UserPreference userPreference = null;
+            //사용자 취향 조회
+            String sessionId = request.getSession().getId();
+            UserPreference userPreference = recommendationService.getUserPreferenceBySession(sessionId);
+            log.info("Detail 페이지 사용자 취향: {}", userPreference != null ? userPreference.getUserName() : "없음");
 
             int congestionScore = recommendationService.calculateCongestionScore(display.getCongestionNm());
             int locationScore = recommendationService.calculateLocationPreferenceScore(display.getEVENT_SITE(), userPreference);
-            int typeScore = recommendationService.calculateTypePreferenceScore(userPreference, display);
             int recommendScore = recommendationService.calculateRecommendationScore(display, userPreference);
 
             //scoreDetail점수
             DisplayCardDTO.ScoreDetail scoreDetail = new DisplayCardDTO.ScoreDetail();
             scoreDetail.setCongestionScore(congestionScore);
             scoreDetail.setLocationScore(locationScore);
-            scoreDetail.setTypeScore(typeScore);
 
             model.addAttribute("scoreDetail",scoreDetail);
             model.addAttribute("recommendScore",recommendScore);
