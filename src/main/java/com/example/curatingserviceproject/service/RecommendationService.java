@@ -12,16 +12,14 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
-import static com.example.curatingserviceproject.enums.TimePreference.*;
-
 /**
 * 사용자 추천 알고리즘 정리하기
-* 1. 혼잡도 상태 (35)
+* 1. 혼잡도 상태 (25)
 * 2. 개인 장소 선호(서울/과천/덕수궁/청주) (15)
-* 3. 시간대 선호 (오전:10-12/오후:12-17/야간개장:17-21/노상관) (각 15,,,)
+* 3. 태그 선호 (20)
 * 4. 상설/기획 선택 선호 (상설/기획) (10)
-* 5. 인기 점수 (10)
-* 기본 점수(15)
+ *
+* 기본 점수(30)
 * 점수 구간 별 분류(ex. 80점 이상-> "지금 가기 좋은 전시" 등등 표시하기)
 * 추천 이유도 적으면 좋을 것 같다?? 언젠가
 */
@@ -40,40 +38,34 @@ public class RecommendationService {
     }
 
     // 개인 추천 점수 계산
-    public int calculateRecommendationScore(Display display, UserPreference  userPreference) {
+    public int calculateRecommendationScore(Display display, UserPreference userPreference) {
         log.info("전시 추천>> {}", display.getTITLE());
 
-        int baseScore = 15; // 기본 점수 15
+        int baseScore = 30; // 기본 점수 30
 
-        // 1. 혼잡도 35
+        // 1. 혼잡도 25
         int congestionScore = calculateCongestionScore(display.getCongestionNm());
         baseScore += congestionScore;
 
         log.info("혼잡도 점수: {}", congestionScore);
 
-        // 2. 인기 10
+        // 2. 장소 선호도 15
         int locationPreferenceScore = calculateLocationPreferenceScore(display.getEVENT_SITE(), userPreference);
         baseScore += locationPreferenceScore;
 
-        log.info("인기 점수: {}", locationPreferenceScore);
+        log.info("장소 선호도 점수: {}", locationPreferenceScore);
 
-        // 3. 시간대 15
-        int timePreferenceScore = calculateTimePreferenceScore(userPreference);
-        baseScore += timePreferenceScore;
+        // 3. 태그 점수 20
+        int tagScore =calculateTagScore(display, userPreference);
+        baseScore += tagScore;
 
-        log.info("시간대 점수: {}", timePreferenceScore);
+        log.info("태그 점수: {}", tagScore);
 
         // 4. 전시 유형 10
         int typepreferenceScore = calculateTypePreferenceScore(userPreference, display);
         baseScore += typepreferenceScore;
 
         log.info("전시 유형 점수: {}", typepreferenceScore);
-
-        // 5. 인기 10
-        int popularityScore = calculatePopularityScore(display.getEVENT_SITE());
-        baseScore += popularityScore;
-
-        log.info("인기 점수: {}", popularityScore);
 
         // 총 점수 0-100
         int finalScore = Math.max(0, Math.min(100, baseScore));
@@ -83,21 +75,20 @@ public class RecommendationService {
         return finalScore;
     }
 
-    // 혼잡도 점수 계산 35
-    private int calculateCongestionScore(String congestionNm) {
+    // 혼잡도 점수 계산 25
+    public int calculateCongestionScore(String congestionNm) {
         if (congestionNm == null || congestionNm.trim().isEmpty() || "미정".equals(congestionNm)) {
             return 8; // 기본 점수
         }
-
         switch (congestionNm.trim()) {
             case "여유":
-                return 35;
-            case "보통":
                 return 25;
+            case "보통":
+                return 18;
             case "약간붐빔":
-                return 15;
+                return 10;
             case "붐빔":
-                return 5;
+                return 3;
             case "매우붐빔":
                 return 0;
             default:
@@ -106,7 +97,7 @@ public class RecommendationService {
     }
 
     // 장소 선호도 점수 계산 15
-    private int calculateLocationPreferenceScore(String eventSite, UserPreference userPreference) {
+    public int calculateLocationPreferenceScore(String eventSite, UserPreference userPreference) {
         if (userPreference == null || userPreference.getPreferredLocations() == null) {
             return 5;
         }
@@ -122,70 +113,62 @@ public class RecommendationService {
         return 2;
     }
 
-    // 시간대 선호 점수 계산 15
-    private int calculateTimePreferenceScore(UserPreference userPreference) {
-        if (userPreference == null || userPreference.getTimePreference() == null) {
+    // 태그 점수 계산(선택) -> 20점까지만
+    public int calculateTagScore(Display display, UserPreference userPreference) {
+        if (userPreference == null || userPreference.getPreferredTag() == null) {
+            return 15; // 기본 점수
+        }
+
+        String displayTags = display.getTags();
+        if (displayTags == null || displayTags.isEmpty()) {
             return 8;
         }
 
-        LocalTime now = LocalTime.now();
-        int hour = now.getHour();
+        String[] displayTagArray = displayTags.split(",");
+        String[] userTagArray = userPreference.getPreferredTag().split(",");
 
-        switch (userPreference.getTimePreference()) {
-            case MORNING:
-                return (10 <= hour && hour < 12) ? 15 : 3;
-            case AFTERNOON:
-                return (12 <= hour && hour < 18) ? 15 : 3;
-            case EVENING: //서울/과천, 수/토요일 한정
-                return (18 <= hour && hour < 21) ? 15 : 3;
-            case ANY:
-                return (10 <= hour && hour < 21) ? 15 : 8;
-            default:
-                return 8;
-        }
+        long matchCount = Arrays.stream(displayTagArray)
+                .mapToLong(displayTag ->
+                        Arrays.stream(userTagArray)
+                                .anyMatch(userTag -> userTag.trim()
+                                        .equals(displayTag.trim())) ? 1 : 0)
+                .sum();
+
+        int score = Math.min(20, (int)(matchCount * 10));
+        log.info("태그 매칭: {}개, 점수: {}", matchCount, score);
+
+        return score;
     }
+
 
     // 상설전,기획전 선택 점수 계산 10
-    private int calculateTypePreferenceScore(UserPreference userPreference, Display display) {
+    public int calculateTypePreferenceScore(UserPreference userPreference, Display display) {
         if (userPreference == null || userPreference.getPreferredType() == null) {
-            return 5;
+            return 6;
         }
 
-        List<String> preferredTypes = userPreference.getPreferredType();
+        String userPreferredType = userPreference.getPreferredType();
+        String exhibitionType = classifyExhibitionType(display);
 
-        String title = display.getTITLE() != null ? display.getTITLE() : "";
-        boolean isPermanent = title.contains("상설");
 
-        if (isPermanent && preferredTypes.contains("상설전")) {
-            return 5;
+        if (userPreferredType.equals(exhibitionType)) {
+            return 10; //같으면 10
         }
-            if (!isPermanent && preferredTypes.contains("기획전")) {
-                return 5;
-            }
-            return 3;
-        }
-
-
-
-    // 인기도 계산 15
-    private int calculatePopularityScore(String eventSite) {
-        String location = extractLocation(eventSite);
-
-        switch (location) {
-            case "서울":
-                return 10;
-            case "과천":
-                return 8;
-            case "청주":
-                return 5;
-            case "덕수궁":
-                return 3;
-            default:
-                return 1;
-        }
+        return 3; //같지 않으면 3
     }
 
-    // event_site 위치
+    //전시 분류
+    private String classifyExhibitionType(Display display) {
+        String title = display.getTITLE();
+        String exhibitionType = (title != null && title.contains("상설")) ? "상설전" : "기획전";
+
+        log.info("@@전시 분류: '{}' -> {}", title, exhibitionType);
+
+        return exhibitionType;
+    }
+
+
+    // event_site 위치 선호도
     private String extractLocation(String eventSite) {
         if (eventSite == null) {
             log.warn("!eventSite is null!");
@@ -198,7 +181,7 @@ public class RecommendationService {
             return "서울";
         } else if (site.contains("덕수궁")) {
             return "덕수궁";
-        } else if (site.contains("과천") ) {
+        } else if (site.contains("과천")) {
             return "과천";
         } else if (site.contains("청주")) {
             return "청주";
@@ -212,9 +195,17 @@ public class RecommendationService {
     }
 
     public UserPreference getUserPreferenceBySession(String sessionId) {
-        return userPreferenceRepository.findBySessionId(sessionId)
-                .orElse(null);
+        List<UserPreference> preferences = userPreferenceRepository.findBySessionId(sessionId);
 
+        if (preferences.isEmpty()) {
+            return null;
+        }
+
+
+        //user가 여러 번 취향 분석 시-> 가장 최근 거 반영하기
+        return preferences.stream()
+                .max((p1, p2) -> Long.compare(p1.getId(), p2.getId()))
+                .orElse(null);
 
     }
 }

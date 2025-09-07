@@ -6,7 +6,7 @@ import com.example.curatingserviceproject.entity.Congestion;
 import com.example.curatingserviceproject.entity.Display;
 import com.example.curatingserviceproject.entity.SpaceMapping;
 import com.example.curatingserviceproject.entity.UserPreference;
-import com.example.curatingserviceproject.enums.TimePreference;
+import com.example.curatingserviceproject.repository.DisplayRepository;
 import com.example.curatingserviceproject.service.*;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -28,6 +28,8 @@ public class ApiController {
     private final CongestionService congestionService;
     private final SpaceMappingService spaceMappingService;
     private final RecommendationService recommendationService;
+    private final TagExtractionService tagExtractionService;
+    private final DisplayRepository displayRepository;
 
     //전시 정보
     @GetMapping("/api/displays")
@@ -59,27 +61,20 @@ public class ApiController {
     public ResponseEntity<?> getDisplayCardsWithPreference
     (@RequestParam(required = false) String sessionId,
      @RequestParam(required = false) String preferredLocations,
-     @RequestParam(required = false) String timePreference,
      @RequestParam(required = false) String preferredTypes
+//     @RequestParam(required = false) String preferredTag
     ){
         UserPreference userPreference = null;
 
         if (sessionId != null && !sessionId.trim().isEmpty()) {
             userPreference = recommendationService.getUserPreferenceBySession(sessionId);
 
-        } else if (preferredLocations != null || timePreference != null || preferredTypes != null) {
+        } else if (preferredLocations != null || preferredTypes != null) {
             userPreference = new UserPreference();
             userPreference.setPreferredLocations(preferredLocations);
 
-            try {
-                userPreference.setTimePreference(TimePreference.valueOf(timePreference));
-
-            } catch (Exception e) {
-                log.warn("시간 오류: {}", timePreference);
-            }
-
             if (preferredTypes != null) {
-                userPreference.setPreferredType(List.of(preferredTypes.split(",")));
+                userPreference.setPreferredType(preferredTypes);
             }
         }
 
@@ -99,19 +94,10 @@ public class ApiController {
                 return ResponseEntity.status(404).body(Map.of("error", "혼잡도 없음"));
 
         } catch(Exception e){
-
             log.error("혼잡도 조회 오류", e);
-
             return ResponseEntity.status(500).body(Map.of("error", "혼잡도 API 호출 실패"));
             }
         }
-
-
-    //혼잡도 테스트
-//    @GetMapping("/api/congestion/test")
-//    public ResponseEntity<?> testCongestion() {
-//        return getCongestion("MMCA-SPACE-1001"); //1전시실 테스트
-//    }
 
 
     @GetMapping("/api/mappings")
@@ -184,10 +170,10 @@ public class ApiController {
 
             UserPreference userPreference = UserPreference.builder()
                     .sessionId(sessionId)
-                    .timePreference(dto.getTimePreference())
+                    .userName(dto.getUserName())
                     .preferredLocations(dto.getPreferredLocation())
-                    .preferredType(dto.getPreferredType() != null ?
-                            List.of(dto.getPreferredType()) : List.of())
+                    .preferredType(dto.getPreferredType())
+                    .preferredTag(dto.getPreferredTag())
                     .build();
 
 
@@ -199,18 +185,39 @@ public class ApiController {
         }
     }
 
+    //태그 생성하기
+    @PostMapping("/api/admin/generate-tags")
+    public ResponseEntity<?> generateTags() {
+        List<Display> displays = displayService.getAllDisplays();
+        int tagCount = 0;
+
+        for (Display display: displays) {
+            String tags = tagExtractionService.extractTags(display);
+            display.setTags(tags);
+            tagCount++;
+        }
+        displayRepository.saveAll(displays);
+
+        return ResponseEntity.ok(Map.of(
+                "status","completed",
+                "tagCount",tagCount,
+                "message","태그 생성 완료!"
+
+        ));
+    }
+
 
 
     //% 테스트 용!!!!%
-    @GetMapping("/api/test")
-    public ResponseEntity<String> test() {
-        return ResponseEntity.ok("API 컨트롤러 작동중!");
-    }
-
-    @GetMapping("/api/mappings/test")
-    public ResponseEntity<String> testMapping() {
-        return ResponseEntity.ok("매핑 컨트롤러 작동중!");
-            }
+//    @GetMapping("/api/test")
+//    public ResponseEntity<String> test() {
+//        return ResponseEntity.ok("API 컨트롤러 작동중!");
+//    }
+//
+//    @GetMapping("/api/mappings/test")
+//    public ResponseEntity<String> testMapping() {
+//        return ResponseEntity.ok("매핑 컨트롤러 작동중!");
+//            }
 
 
     }

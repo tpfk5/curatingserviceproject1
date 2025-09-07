@@ -211,7 +211,11 @@
     <!-- top 섹션 -->
 <div class="top-section">
     <div>
-        <h2 style="font-size: 50px; margin-top: 15px; padding: 0;">Selected Displays FOR @YOU</h2>
+		<h2 style="font-size: 50px; margin-top: 15px; padding: 0;">
+			Selected Displays @
+			{{#userName}}{{userName}}{{/userName}}
+			{{^userName}}YOU{{/userName}}
+		</h2>
         <div style="display: flex;">
     </div>
 
@@ -234,13 +238,13 @@
 					</a>
 				</div>
 
-                <div class="card-details"></div>
-                <div class="detail-item">
-                    <h5 class="place"> {{agencyNm}}</h5></div>
-                <div class="detail-item">
-                 <h5 class="recomnd_score"> Recommend Score : {{recommendScore}}</h5> </div>
-                <div class="detail-item">
-                    <h5 class="period">{{period}}</h5></div>
+<!--                <div class="card-details"></div>-->
+<!--                <div class="detail-item">-->
+<!--                    <h5 class="place"> {agencyNm}</h5></div>-->
+<!--                <div class="detail-item">-->
+<!--                 <h5 class="recomnd_score"> Recommend Score : {recommendScore}</h5> </div>-->
+<!--                <div class="detail-item">-->
+<!--                    <h5 class="period">{period}</h5></div>-->
             </div>
         {{/cards}}
         </div>
@@ -260,7 +264,7 @@
               </span>
         </div>
 
-        <div class="titleandbtn">
+        <div class="titleandbtn">'
         <div class="sub-title">
             <h5 style="font-size: 50px;  margin: 20px; margin-top: 7px;">What are your tastes?</h5>
         </div>
@@ -270,7 +274,16 @@
 
         <!--첫번째 질문-->
         <div class="question-block">
-        <div class="question1" style="font-size: 23px">
+			<!--이름 적는 칸-->
+			<div class="question0" style="font-size: 23px">
+				0. What's u r name or nickname? </div>
+
+			<div class="answer0" style="padding-top: 15px">
+				<input type="text" id="userName" name="userName" placeholder="whatever name you want to be called"
+					   style="width: 30%; padding: 20px; padding-left: 20px; border: 1px solid #000000; ">
+			</div>
+
+        <div class="question1" style="font-size: 23px; padding-top: 15px">
             1. Are there any museums you're interested in? </div>
 
         <div class="answer1" style="padding-top: 15px;">
@@ -298,31 +311,49 @@
                 청주
             </label>
         </div>
+		<div class="form-check">
+			<input class="form-check-input" name="location" type="radio" id="상관 없음" value="상관 없음">
+			<label class="form-check-label" for="상관 없음">
+				상관 없음
+			</label>
+		</div>
         </div>
 
 </div>
-        <!--두번째 질문(시간대)-->
+        <!--두번째 질문(태그 / 선택 사항)-->
             <div class="question-block">
         <div class="question2" style="font-size: 23px">
-            2. When is the favorite time to visit the exhibition? </div>
+			2. What kind of art interests you? (Optional) </div>
 
         <div class="answer2" style="padding-top: 15px;">
         <div class="form-check">
-            <input class="form-check-input" name="time" type="radio" value="MORNING" id="MORNING">
-            <label class="form-check-label" for="MORNING">Morning</label>
+            <input class="form-check-input" name="tags" type="checkbox" value="설치/미디어" id="installation">
+            <label class="form-check-label" for="installation">설치/미디어</label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" name="time" type="radio" id="AFTERNOON" value="AFTERNOON">
-            <label class="form-check-label" for="AFTERNOON">Afternoon</label>
+            <input class="form-check-input" name="tags" type="checkbox" id="photography" value="사진">
+            <label class="form-check-label" for="photography">사진</label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" name="time" type="radio" id="EVENING" value="EVENING" >
-            <label class="form-check-label" for="EVENING">Evening</label>
+            <input class="form-check-input" name="tags" type="checkbox" id="painting" value="회화/수채" >
+            <label class="form-check-label" for="painting">회화/수채</label>
         </div>
         <div class="form-check">
-            <input class="form-check-input" name="time" type="radio" id="ANY" value="ANY" >
-            <label class="form-check-label" for="ANY">Any Time</label>
+            <input class="form-check-input" name="tags" type="checkbox" id="modern" value="근현대" >
+            <label class="form-check-label" for="modern">근현대</label>
         </div>
+		<div class="form-check">
+			<input class="form-check-input" name="tags" type="checkbox" id="sound" value="사운드" >
+			<label class="form-check-label" for="sound">사운드</label>
+		</div>
+		<div class="form-check">
+			<input class="form-check-input" name="tags" type="checkbox" id="nature" value="자연" >
+			<label class="form-check-label" for="nature">자연</label>
+		</div>
+		<div class="form-check">
+			<input class="form-check-input" name="tags" type="checkbox" id="rookie" value="신인작가" >
+			<label class="form-check-label" for="rookie">신인작가</label>
+		</div>
     </div>
             </div>
 
@@ -351,10 +382,9 @@
 </footer>
 </body>
 <script>
-    // 버튼 누르면 업데이트 하기
+    // 암 레디 버튼 누르면 업데이트 하기
     document.addEventListener('DOMContentLoaded', function() {
         const readyButton = document.querySelector('.complete_input');
-
         if (readyButton) {
             readyButton.addEventListener('click', function() {
                 updateRecommendations();
@@ -362,58 +392,65 @@
         }
     });
 
-
     async function updateRecommendations() {
-        const preferences = collectPreferences();
+		const preferences = collectPreferences();
 
-        console.log('전송할 데이터:', preferences);
+		if (!preferences) {
+			return;
+		}
 
-        try {
+		console.log('전송할 데이터:', preferences);
 
-            const response = await fetch('/api/preference', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(preferences)
-        });
-            console.log('POST 응답:', response.status);
+		try {
+			const response = await fetch('/api/preference', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(preferences)
+			});
 
+			console.log('POST 응답:', response.status);
 
-            if (!response.ok) {
+			if (response.ok) {
+				window.location.reload();
+			} else {
+				console.error('서버 오류:', response.status, await response.text());
+				alert('취향 저장 실패! 다시 시도해주세요.');
+			}
 
-            console.error('서버 오류:', response.status, await response.text());
-            return;
-        }
+		} catch (error) {
+			console.error('요청 실패:', error);
+			alert('네트워크 오류가 발생! 다시 시도해주세요.');
+		}
 
-        //업데이트된 리스트!!!
-        const cardsResponse = await fetch('/api/cards');
-        const cards = await cardsResponse.json();
+	}
 
-        updateCardDisplay(cards);
-        } catch (error) {
-
-            console.error('요청 실패:', error);
-        }
-    }
 
     function collectPreferences() {
-        const getCheckedValues = (selector) =>
-                Array.from(document.querySelectorAll(selector + ' input:checked'))
-                        .map(el => el.value);
+		const userName = document.getElementById('userName').value || '';
+		const preferredLocation = document.querySelector('input[name="location"]:checked')?.value || '';
+		const preferredType = document.querySelector('input[name="type"]:checked')?.value || '';
+
+		if (!userName.trim()) {
+			alert('이름을 입력하세요');
+			return null;
+		}
+        if (!preferredLocation || !preferredType) {
+			alert('모든 선택 사항을 체크해주세요');
+			return null;
+		}
 
         return {
-            preferredLocation: document.querySelector('input[name="location"]:checked')?.value || '',
-            timePreference: document.querySelector('input[name="time"]:checked')?.value || null,
-            preferredType: document.querySelector('input[name="type"]:checked')?.value || ''
+            userName: userName,
+			preferredLocation: preferredLocation,
+			preferredType: preferredType
         };
     }
 
     //취향 반영 카드 업데이트 하기
     function updateCardDisplay(cards) {
-
         console.log('updateCardDisplay 호출됨, 카드 개수:', cards.length);
-
         const container = document.getElementById('recommendationContainer');
 
         if (!container) return;
@@ -425,27 +462,27 @@
         limitedCards.forEach(card => {
             const cardDiv = document.createElement('div');
             cardDiv.className = 'card';
-            cardDiv.innerHTML = `
-
-            <div class="card-header">
-                <h5 style="margin: 0; font-size: 22px;">${card.title}</h5>
-                <div class="action-buttons">
-                    <a href="/detail?title=${card.title}" class="view-btn">VIEW</a>
-                </div>
-            </div>
-            <img src="${card.imageObject}" class="card-image" loading="lazy">
-            <div class="card-details">
-                <div class="detail-item">
-                    <h5 class="place">${card.agencyNm}</h5>
-                </div>
-                <div class="detail-item">
-                    <h5 class="recomnd_score">추천 ${card.recommendScore}</h5>
-                </div>
-                <div class="detail-item">
-                    <h5 class="period">${card.period}</h5>
-                </div>
-            </div>
-        `;
+			cardDiv.innerHTML = `
+    <div class="card-header">
+        <h5 style="font-size: 22px;">${card.title}</h5>
+    </div>
+    <div class="image-wrapper">
+        <a href="/detail?title=${card.title}">
+            <img src="${card.imageObject}" onerror="this.onerror=null; this.src='/img/temp.jpg';" class="card-image" loading="lazy">
+            <div class="image-overlay"></div>
+        </a>
+    </div>
+    <div class="card-details"></div>
+    <div class="detail-item">
+        <h5 class="place">${card.agencyNm}</h5>
+    </div>
+    <div class="detail-item">
+        <h5 class="recomnd_score">Recommend Score : ${card.recommendScore}</h5>
+    </div>
+    <div class="detail-item">
+        <h5 class="period">${card.period}</h5>
+    </div>
+`;
             container.appendChild(cardDiv);
         });
     }

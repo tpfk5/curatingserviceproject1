@@ -55,5 +55,8 @@ public class Display {
     @Column(name = "congestion_nm")
     private String congestionNm;
 
+    @Column(name = "tags")
+    private String Tags; // 전시 태그
+
 
 }

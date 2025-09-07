@@ -29,6 +29,7 @@ public class DisplayService {
     private final DisplayRepository displayRepository;
     private final SpaceMappingService spaceMappingService;
     private final RecommendationService recommendationService;
+    private final TagExtractionService tagExtractionService;
 
     public List<Display> fetchANDSAVEDisplay(int startPage, int endPage) {
         List<Display> allDisplays = new ArrayList<>();
@@ -113,7 +114,6 @@ public class DisplayService {
                 if (localId.isEmpty() || seenLocalIds.contains(localId)) {
                     continue;
                 }
-
                 seenLocalIds.add(localId);
 
                 Display display = new Display();
@@ -155,6 +155,12 @@ public class DisplayService {
                     display.setSpaceCode("오류");
                     display.setCongestionNm("오류");
                 }
+
+                //전시 태그 추출하기
+                String tags = tagExtractionService.extractTags(display);
+                display.setTags(tags);
+                log.info("생성된 태그: {} -> {}", display.getTITLE(), tags);
+
                 displays.add(display); //리스트에 추가
             }
         } catch (Exception e) {
@@ -194,6 +200,10 @@ public class DisplayService {
         return displayRepository.findAll();
     }
 
+    //임시로 중복 전시 2개 안보이게 하기
+    private static final Set<String> EXCLUDED_TITLES = Set.of(
+            "젊은 모색 2025", "MMCA 서울 상설전: 한국현대미술 하이라이트"
+    );
 
 
     //DisplayCard DTO <- 사용자 취향 반영@
@@ -221,17 +231,22 @@ public class DisplayService {
 
             //중복 체크하기 -> 이미 저장됐으면 SKIP!
             String title = display.getTITLE();
+
+            if (EXCLUDED_TITLES.contains(title)) {
+                log.info("제외된 전시:, {}", title);
+                continue;
+            }
+
             if (seenTitles.contains(title)) {
                 log.info("중복 skip: {}", title);
                 continue;
             }
 
             seenTitles.add(title);
-
             try {
                 int score = recommendationService.calculateRecommendationScore(display, preference);
                 String safeCongestionNm = display.getCongestionNm() != null ? display.getCongestionNm() : "정보 없음";
-
+                String exhibitionType = (title != null && title.contains("상설")) ? "상설전" : "기획전";
 
                 DisplayCardDTO dto = new DisplayCardDTO(
                         title,
@@ -242,11 +257,21 @@ public class DisplayService {
                         score,
                         display.getPERIOD(),
                         display.getDESCRIPTION(),
-                        display.getAUTHOR()
+                        display.getAUTHOR(),
+                        exhibitionType
 
                 );
-                log.info("@@이미지 URL: {}", display.getIMAGE_OBJECT());
-                log.info("@@현재 전시 추가: {} ({})", title, display.getPERIOD());
+                log.info("@이미지 URL: {}", display.getIMAGE_OBJECT());
+
+                //점수 상세 정보 추가하기
+                if (preference != null) {
+                    int congestionScore = recommendationService.calculateCongestionScore(display.getCongestionNm());
+                    int locationScore = recommendationService.calculateLocationPreferenceScore(display.getEVENT_SITE(), preference);
+                    int typeScore = recommendationService.calculateTypePreferenceScore(preference, display);
+                    int tagScore = recommendationService.calculateTagScore(display, preference);
+
+                    dto.setScoreDetail(congestionScore, locationScore, typeScore, tagScore);
+                }
 
                 result.add(dto);
             } catch (Exception e) {
@@ -255,13 +280,12 @@ public class DisplayService {
         }
 
         if (preference != null) {
-            // 사용자 취향 0 -> 점수 높은 순 정렬
+            // 사용자 취향 0 -> 버튼 -> 점수 높은 순 정렬
             result.sort((a, b) -> Integer.compare(b.getRecommendScore(), a.getRecommendScore()));
             log.info("점수 순 정렬");
         }
-
+        // x -> 랜덤 정렬
         else {
-            // x -> 랜덤 정렬
             Collections.shuffle(result);
             log.info("랜덤 정렬");
         }

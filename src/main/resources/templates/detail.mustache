@@ -295,9 +295,9 @@
     <div class="left-section">
 
         <!--검색 구역-->
-        <div class="seach-container" style="margin-bottom: 20px; ">
+        <div class="search-container" style="margin-bottom: 20px; ">
             <div style="position: relative;">
-                <input type="text" class="seach-box" placeholder="search exhibitions"
+                <input type="text" id="searchInput" class="search-box" placeholder="search exhibitions"
                        STYLE="width: 100%; padding: 10px; box-sizing: border-box; border: 1px solid gray;"
                         onkeyup="filterExhibitions();">
             </div>
@@ -340,18 +340,18 @@
 			</div>
 
 			<div class="stat-item">
-				<div class="stat-label">Time Score</div>
-				<span class="stat-number" id="timeScore">{{scoreDetail.timeScore}}</span>
+				<div class="stat-label">Tag Score</div>
+				<span class="stat-number" id="tagScore">{{scoreDetail.tagScore}}</span>
 			</div>
 
 			<div class="stat-item">
-				<div class="stat-label">Popularity Score</div>
-				<span class="stat-number" id="popularityScore">{{scoreDetail.popularityScore}}</span>
+				<div class="stat-label">Type Score</div>
+				<span class="stat-number" id="typeScore">{{scoreDetail.typeScore}}</span>
 			</div>
 
-			<!--추천 점슈 & 이유-->
+			<!--추천 점수 & 이유-->
 			<div class="recommendation-details" style="margin-top: 10px; font-weight: bold;">
-				<div class="recommendation-score" id="totalScore">Total Recommendation: {{recommendScore}} </div>
+				<div class="recommendation-score" id="recommenDScore"> Recommend Score: {{recommendScore}} </div>
 				<div class="recommendation-text" id="recommendationText">@@@ Highly recommended @@@</div>
 			</div>
 		</div>
@@ -364,7 +364,7 @@
 	<section class="image-section">
 		<div class="image-container">
 			<img src="{{imageObject}}" class="exhibition-image" onerror="this.onerror=null; this.src='/img/temp.jpg';" >
-
+		</div>
 
 		<div class="exhibition-info">
 			<div><strong>Author:</strong> {{AUTHOR}}</div>
@@ -384,22 +384,26 @@
 
 </body>
 <script>
-    //전시 검색하기 ('제목만')
+    //전시 검색하기 (제목만@@)
     function filterExhibitions () {
-        const searchTerm = document.getElementById('searchItem').value.toLowerCase();
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
         const exhibitions = document.querySelectorAll('.exhibition-item');
 
         exhibitions.forEach(item => {
             const titleElement = item.querySelector('.title-info');
             const title = titleElement ? titleElement.textContent.toLocaleLowerCase() : '';
 
-            item.style.display = 'flex';
+            if (title.includes(searchTerm) || searchTerm === '') {
+				item.style.display = 'flex';
 
-            if (searchTerm && title.includes(searchTerm)) {
-                item.classList.add('search-highlight');
-            } else {
-                item.classList.remove('search-highlight');
-            }
+                if (searchTerm && title.includes(searchTerm)) {
+					item.classList.add('search-highlight');
+				} else {
+					item.classList.remove('search-highlight');
+				}
+			} else {
+                item.style.display = 'none'
+			}
         });
     }
 
@@ -415,6 +419,39 @@
             }
         });
     });
+
+
+	//통계 부분
+	async function updateRecommendations() {
+		const preference = collectPreferences();
+		console.log("전송할 데이터:", preference);
+
+		//사용자 취향 저장하기
+		try {
+			const response = await fetch("/api/preference", {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json'
+				},
+				body: JSON.stringify(preferences)
+			});
+
+			if (!response.ok) {
+				console.error('서버 오류', response.status, await response.text());
+				return;
+			}
+
+            //세션 ID  -> 업데이트 리스트 가져오기
+			const cardsResponse = await fetch('/api/cards');
+            const cards = await cardsResponse.json();
+
+            console.log('받은 카드 데이터:', cards);
+            updateCardDisplay(cards);
+
+		} catch (error) {
+            console.error('요청 실패', error)
+	}
+    }
 
 </script>
 </html>
