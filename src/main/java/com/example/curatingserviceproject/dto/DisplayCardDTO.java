@@ -3,6 +3,8 @@ package com.example.curatingserviceproject.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.List;
+
 
 @Getter
 @Setter
@@ -18,6 +20,8 @@ public class DisplayCardDTO {
     private String description; //전시 설명
     private String author; //작가
     private ScoreDetail scoreDetail; // 추천 상세 점수
+    private String tags; //전시 태그
+    private List<String> tagList;
 
 
     //main page -> card.badge 혼잡도 색 표시
@@ -29,7 +33,7 @@ public class DisplayCardDTO {
 
 
 
-    public DisplayCardDTO(String title, String imageObject, String agencyNm, String spaceCode, String congestionNm, int recommendScore, String period, String description, String author) {
+    public DisplayCardDTO(String title, String imageObject, String agencyNm, String spaceCode, String congestionNm, int recommendScore, String period, String description, String author, String tags) {
         this.title = title != null ? title : "제목 없음";
         this.imageObject = imageObject != null ? imageObject : "/img/temp.jpg";
         this.agencyNm = agencyNm != null ? agencyNm : "기관 정보 없음";
@@ -39,8 +43,10 @@ public class DisplayCardDTO {
         this.period = period;
         this.description = description;
         this.author = author;
+        this.tags = tags;
 
-        //혼잡도 상태
+
+        //혼잡도 상태 추가하기 (어디에, 어떻게는 미정)
         //여유, 보통, 약간붐빔, 붐빔, 미정(OR 정보없음, 기본 표시)
         switch (congestionNm) {
             case "여유":

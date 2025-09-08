@@ -201,6 +201,27 @@
 			object-fit: cover;
 		}
 
+		.detail-tags {
+			margin-top: 20px;
+			margin-bottom: 20px;
+			display: flex;
+			flex-wrap: wrap;
+			gap: 8px;
+		}
+
+		.detail-tag-badge {
+			display: inline-block;
+			padding: 8px 16px;
+			background: white;
+			color: #333;
+			font-size: 14px;
+			font-weight: 500;
+			border-radius: 20px;
+			border: 1px solid #ddd;
+			white-space: nowrap;
+		}
+
+
 
 		.btn {
 			padding: 8px 16px;
@@ -359,6 +380,12 @@
 	<section class="image-section">
 		<div class="image-container">
 			<img src="{{imageObject}}" class="exhibition-image" onerror="this.onerror=null; this.src='/img/temp.jpg';" >
+		</div>
+
+		<div class="detail-tags">
+			{{#display.tagList}}
+					<span class="detail-tag-badge">{{.}}</span>
+				{{/display.tagList}}
 		</div>
 
 		<div class="exhibition-info">

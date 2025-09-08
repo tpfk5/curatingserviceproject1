@@ -154,6 +154,57 @@ public class ApiController {
         }
     }
 
+    @GetMapping("/api/mappings/all")
+    public ResponseEntity<?> getAllMappings() {
+        try {
+            List<SpaceMapping> mappings = spaceMappingService.getAllMappings();
+            return ResponseEntity.ok(mappings);
+        } catch (Exception e) {
+            log.error("전체 매핑 조회 오류:", e);
+            return ResponseEntity.status(500).body(Map.of("error",e.getMessage()));
+        }
+    }
+
+    @PostMapping("/api/admin/update-mappings")
+    public ResponseEntity<?> updateExistingDisplayMappings() {
+        try {
+            List<Display> displays = displayRepository.findAll();
+            int updatedCount = 0;
+
+            for (Display display : displays) {
+                String displaySiteKey = display.getEVENT_SITE();
+                try {
+                    Optional<SpaceMapping> opt = spaceMappingService.getByDisplaySiteKey(displaySiteKey);
+                    if (opt.isPresent()) {
+                        SpaceMapping mapping = opt.get();
+                        display.setSpaceCode(mapping.getSpaceCode());
+                        display.setCongestionNm(mapping.getCongestionNm());
+                        updatedCount++;
+                        log.info("매핑 업데이트: {} -> {}", display.getTITLE(), mapping.getSpaceCode());
+                    }
+                } catch (Exception e) {
+                    log.error("매핑 업데이트 실패: {}", display.getTITLE(), e);
+                }
+            }
+
+            displayRepository.saveAll(displays);
+
+            return ResponseEntity.ok(Map.of(
+                    "status", "completed",
+                    "updatedCount", updatedCount
+            ));
+        } catch (Exception e) {
+            log.error("전체 매핑 업데이트 실패", e);
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
+        }
+    }
+    @GetMapping("/api/admin/update-mappings-get")
+    public ResponseEntity<?> updateExistingDisplayMappingsGet() {
+        return updateExistingDisplayMappings();
+    }
+
+
+
 
 
     //사용자 취향 분석 저장

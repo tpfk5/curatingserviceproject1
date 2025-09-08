@@ -3,6 +3,7 @@ package com.example.curatingserviceproject.service;
 import com.example.curatingserviceproject.entity.SpaceMapping;
 import com.example.curatingserviceproject.repository.SpaceMappingRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,7 +54,6 @@ public class SpaceMappingService {
             entity.setCongestionNm(cg);
 
         }
-
         // 생성 부분
         else {
         entity = SpaceMapping.builder()
@@ -71,4 +71,6 @@ public class SpaceMappingService {
     public List<SpaceMapping> getAllMappings() {
         return spaceMappingRepository.findAll();
     }
+
+
 }

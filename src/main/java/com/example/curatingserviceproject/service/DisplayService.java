@@ -19,6 +19,7 @@ import java.net.URL;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -258,6 +259,19 @@ public class DisplayService {
                         display.getAUTHOR()
                 );
                 log.info("@이미지 URL: {}", display.getIMAGE_OBJECT());
+
+                //태그 정보 추가
+                dto.setTags(display.getTags());
+
+                if (display.getTags() != null && !display.getTags().isEmpty()) {
+                    List<String> tagList = Arrays.asList(display.getTags().split(","));
+
+                    tagList = tagList.stream()
+                            .map(String::trim)
+                            .filter(tag -> !tag.isEmpty())
+                            .collect(Collectors.toList());
+                    dto.setTagList(tagList);
+                }
 
                 //점수 상세 정보 추가하기
                 if (preference != null) {
