@@ -48,70 +48,59 @@
          border-bottom: 1px solid #000000;
      }
 
-    .main-container {
-        display: grid;
-        margin: 0 auto;
-        margin-top: 100px;
+	 .main-container {
+		 margin-top: 100px;
+		 padding: 40px;
+	 }
 
-    }
-
-    .top-section {
-        background: #000000;
-        color: #ffffff;
-        box-sizing: border-box;
-		padding-bottom: 30px;
-
-    }
-
-    .center-section {
-		margin-top: 20px;
-        margin-bottom: 40px;
-        grid-template-columns: repeat(3, 1fr);
-		padding: 0 30px;
-	}
-
-     .card {
-		 position: relative;
-		 overflow: hidden;
-		 border-radius: 16px;
-		 background: #ccc;
-		 aspect-ratio: 2/3;
-		 height: 100%;
-		 margin: 0;
-		 padding: 0;
-     }
-
-     .cards-grid {
-         display: grid;
-		 grid-template-columns: repeat(4, 1fr);
-		 grid-template-rows: 1fr;
-		 gap: 1px;
-		 width: 100%;
+	 .main-grid {
+		 display: grid;
+		 grid-template-columns: 1fr 1fr;
+		 gap: 60px;
 		 max-width: 1400px;
 		 margin: 0 auto;
-		 height: 500px;
-     }
+	 }
 
-	 .color-card {
+	 .left-section, .right-section {
+		 padding: 20px;
+	 }
+
+	 .section-title {
+		 font-size: 36px;
+		 margin-bottom: 30px;
+		 color: #000;
+	 }
+
+	 .card {
 		 position: relative;
-		 height: 100%;
-		 background-color: #ffffff;
-		 display: flex;
-		 align-items: center;
-		 justify-content: center;
-		 border-radius: 17px;
+		 border: 1px solid #000;
+		 border-radius: 8px;
 		 overflow: hidden;
-		 aspect-ratio: 2/3;
+		 background: white;
 	 }
 
-	 .color-card-content {
-		 text-align: center;
-		 color: #000000;
-		 font-size: 32px;
-		 font-weight: 700;
-		 letter-spacing: 2px;
+	 .card-number::before {
+		 content: "0" counter(card-counter);
+		 font-size: 48px;
+		 font-weight: bold;
 	 }
 
+	 .cards-grid {
+		 display: grid;
+		 grid-template-columns: repeat(2, 1fr);
+		 grid-template-rows: repeat(2, 1fr);
+		 gap: 20px;
+		 height: 600px;
+	 }
+
+	 .card-number {
+		 position: absolute;
+		 top: 15px;
+		 left: 15px;
+		 font-size: 48px;
+		 font-weight: bold;
+		 z-index: 10;
+	 }
 
 	 .card-image {
 		 width: 100%;
@@ -130,20 +119,24 @@
 		 margin: 0;
 		 padding: 0;
 	 }
+
 	 .card-tags {
-		 padding: 8px;
-		 display:flex;
+		 background: transparent !important; /* 빨간 테스트 배경 제거 */
+		 min-height: 30px !important;
+		 padding: 8px !important;
+		 display: flex;
 		 flex-wrap: wrap;
 		 gap: 4px;
 		 border-radius: 0 0 12px 12px;
 	 }
 
+
 	 .tag-badge {
 		 display: inline-block;
 		 padding: 2px 6px;
-		 background: #f0f0f0;
-		 color: #333;
-		 font-size: 10px;
+		 background: #ffffff;
+		 color: #000000;
+		 font-size: 12px;
 		 border-radius: 8px;
 		 border: 1px solid #ddd;
 	 }
@@ -165,37 +158,45 @@
 	 }
 
 
-     .question-container {
-         display: flex;
-         gap: 60px;
-         justify-content: space-between;
-         margin-top: 20px;
-		 border-top: 1px solid #000
-     }
+	 .preference-form {
+		 padding: 20px;
+	 }
 
 	 .question-block {
-		 padding-right: 20px;
-		 margin-top: 30px;
+		 margin-bottom: 30px;
 	 }
 
-	 .question-block.name-block {
+	 .question {
+		 font-size: 18px;
+		 font-weight: 600;
+		 margin-bottom: 15px;
+	 }
+
+	 .options-grid {
+		 display: grid;
+		 grid-template-columns: repeat(2, 1fr);
+		 gap: 10px;
+	 }
+
+	 .option-item, .tag-item {
 		 display: flex;
 		 align-items: center;
-		 gap: 15px;
+		 padding: 10px;
+		 border: 1px solid #ddd;
+		 border-radius: 4px;
+		 cursor: pointer;
 	 }
 
-     .answer .form-check {
-         margin-bottom: 6px;
-     }
-
-     .titleandbtn {
-         display: flex;
-         align-items: center;
-         /*margin-bottom: 70px;*/
-     }
-
-	 .form-check-label{
-		 font-size: 20px;
+	 .submit-btn {
+		 width: 100%;
+		 padding: 15px;
+		 font-size: 18px;
+		 font-weight: bold;
+		 background: #000;
+		 color: white;
+		 border: none;
+		 border-radius: 4px;
+		 cursor: pointer;
 	 }
 
 
@@ -226,171 +227,138 @@
 <!--본문-->
 <div class="main-container">
 
-    <!-- top 섹션 -->
-<div class="top-section">
-    <div>
-		<h2 style="font-size: 40px; margin-top: 15px; padding: 0; ">
-			Selected Displays for
-			{{#userName}}{{userName}}{{/userName}}
-			{{^userName}}TestUser{{/userName}}
-		</h2>
-        <div style="display: flex;">
-    </div>
+	<div class="main-grid">
+		<!-- 왼쪽: 카드 영역 -->
+
+		<div class="left-section">
+			<h2 class="section-title">
+				Selected Displays for
+				{{#userName}}{{userName}}{{/userName}}
+				{{^userName}}TestUser{{/userName}}
+			</h2>
+
 
         <!--추천 전시 카드-->
-        <div class="cards-grid" id="recommendationContainer">
-        {{#cards}}
-            <div class="card">
-                <div class="card-header">
-<!--                <h5 style=" font-size: 22px;">{title}</h5>-->
-<!--                    <span class= "badge {#isGreen}green{/isGreen}{#isOrange}orange{/isOrange} {#isYellow}yellow{/isYellow}{#isRed}red{/isRed}}{#isGray}gray{/isGray}"></span>-->
-<!--                <div class="action-buttons" style="padding: 8px 16px;-->
-<!--         text-decoration: none; font-weight: 600;font-size: 20px; ">-->
-<!--                <a href="/detail?title={title}" class="view-btn" > VIEW </a>-->
-<!--                </div>-->
-                </div>
-				<div class="image-wrapper">
-				<a href="/detail?title={{title}}">
-                <img src = "{{imageObject}}" onerror="this.onerror=null; this.src='/img/temp.jpg';" class="card-image" loading="lazy">
-					<div class="image-overlay"></div>
-					</a>
-				</div>
-				<div class="card-tags">
-					{{#tags}}
-						<span class="tag-badge">{{.}}</span>
-						{{/tags}}
-				</div>
-            </div>
-        {{/cards}}
-			<div class="color-card">
-				<div class="color-card-content">NEW</div>
+			<div class="cards-grid" id="recommendationContainer">
+				{{#cards}}
+					<div class="card">
+						<div class="card-number"></div>
+						<div class="image-wrapper">
+							<a href="/detail?title={{title}}">
+							<img src="{{imageObject}}" onerror="this.onerror=null; this.src='/img/temp.jpg';" class="card-image" loading="lazy">
+							<div class="image-overlay"></div>
+							</a>
+						</div>
+<!--						<div class="card-info">-->
+<!--							<h3 class="card-title">{title}</h3>-->
+<!--							<p class="card-period">{period}</p>-->
+<!--						</div>-->
+					</div>
+				{{/cards}}
 			</div>
-        </div>
-        </div>
-    </div>
+		</div>
 
-<!--    구역 나누기-->
-<!--    <section class="empty-section">-->
-<!--    </section>-->
+<!--오른쪽ㄹ 섹션 -> 사용자 취향 분석-->
+    <div class="right-section">
+		<h2 class="section-title">What are your tastes?</h2>
 
-
-<!--@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@-->
-    <!-- 중간 섹션: 사용자 취향 분석 -->
-    <div class="center-section">
-        <div>
-        <span class="test" style=" font-family: 'Intel', sans-serif; color: darkgray;">
-              </span>
-        </div>
-
-        <div class="titleandbtn">'
-        <div class="sub-title">
-            <h5 style="font-size: 40px;  margin: 20px; margin-top: 7px;">What are your tastes?</h5>
-        </div>
+        <div class="titleandbtn">
+<!--        <div class="sub-title">-->
+<!--            <h5 style="font-size: 40px;  margin: 20px; margin-top: 7px;">What are your tastes?</h5>-->
+<!--        </div>-->
 			<button class="complete_input" style="font-size: 20px" onclick="directSave()">IM READY!!!</button>
         </div>
+
         <div class="question-container">
 
-        <!--첫번째 질문-->
-        <div class="question-block name-block">
+        <div class="preference-form">
 			<!--이름 적는 칸-->
-			<div class="question0" style="font-size: 23px">
-				0. What's u r name or nickname? </div>
-
-			<div class="answer0" style="padding-top: 15px">
-				<input type="text" id="userName" name="userName" placeholder="whatever name you want to be called"
-					   style="width: 30%; padding: 20px; padding-left: 20px; border: 1px solid #000000; ">
+			<div class="question-block">
+				<div class="question">What's your name or nickname?</div>
+				<input type="text" id="userName" name="userName"
+					   placeholder="whatever name you want to be called"
+					   class="name-input">
+			</div>
+			<!--첫번째 질문-->
+			<div class="question-block">
+				<div class="question">Are there any museums you're interested in?</div>
+				<div class="options-grid">
+					<label class="option-item">
+						<input type="radio" name="location" value="서울">
+						<span>서울</span>
+					</label>
+					<label class="option-item">
+						<input type="radio" name="location" value="과천">
+						<span>과천</span>
+					</label>
+					<label class="option-item">
+						<input type="radio" name="location" value="덕수궁">
+						<span>덕수궁</span>
+					</label>
+					<label class="option-item">
+						<input type="radio" name="location" value="청주">
+						<span>청주</span>
+					</label>
+					<label class="option-item">
+						<input type="radio" name="location" value="상관 없음">
+						<span>상관 없음</span>
+					</label>
+				</div>
 			</div>
 
-		<div class="question-block">
-        <div class="question1" style="font-size: 23px; padding-top: 15px">
-            1. Are there any museums you're interested in? </div>
 
-        <div class="answer1" style="padding-top: 15px;">
-        <div class="form-check">
-            <input class="form-check-input" name="location" type="radio" value="서울" id="서울">
-            <label class="form-check-label" for="서울">
-                서울
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" name="location" type="radio" id="과천" value="과천" >
-            <label class="form-check-label" for="과천">
-               과천
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" name="location" type="radio" id="덕수궁" value="덕수궁" >
-            <label class="form-check-label" for="덕수궁">
-                덕수궁
-            </label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" name="location" type="radio" id="청주" value="청주">
-            <label class="form-check-label" for="청주">
-                청주
-            </label>
-        </div>
-		<div class="form-check">
-			<input class="form-check-input" name="location" type="radio" id="상관 없음" value="상관 없음">
-			<label class="form-check-label" for="상관 없음">
-				상관 없음
-			</label>
-		</div>
-		</div>
-        </div>
-
-</div>
         <!--두번째 질문(태그 / 선택 사항)-->
-            <div class="question-block">
-        <div class="question2" style="font-size: 23px">
-			2. What kind of art interests you? (다중 선택 가중) </div>
-
-        <div class="answer2" style="padding-top: 15px;">
-        <div class="form-check">
-            <input class="form-check-input" name="tags" type="checkbox" value="설치/미디어" id="installation">
-            <label class="form-check-label" for="installation">설치/미디어</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" name="tags" type="checkbox" id="photography" value="사진">
-            <label class="form-check-label" for="photography">사진</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" name="tags" type="checkbox" id="painting" value="회화/수채" >
-            <label class="form-check-label" for="painting">회화/수채</label>
-        </div>
-        <div class="form-check">
-            <input class="form-check-input" name="tags" type="checkbox" id="modern" value="근현대" >
-            <label class="form-check-label" for="modern">근현대</label>
-        </div>
-		<div class="form-check">
-			<input class="form-check-input" name="tags" type="checkbox" id="sound" value="사운드" >
-			<label class="form-check-label" for="sound">사운드</label>
+			<div class="question-block">
+				<div class="question">What kind of art interests you?</div>
+				<div class="tags-grid">
+					<label class="tag-item">
+						<input type="checkbox" name="tags" value="설치/미디어">
+						<span>설치/미디어</span>
+					</label>
+					<label class="tag-item">
+						<input type="checkbox" name="tags" value="사진">
+						<span>사진</span>
+					</label>
+					<label class="tag-item">
+						<input type="checkbox" name="tags" value="회화/수채">
+						<span>회화/수채</span>
+					</label>
+					<label class="tag-item">
+						<input type="checkbox" name="tags" value="근현대">
+						<span>근현대</span>
+					</label>
+					<label class="tag-item">
+						<input type="checkbox" name="tags" value="사운드">
+						<span>사운드</span>
+					</label>
+					<label class="tag-item">
+						<input type="checkbox" name="tags" value="자연">
+						<span>자연</span>
+					</label>
+					<label class="tag-item">
+						<input type="checkbox" name="tags" value="신인작가">
+						<span>신인작가</span>
+					</label>
+					<label class="tag-item">
+						<input type="checkbox" name="tags" value="상설전">
+						<span>상설전</span>
+					</label>
+					<label class="tag-item">
+						<input type="checkbox" name="tags" value="기획전">
+						<span>기획전</span>
+					</label>
+				</div>
+			</div>
+			<button class="submit-btn" onclick="directSave()">IM READY!!!</button>
 		</div>
-		<div class="form-check">
-			<input class="form-check-input" name="tags" type="checkbox" id="nature" value="자연" >
-			<label class="form-check-label" for="nature">자연</label>
 		</div>
-		<div class="form-check">
-			<input class="form-check-input" name="tags" type="checkbox" id="rookie" value="신인작가" >
-			<label class="form-check-label" for="rookie">신인작가</label>
-		</div>
-		<div class="form-check">
-			<input class="form-check-input" name="tags" type="checkbox" id="permanent" value="상설전" >
-			<label class="form-check-label" for="permanent">상설전</label>
-		</div>
-		<div class="form-check">
-			<input class="form-check-input" name="tags" type="checkbox" id="special" value="기획전" >
-			<label class="form-check-label" for="special">기획전</label>
-		</div>
-    </div>
-            </div>
-        </div>
-
-    </div>
+	</div>
+	</div>
 </div>
-<footer class="footer">
 
-</footer>
+
+
+<footer class="footer"></footer>
 </body>
 <script>
     // 암 레디 버튼 누르면 업데이트 하기

@@ -37,9 +37,6 @@ public class Display {
     @Column(name = "author")
     private String AUTHOR; //작가
 
-    @Column(name = "charge")
-    private String CHARGE; //관람료 정보
-
     @Column(name = "period")
     private String PERIOD; //기간
 
@@ -57,6 +54,5 @@ public class Display {
 
     @Column(name = "tags")
     private String Tags; // 전시 태그
-
 
 }

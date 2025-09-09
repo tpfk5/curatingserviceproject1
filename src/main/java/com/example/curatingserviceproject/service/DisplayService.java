@@ -121,7 +121,6 @@ public class DisplayService {
                 display.setTITLE(item.optString("TITLE", ""));
                 display.setCOLLECTED_DATE(item.optString("COLLECTED_DATE", ""));
                 display.setEVENT_SITE(item.optString("EVENT_SITE", ""));
-                display.setCHARGE(item.optString("CHARGE", ""));
                 display.setPERIOD(item.optString("PERIOD", ""));
                 display.setCNTC_INSTT_NM(item.optString("CNTC_INSTT_NM",""));
 
@@ -256,7 +255,8 @@ public class DisplayService {
                         score,
                         display.getPERIOD(),
                         display.getDESCRIPTION(),
-                        display.getAUTHOR()
+                        display.getAUTHOR(),
+                        display.getTags()
                 );
                 log.info("@이미지 URL: {}", display.getIMAGE_OBJECT());
 

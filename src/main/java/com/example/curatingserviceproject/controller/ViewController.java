@@ -14,7 +14,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -108,6 +110,14 @@ public class ViewController {
             if (display == null) {
                 log.error("해당 전시를 찾을 수 없습니다: {}", title);
                 return "error";
+            }
+            if (display.getTags() != null) {
+                List<String> tagList = Arrays.asList(display.getTags().split(","))
+                        .stream()
+                        .map(String::trim)
+                        .filter(tag -> !tag.isEmpty())
+                        .collect(Collectors.toList());
+                model.addAttribute("tagList",tagList);
             }
 
             // 기본 전시 정보
