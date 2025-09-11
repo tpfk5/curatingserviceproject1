@@ -28,6 +28,7 @@
          display: flex;
          flex-direction: column;
      }
+
      .top-header {
          width: 100%;
          height: 100px;
@@ -50,14 +51,13 @@
 
 	 .main-container {
 		 margin-top: 100px;
-		 padding: 40px;
+		 padding: 0;
 	 }
 
 	 .main-grid {
 		 display: grid;
-		 grid-template-columns: 1fr 1fr;
-		 gap: 60px;
-		 max-width: 1400px;
+		 grid-template-columns: 2fr 50px 1fr;
+		 max-width: 1700px;
 		 margin: 0 auto;
 	 }
 
@@ -73,11 +73,32 @@
 
 	 .card {
 		 position: relative;
+		 display: grid;
+		 grid-template-columns: 80px 1fr;
 		 border: 1px solid #000;
-		 border-radius: 8px;
 		 overflow: hidden;
-		 background: white;
+		 counter-increment: card-counter;
+		 height: 100%;
 	 }
+
+	 .card-number-section {
+		 display: flex;
+		 align-items: center;
+		 justify-content: center;
+		 border-right: 1px solid #000;
+	 }
+
+	 .card-content {
+		 display: grid;
+		 grid-template-rows: 1fr auto;
+		 height: 100%;
+
+	 }.card-info {
+		  padding: 15px;
+		  background: white;
+		  border-top: 1px solid #000;
+		  min-height: 80px;
+	  }
 
 	 .card-number::before {
 		 content: "0" counter(card-counter);
@@ -90,7 +111,8 @@
 		 grid-template-columns: repeat(2, 1fr);
 		 grid-template-rows: repeat(2, 1fr);
 		 gap: 20px;
-		 height: 600px;
+		 height: 700px;
+		 counter-reset: card-counter;
 	 }
 
 	 .card-number {
@@ -99,7 +121,7 @@
 		 left: 15px;
 		 font-size: 48px;
 		 font-weight: bold;
-		 z-index: 10;
+		 /*z-index: 10;*/
 	 }
 
 	 .card-image {
@@ -115,7 +137,6 @@
 		 overflow: hidden;
 		 height: 100%;
 		 width: 100%;
-		 border-radius: 17px;
 		 margin: 0;
 		 padding: 0;
 	 }
@@ -157,6 +178,23 @@
 		 opacity: 1;
 	 }
 
+	 .center-section {
+		 border-left: 1px solid #000;
+		 border-right: 1px solid #000;
+		 display: flex;
+		 align-items: center;
+		 justify-content: center;
+		 writing-mode: vertical-rl;
+		 font-size: 12px;
+		 font-weight: 500;
+		 position: relative;
+	 }
+
+	 .center-section::before {
+		 content: 'EXHIBITION CURATING SERVICE';
+		 transform: rotate(180deg);
+	 }
+
 
 	 .preference-form {
 		 padding: 20px;
@@ -182,8 +220,8 @@
 		 display: flex;
 		 align-items: center;
 		 padding: 10px;
-		 border: 1px solid #ddd;
-		 border-radius: 4px;
+		 /*border: 1px solid #ddd;*/
+		 /*border-radius: 4px;*/
 		 cursor: pointer;
 	 }
 
@@ -200,18 +238,19 @@
 	 }
 
 
-    .footer {
-     background-color: #000;
-     height: 60px;
-     border-top: 1px solid #000;
-     color: white;
-    }
-
-	 @media (max-width: 768px) {
-		 .cards-grid {
-			 grid-template-columns: repeat(2, 1fr);
+		 .footer {
+			 background-color: #000;
+			 height: 60px;
+			 border-top: 1px solid #000;
+			 color: white;
 		 }
-	 }
+
+		 @media (max-width: 768px) {
+			 .cards-grid {
+				 grid-template-columns: repeat(2, 1fr);
+			 }
+		 }
+
 
     </style>
 </head>
@@ -226,10 +265,9 @@
 
 <!--본문-->
 <div class="main-container">
-
 	<div class="main-grid">
-		<!-- 왼쪽: 카드 영역 -->
 
+		<!-- 왼쪽: 카드 영역 -->
 		<div class="left-section">
 			<h2 class="section-title">
 				Selected Displays for
@@ -242,37 +280,40 @@
 			<div class="cards-grid" id="recommendationContainer">
 				{{#cards}}
 					<div class="card">
-						<div class="card-number"></div>
+					<!--인덱스-->
+						<div class="card-number-section">
+							<div class="card-number"></div>
+						</div>
+
+						<!--오른쪽 구역-->
+						<div class="card-content">
 						<div class="image-wrapper">
 							<a href="/detail?title={{title}}">
 							<img src="{{imageObject}}" onerror="this.onerror=null; this.src='/img/temp.jpg';" class="card-image" loading="lazy">
 							<div class="image-overlay"></div>
 							</a>
 						</div>
-<!--						<div class="card-info">-->
-<!--							<h3 class="card-title">{title}</h3>-->
-<!--							<p class="card-period">{period}</p>-->
-<!--						</div>-->
+
+							<div class="card-info">
+							<h3 class="card-title">{{title}}</h3>
+							<p class="card-period">{{period}}</p>
+						</div>
+					</div>
 					</div>
 				{{/cards}}
 			</div>
 		</div>
 
-<!--오른쪽ㄹ 섹션 -> 사용자 취향 분석-->
+<!--중간 구역-->
+		<div class="center-section" ></div>
+
+<!--오른쪽 섹션 -> 사용자 취향 분석-->
     <div class="right-section">
 		<h2 class="section-title">What are your tastes?</h2>
 
-        <div class="titleandbtn">
-<!--        <div class="sub-title">-->
-<!--            <h5 style="font-size: 40px;  margin: 20px; margin-top: 7px;">What are your tastes?</h5>-->
-<!--        </div>-->
-			<button class="complete_input" style="font-size: 20px" onclick="directSave()">IM READY!!!</button>
-        </div>
-
         <div class="question-container">
-
         <div class="preference-form">
-			<!--이름 적는 칸-->
+			<!--이름 안풋 @수정필요@-->
 			<div class="question-block">
 				<div class="question">What's your name or nickname?</div>
 				<input type="text" id="userName" name="userName"
@@ -305,7 +346,7 @@
 					</label>
 				</div>
 			</div>
-
+		</div>
 
         <!--두번째 질문(태그 / 선택 사항)-->
 			<div class="question-block">
