@@ -31,9 +31,9 @@
 
      .top-header {
          width: 100%;
-         height: 100px;
+         height: 90px;
          background-color: #000000;
-         color: white;
+         color: #ffffff;
          padding: 20px;
      }
 
@@ -41,12 +41,11 @@
          display: flex;
          justify-content: space-between;
          align-items: center;
-         height: 60px;
+         height: 50px;
          font-size: 16px;
          font-weight: 600;
-         background-color: #ffffff;
-         padding: 20px;
-         border-bottom: 1px solid #000000;
+         background-color: #DFFE40;
+         padding: 10px;
      }
 
 	 .main-container {
@@ -56,7 +55,7 @@
 
 	 .main-grid {
 		 display: grid;
-		 grid-template-columns: 2fr 50px 1fr;
+		 grid-template-columns: 2fr 1fr;
 		 max-width: 1700px;
 		 margin: 0 auto;
 	 }
@@ -74,55 +73,34 @@
 	 .card {
 		 position: relative;
 		 display: grid;
-		 grid-template-columns: 80px 1fr;
-		 border: 1px solid #000;
+		 grid-template-columns: auto 1fr;
 		 overflow: hidden;
-		 counter-increment: card-counter;
 		 height: 100%;
+		 background-color: #F1F1EF;
 	 }
 
-	 .card-number-section {
-		 display: flex;
-		 align-items: center;
-		 justify-content: center;
-		 border-right: 1px solid #000;
-	 }
 
 	 .card-content {
 		 display: grid;
-		 grid-template-rows: 1fr auto;
+		 grid-template-rows: auto 1fr;
 		 height: 100%;
 
 	 }.card-info {
-		  padding: 15px;
+		  padding: 5px;
 		  background: white;
 		  border-top: 1px solid #000;
-		  min-height: 80px;
+		  /*min-height: 80px;*/
+		 order: 1;
 	  }
-
-	 .card-number::before {
-		 content: "0" counter(card-counter);
-		 font-size: 48px;
-		 font-weight: bold;
-	 }
 
 	 .cards-grid {
 		 display: grid;
 		 grid-template-columns: repeat(2, 1fr);
 		 grid-template-rows: repeat(2, 1fr);
-		 gap: 20px;
-		 height: 700px;
-		 counter-reset: card-counter;
+		 gap: 40px;
+		 height: 1000px;
 	 }
 
-	 .card-number {
-		 position: absolute;
-		 top: 15px;
-		 left: 15px;
-		 font-size: 48px;
-		 font-weight: bold;
-		 /*z-index: 10;*/
-	 }
 
 	 .card-image {
 		 width: 100%;
@@ -139,10 +117,11 @@
 		 width: 100%;
 		 margin: 0;
 		 padding: 0;
+		 order: 2;
 	 }
 
 	 .card-tags {
-		 background: transparent !important; /* 빨간 테스트 배경 제거 */
+		 background: transparent !important;
 		 min-height: 30px !important;
 		 padding: 8px !important;
 		 display: flex;
@@ -180,28 +159,31 @@
 
 	 .center-section {
 		 border-left: 1px solid #000;
-		 border-right: 1px solid #000;
+		 /*border-right: 1px solid #000;*/
 		 display: flex;
-		 align-items: center;
-		 justify-content: center;
-		 writing-mode: vertical-rl;
-		 font-size: 12px;
-		 font-weight: 500;
 		 position: relative;
 	 }
 
-	 .center-section::before {
-		 content: 'EXHIBITION CURATING SERVICE';
-		 transform: rotate(180deg);
+	 .color-card {
+		 background-color: #DFFE40;
+	 }
+
+	 .color-card .card-info {
+		 background-color: transparent;
+		 border: none;
+	 }
+
+	 .color-card .image-wrapper {
+		 background-color: rgba(255, 255, 255, 0.1);
 	 }
 
 
 	 .preference-form {
-		 padding: 20px;
+		 margin-bottom: 20px;
 	 }
 
 	 .question-block {
-		 margin-bottom: 30px;
+		 margin-bottom: 15px;
 	 }
 
 	 .question {
@@ -216,18 +198,23 @@
 		 gap: 10px;
 	 }
 
+	 .tags-grid {
+		 display: grid;
+		 grid-template-columns: repeat(2, 1fr);
+		 gap: 10px;
+	 }
+
 	 .option-item, .tag-item {
 		 display: flex;
 		 align-items: center;
-		 padding: 10px;
-		 /*border: 1px solid #ddd;*/
-		 /*border-radius: 4px;*/
+		 padding: 5px;
 		 cursor: pointer;
 	 }
 
+
 	 .submit-btn {
 		 width: 100%;
-		 padding: 15px;
+		 padding: 10px;
 		 font-size: 18px;
 		 font-weight: bold;
 		 background: #000;
@@ -236,7 +223,6 @@
 		 border-radius: 4px;
 		 cursor: pointer;
 	 }
-
 
 		 .footer {
 			 background-color: #000;
@@ -280,11 +266,6 @@
 			<div class="cards-grid" id="recommendationContainer">
 				{{#cards}}
 					<div class="card">
-					<!--인덱스-->
-						<div class="card-number-section">
-							<div class="card-number"></div>
-						</div>
-
 						<!--오른쪽 구역-->
 						<div class="card-content">
 						<div class="image-wrapper">
@@ -301,15 +282,24 @@
 					</div>
 					</div>
 				{{/cards}}
+				<div class="card color-card">
+					<div class="card-content">
+						<div class="card-info">
+							<!-- 내용물 없음 - 빈 카드 -->
+						</div>
+						<div class="image-wrapper">
+							<!-- 이미지도 없음 -->
+						</div>
+					</div>
+				</div>
+
+
 			</div>
 		</div>
 
-<!--중간 구역-->
-		<div class="center-section" ></div>
-
 <!--오른쪽 섹션 -> 사용자 취향 분석-->
     <div class="right-section">
-		<h2 class="section-title">What are your tastes?</h2>
+		<h2 class="section-title" style="padding: 0;">What are your tastes?</h2>
 
         <div class="question-container">
         <div class="preference-form">
@@ -324,23 +314,23 @@
 			<div class="question-block">
 				<div class="question">Are there any museums you're interested in?</div>
 				<div class="options-grid">
-					<label class="option-item">
+					<label class="tag-item">
 						<input type="radio" name="location" value="서울">
 						<span>서울</span>
 					</label>
-					<label class="option-item">
+					<label class="tag-item">
 						<input type="radio" name="location" value="과천">
 						<span>과천</span>
 					</label>
-					<label class="option-item">
+					<label class="tag-item">
 						<input type="radio" name="location" value="덕수궁">
 						<span>덕수궁</span>
 					</label>
-					<label class="option-item">
+					<label class="tag-item">
 						<input type="radio" name="location" value="청주">
 						<span>청주</span>
 					</label>
-					<label class="option-item">
+					<label class="tag-item">
 						<input type="radio" name="location" value="상관 없음">
 						<span>상관 없음</span>
 					</label>
@@ -395,8 +385,6 @@
 		</div>
 	</div>
 	</div>
-</div>
-
 
 
 <footer class="footer"></footer>
